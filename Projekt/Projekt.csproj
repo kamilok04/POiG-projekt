@@ -9,9 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
+    <Compile Remove="ViewModels\TemplateViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\thumb.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\thumb.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="9.3.0" />
   </ItemGroup>
 
 </Project>

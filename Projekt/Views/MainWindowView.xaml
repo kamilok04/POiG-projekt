@@ -1,0 +1,26 @@
+﻿<Window x:Class="Projekt.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Projekt.Views"
+        xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
+        
+        mc:Ignorable="d"
+        Title="Projekt" Height="768" Width="1024"
+        Icon="/Resources/thumb.png">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+            <views:LoginView />
+            <!-- This is a UserControl -->
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">
+            <views:MainMenuView />
+            
+        </DataTemplate>
+
+
+    </Window.Resources>
+    <ContentControl Margin="10" Content="{Binding CurrentPageViewModel}"/>
+
+</Window>

@@ -2,8 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Projekt"
-             StartupUri="MainWindow.xaml">
+             xmlns:views="clr-namespace:Projekt.Views"
+>
     <Application.Resources>
-         
+        <!-- Global font for all controls -->
+        <Style TargetType="Control">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+        
+        </Style>
+        <!-- Global font for all TextBlocks -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+           
+        </Style>
     </Application.Resources>
 </Application>
