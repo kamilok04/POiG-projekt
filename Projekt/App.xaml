@@ -4,16 +4,20 @@
              xmlns:local="clr-namespace:Projekt"
              xmlns:views="clr-namespace:Projekt.Views"
 >
+    
     <Application.Resources>
-        <!-- Global font for all controls -->
+
+        <!-- Global font for all controls --><!--
         <Style TargetType="Control">
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
         
         </Style>
-        <!-- Global font for all TextBlocks -->
+        --><!-- Global font for all TextBlocks --><!--
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
            
-        </Style>
+        </Style>-->
+        <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+
     </Application.Resources>
 </Application>
