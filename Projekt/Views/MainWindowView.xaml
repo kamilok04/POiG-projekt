@@ -10,7 +10,7 @@
         Title="Projekt" Height="768" Width="1024"
         Icon="/Resources/thumb.png">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+        <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">
             <views:LoginView />
             <!-- This is a UserControl -->
         </DataTemplate>

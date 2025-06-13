@@ -16,13 +16,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Fluent:Ribbon Grid.Row="0">
             <!--Backstage-->
-            <Fluent:Ribbon.Menu>
+            <!--<Fluent:Ribbon.Menu>
                 <Fluent:Backstage Header="Menu główne">
                 </Fluent:Backstage>
-            </Fluent:Ribbon.Menu>
+            </Fluent:Ribbon.Menu>-->
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Użytkownicy">
@@ -57,5 +58,9 @@ LargeIcon="/Resources/thumb.png" />
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
+
+        <Label Grid.Row="2">
+           PIWO
+        </Label>
     </Grid>
 </UserControl>

@@ -11,28 +11,49 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class LoginViewModel : IPageViewModel
+    public class LoginViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => "LoginPage";
 
         #region Fields
         private string _username = "";
-        private SecureString _password = new();
+        private string _password = "";
+        private string _errorString = "";
         private ICommand _loginCommand;
-        private LoginModel _model;
+        private LoginModel? _model;
         public event Action? Authenticated;
         #endregion
 
         #region Constructors
       
-        public LoginViewModel()
+        public LoginViewModel() 
         {
-            _model = new();
             _loginCommand = LoginCommand;
+            _model = new();
+            _model.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(LoginModel.Authenticated))
+                {
+                    if (_model.Authenticated)
+                    {
+                        Authenticated?.Invoke();
+                    }
+                }
+                if (e.PropertyName == nameof(LoginModel.InvalidLogin))
+                {
+                    if (_model.InvalidLogin) {
+                        // Handle invalid login, e.g., show a message to the user
+                        // This could be a property that the view binds to for displaying an error message
+                        ErrorString = "Niepoprawne dane logowania. Spróbuj ponownie.";
+                    }
+                }
+            };
         }
 
 
         #endregion
+
+       
 
         #region Public Properties/Commands
         public string Username
@@ -45,13 +66,24 @@ namespace Projekt.ViewModels
             }
         }
 
-        public SecureString Password
+        public string Password
         {
             get => _password;
             set
             {
                 _password = value;
            
+            }
+        }
+
+        public string ErrorString
+        {
+            get => _errorString;
+            set
+            {
+                _errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
+
             }
         }
 
@@ -62,7 +94,7 @@ namespace Projekt.ViewModels
                 if (_loginCommand == null)
                 {
                     _loginCommand = new RelayCommand(
-                        param => ValidateLogin());
+                        async param => await ValidateLogin());
                 }
                 return _loginCommand;
             }
@@ -71,19 +103,25 @@ namespace Projekt.ViewModels
 
         #region Private Methods
 
-        private bool ValidateLogin()
+        private async Task<bool> ValidateLogin()
         {
             
             if (String.IsNullOrEmpty(Username) || Password == null)
                 return false;
 
-            // connect to db
-            // authenticate
-            // for now though, it's fine
-            if (_model.Authenticated)
+            _model.UserName = Username;
+            _model.Password = Password;
+
+             ErrorString = "Logowanie w trakcie, proszę czekać...";
+            bool validLogin = await _model.GetAuthenticatedAsync();
+
+
+
+            if (validLogin)
             {
-                Authenticated?.Invoke();
+            
                 return true;
+
             }
             return false; 
 

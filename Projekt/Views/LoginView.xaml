@@ -38,6 +38,7 @@
                 </PasswordBox>
             </AdornerDecorator>
         </DockPanel>
+        <Label Content="{Binding ErrorString}" Foreground="Red" ></Label>
         <Button Command="{Binding LoginCommand}">ZALOGUJ SIĘ</Button>
     </StackPanel>
 

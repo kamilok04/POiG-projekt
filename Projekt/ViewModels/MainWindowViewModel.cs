@@ -104,6 +104,7 @@ namespace Projekt.ViewModels
             MainMenuViewModel mainmenu = new();
 
             ChangeViewModel(mainmenu);
+            
         }
         #endregion
     }

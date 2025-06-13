@@ -13,10 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ca.pem" />
     <None Remove="Resources\thumb.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ca.pem" />
     <Resource Include="Resources\thumb.png" />
   </ItemGroup>
 
