@@ -29,32 +29,41 @@
             <Fluent:RibbonTabItem Header="Użytkownicy">
                 <Fluent:RibbonGroupBox Header="Użytkownicy">
                     <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/thumb.png"
-                           LargeIcon="/Resources/thumb.png" />
+                           Icon="/Resources/plus-256.png"
+                           LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom" />
+                    <Fluent:Button Header="Edytuj" 
+                            Icon="/Resources/edit-256.png"
+                            LargeIcon="/Resources/edit-256.png"/>
                     <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/thumb.png"
-LargeIcon="/Resources/thumb.png" />
+                           Icon="/Resources/minus-256.png"
+                           LargeIcon="/Resources/minus-256.png" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
             <Fluent:RibbonTabItem Header="Plany">
                 <Fluent:RibbonGroupBox Header="Plany">
                     <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/thumb.png"
-                           LargeIcon="/Resources/thumb.png" />
+                           Icon="/Resources/plus-256.png"
+                           LargeIcon="/Resources/plus-256.png" />
+                    <Fluent:Button Header="Edytuj" 
+                            Icon="/Resources/edit-256.png"
+                            LargeIcon="/Resources/edit-256.png"/>       
                     <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/thumb.png"
-LargeIcon="/Resources/thumb.png" />
+                           Icon="/Resources/minus-256.png"
+                           LargeIcon="/Resources/minus-256.png" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Przedmioty">
                         <Fluent:RibbonGroupBox Header="Przedmioty">
                             <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/thumb.png"
-                           LargeIcon="/Resources/thumb.png" />
-                            <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/thumb.png"
-LargeIcon="/Resources/thumb.png" />
+                           Icon="/Resources/plus-256.png"
+                           LargeIcon="/Resources/plus-256.png" />
+                    <Fluent:Button Header="Edytuj" 
+                    Icon="/Resources/edit-256.png"
+                    LargeIcon="/Resources/edit-256.png"/> 
+                    <Fluent:Button Header="Usuń" 
+                           Icon="/Resources/minus-256.png"
+                           LargeIcon="/Resources/minus-256.png" />
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
         </Fluent:Ribbon>

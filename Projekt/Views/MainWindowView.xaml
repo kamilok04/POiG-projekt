@@ -7,8 +7,8 @@
         xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
         
         mc:Ignorable="d"
-        Title="Projekt" Height="768" Width="1024"
-        Icon="/Resources/thumb.png">
+        Title="Plan zajęć" Height="768" Width="1024"
+        Icon="/Resources/calendar-7-256.png">
     <Window.Resources>
         <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">
             <views:LoginView />

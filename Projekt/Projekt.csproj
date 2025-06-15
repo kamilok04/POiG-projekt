@@ -14,11 +14,19 @@
 
   <ItemGroup>
     <None Remove="Resources\ca.pem" />
+    <None Remove="Resources\calendar-7-256.png" />
+    <None Remove="Resources\edit-256.png" />
+    <None Remove="Resources\minus-256.png" />
+    <None Remove="Resources\plus-256.png" />
     <None Remove="Resources\thumb.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\ca.pem" />
+    <Resource Include="Resources\calendar-7-256.png" />
+    <Resource Include="Resources\edit-256.png" />
+    <Resource Include="Resources\minus-256.png" />
+    <Resource Include="Resources\plus-256.png" />
     <Resource Include="Resources\thumb.png" />
   </ItemGroup>
 
