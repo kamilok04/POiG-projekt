@@ -21,6 +21,15 @@ namespace Projekt.Models
         public string UserName { get => _username; set => _username = value; }
         public string Password { get => _password; set => _password = value; }
         public bool Authenticated { get => _authenticated; }
+        public DatabaseHandler DBHandler { get; init; } = new();
+        private LoginWrapper _loginWrapper { get; set; }
+        public LoginWrapper LoginWrapper
+        {
+            get => _loginWrapper;
+            set => _loginWrapper = value;
+
+        }
+
         public bool InvalidLogin
         {
             get => _invalidLogin;
@@ -30,18 +39,17 @@ namespace Projekt.Models
                 OnPropertyChanged(nameof(InvalidLogin));
             }
         }
-        public DatabaseHandler DBHandler { get; } = new();
 
         public LoginModel()
         {
         }
 
-   
+
         public async Task<bool> GetAuthenticatedAsync()
         {
             bool previous = Authenticated;
             await Authenticate();
-            if(Authenticated != previous) 
+            if (Authenticated != previous)
                 OnPropertyChanged(nameof(Authenticated));
             return _authenticated;
         }
@@ -62,6 +70,7 @@ namespace Projekt.Models
                               string remoteHash = (string)row["hash"];
                               if (localHash.Equals(remoteHash))
                               {
+                                  CreateWrapper();
                                   _authenticated = true;
                                   InvalidLogin = false;
                                   return;
@@ -77,7 +86,14 @@ namespace Projekt.Models
                       }
                   });
         }
-    }
 
+
+
+        private void CreateWrapper()
+        {
+            _loginWrapper = new LoginWrapper(DBHandler, UserName);
+            return;
+        }
+    }
 
 }

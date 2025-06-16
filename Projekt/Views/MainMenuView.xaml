@@ -68,8 +68,6 @@
                     </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
-        <Label Grid.Row="2">
-           PIWO
-        </Label>
+        <Label Grid.Row="2" Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
     </Grid>
 </UserControl>

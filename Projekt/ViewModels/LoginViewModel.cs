@@ -20,7 +20,7 @@ namespace Projekt.ViewModels
         private string _password = "";
         private string _errorString = "";
         private ICommand _loginCommand;
-        private LoginModel? _model;
+        private readonly LoginModel? _model;
         public event Action? Authenticated;
         #endregion
 
@@ -99,6 +99,22 @@ namespace Projekt.ViewModels
                 return _loginCommand;
             }
         }
+
+        public LoginWrapper LoginWrapper
+        {
+            get => _model?.LoginWrapper ?? throw new InvalidOperationException("Model is not initialized.");
+            set
+            {
+                if (_model != null)
+                {
+                    _model.LoginWrapper = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Model is not initialized.");
+                }
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -106,7 +122,7 @@ namespace Projekt.ViewModels
         private async Task<bool> ValidateLogin()
         {
             
-            if (String.IsNullOrEmpty(Username) || Password == null)
+            if (_model == null || String.IsNullOrEmpty(Username) || Password == null)
                 return false;
 
             _model.UserName = Username;

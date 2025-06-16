@@ -22,16 +22,32 @@ namespace Projekt.ViewModels
 
         string IPageViewModel.Name => "MainWindow";
 
+        private LoginWrapper _loginWrapper;
+        public LoginWrapper LoginWrapper
+        {
+            get => _loginWrapper;
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                _loginWrapper = value;
+            }
+        }
 
 
-        #endregion
-        #region Constructors
+
 
         public MainWindowViewModel()
         {
-
             LoginViewModel loginViewModel = new();
-            loginViewModel.Authenticated += LoginViewModel_Authenticated;
+            loginViewModel.Authenticated += () =>
+            {
+                if (loginViewModel.LoginWrapper != null)
+                {
+                    LoginWrapper = loginViewModel.LoginWrapper;
+                }
+                LoginViewModel_Authenticated();
+            };
             ChangeViewModel(loginViewModel);
         }
 
@@ -101,7 +117,8 @@ namespace Projekt.ViewModels
 
         private void LoginViewModel_Authenticated()
         {
-            MainMenuViewModel mainmenu = new();
+            
+            MainMenuViewModel mainmenu = new(LoginWrapper);
 
             ChangeViewModel(mainmenu);
             
