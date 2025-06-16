@@ -15,6 +15,7 @@ namespace Projekt.ViewModels
         string IPageViewModel.Name => "MainMenu";
         private MainMenuModel _model { get; init; }
         public LoginWrapper LoginWrapper { get; init; }
+        private IPageViewModel _pageViewModel { get; set; }
  
         #endregion
 
@@ -22,12 +23,18 @@ namespace Projekt.ViewModels
         public MainMenuViewModel(LoginWrapper loginWrapper) {
             _model = new();
             LoginWrapper = loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper));
+            PageViewModel = new UsersViewTableViewModel();
         }
         public MainMenuViewModel() { }
 
         #endregion
 
         #region Public Properties/Commands
+        public IPageViewModel PageViewModel
+        {
+            get { return _pageViewModel; }
+            set { _pageViewModel = value; }
+        }
         #endregion
 
         #region Private Helpers

@@ -1,23 +1,26 @@
-﻿<Application x:Class="Projekt.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Projekt"
-             xmlns:views="clr-namespace:Projekt.Views"
->
-    
-    <Application.Resources>
-
-        <!-- Global font for all controls --><!--
-        <Style TargetType="Control">
-            <Setter Property="FontFamily" Value="Comic Sans MS"/>
-        
-        </Style>
-        --><!-- Global font for all TextBlocks --><!--
-        <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Comic Sans MS"/>
-           
-        </Style>-->
-        <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-
-    </Application.Resources>
+﻿<Application x:Class="Projekt.App"  
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
+            xmlns:local="clr-namespace:Projekt"  
+            xmlns:views="clr-namespace:Projekt.Views"  
+            xmlns:viewmodels="clr-namespace:Projekt.ViewModels">  
+   <Application.Resources>  
+       <ResourceDictionary>  
+           <ResourceDictionary.MergedDictionaries>  
+               <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />  
+           </ResourceDictionary.MergedDictionaries>  
+           <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">  
+               <views:LoginView />  
+           </DataTemplate>  
+           <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">  
+               <views:MainMenuView />  
+           </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:UsersViewTableViewModel}">
+                <views:UserTableView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:ConditionalContentControlViewModel}">
+                <views:ConditionalContentControl/>
+            </DataTemplate>
+       </ResourceDictionary>  
+   </Application.Resources>  
 </Application>

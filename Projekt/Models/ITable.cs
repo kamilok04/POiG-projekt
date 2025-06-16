@@ -8,9 +8,11 @@ namespace Projekt.Models
 {
     public interface ITable
     {
-        public string TableName { get; set; }
+        public string TableName { get; }
 
-        public string DefaultQuery { get; set; }
-        public Dictionary<string, object>? DefaultParameters { get; set; }
+        public string DefaultQuery { get;  }
+        public Dictionary<string, object>? DefaultParameters { get; }
+
+        
     }
 }
