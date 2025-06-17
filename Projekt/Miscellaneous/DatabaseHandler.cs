@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +34,13 @@ namespace Projekt.Miscellaneous
 
 
         public MySqlConnection GetConnection()
-            => _conn ??= new(_sb.ConnectionString);
+        { 
+            if (_conn == null || _conn.IsDisposed)
+            {
+                return new(_sb.ConnectionString);
+            }
+            return _conn;
+        }
         
 
         public async Task<bool> TestConnectionAsync()
@@ -82,6 +89,12 @@ namespace Projekt.Miscellaneous
             return await command.ExecuteScalarAsync();
         }
 
+        /// <summary>
+        /// Executes a query and returns the results as a list of dictionaries, where each dictionary represents a row.
+        /// </summary>
+        /// <param name="query">A MySQL query. Replace parameters with @parameter_name.</param>
+        /// <param name="parameters">A list of parameters, of format {"@parameter_name" : object}</param>
+        /// <returns></returns>
         public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
             var results = new List<Dictionary<string, object>>();
@@ -106,6 +119,30 @@ namespace Projekt.Miscellaneous
                 results.Add(row);
             }
             return results;
+        }
+
+        private MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
+        {
+            MySqlCommand command = new(query);
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+            }
+            return command;
+        }
+        public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
+        {
+            MySqlDataAdapter adapter = new MySqlDataAdapter(GenerateSelect(query, parameters));
+            DataTable dataTable = new DataTable();
+            using var connection = GetConnection();
+            await connection.OpenAsync();
+            adapter.SelectCommand.Connection = connection;
+            adapter.Fill(dataTable);
+            return dataTable;
+
         }
 
 

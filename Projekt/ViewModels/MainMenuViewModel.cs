@@ -23,7 +23,7 @@ namespace Projekt.ViewModels
         public MainMenuViewModel(LoginWrapper loginWrapper) {
             _model = new();
             LoginWrapper = loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper));
-            PageViewModel = new UsersViewTableViewModel();
+            PageViewModel = new UsersViewTableViewModel(LoginWrapper);
         }
         public MainMenuViewModel() { }
 

@@ -1,31 +1,47 @@
-﻿using Projekt.Miscellaneous;
+﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
+using Projekt.Miscellaneous;
 using Projekt.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Projekt.ViewModels
 {
-    public class UsersViewTableViewModel : IPageViewModel
+    public class UsersViewTableViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(UsersViewTableViewModel);
         public LoginWrapper LoginWrapper { get; init; }
         private UsersViewTableModel Model { get; init; }
-        public List<Dictionary<string, object>> Data { get; set; }
-        public UsersViewTableViewModel() { }
-        public UsersViewTableViewModel(LoginWrapper loginWrapper) {
-            LoginWrapper = loginWrapper;
-            Model = new(LoginWrapper);
-            GetData();
-        }
 
-        public async void GetData()
+        private DataTable _data;
+        public DataTable Data
         {
-            await Model.RetrieveDefaultQuery();
+            get => _data;
+            private set
+            {
+                _data = value;
+                OnPropertyChanged(nameof(Data));
+            }
         }
 
-        
+        public UsersViewTableViewModel(LoginWrapper loginWrapper)
+        {
+            LoginWrapper = loginWrapper;
+            Model = new(loginWrapper);
+            GetDataAsync().ConfigureAwait(false); ;
+        }
+
+        public UsersViewTableViewModel() { } //for designer only
+
+        private async Task GetDataAsync()
+        {
+            Data = await LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+        }
     }
 }
