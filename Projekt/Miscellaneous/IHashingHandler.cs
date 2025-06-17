@@ -13,11 +13,10 @@ namespace Projekt.Miscellaneous
     {
         public static byte[] GetHash(string inputString)
         {
-            using HashAlgorithm algorithm = SHA256.Create();
-            return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+            return SHA256.HashData(Encoding.UTF8.GetBytes(inputString));
         }
 
-        public static string GetHashString(string inputString)
+        public static string? GetHashString(string inputString)
         {
             StringBuilder sb = new();
             foreach (byte b in GetHash(inputString))

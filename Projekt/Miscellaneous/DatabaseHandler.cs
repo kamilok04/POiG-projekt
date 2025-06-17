@@ -14,7 +14,7 @@ namespace Projekt.Miscellaneous
     public class DatabaseHandler
     {
         private readonly MySqlConnectionStringBuilder _sb;
-        private MySqlConnection _conn;
+        private MySqlConnection? _conn;
 
         public DatabaseHandler()
         {
@@ -34,14 +34,11 @@ namespace Projekt.Miscellaneous
 
 
         public MySqlConnection GetConnection()
-        { 
-            if (_conn == null || _conn.IsDisposed)
-            {
-                return new(_sb.ConnectionString);
-            }
-            return _conn;
+        {
+            return new MySqlConnection(_sb.ConnectionString);
         }
-        
+
+
 
         public async Task<bool> TestConnectionAsync()
         {
@@ -86,7 +83,8 @@ namespace Projekt.Miscellaneous
                     command.Parameters.AddWithValue(param.Key, param.Value);
                 }
             }
-            return await command.ExecuteScalarAsync();
+            object? result = await command.ExecuteScalarAsync();
+            return result;
         }
 
         /// <summary>
@@ -99,7 +97,7 @@ namespace Projekt.Miscellaneous
         {
             var results = new List<Dictionary<string, object>>();
             using var connection = GetConnection();
-            await connection.OpenAsync();
+            await connection.OpenAsync().ConfigureAwait(false);
             using var command = new MySqlCommand(query, connection);
             if (parameters != null)
             {
@@ -121,7 +119,7 @@ namespace Projekt.Miscellaneous
             return results;
         }
 
-        private MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
+        private static MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
         {
             MySqlCommand command = new(query);
             if (parameters != null)
@@ -135,8 +133,8 @@ namespace Projekt.Miscellaneous
         }
         public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            MySqlDataAdapter adapter = new MySqlDataAdapter(GenerateSelect(query, parameters));
-            DataTable dataTable = new DataTable();
+            MySqlDataAdapter adapter = new(GenerateSelect(query, parameters));
+            DataTable dataTable = new();
             using var connection = GetConnection();
             await connection.OpenAsync();
             adapter.SelectCommand.Connection = connection;
@@ -157,6 +155,22 @@ namespace Projekt.Miscellaneous
             using var fileStream = File.Create(tempFile);
             stream.CopyTo(fileStream);
             return tempFile;
+        }
+
+        public async Task<bool> AuthenticateAsync(LoginWrapper wrapper)
+        {
+            string query = "SELECT * FROM sessions WHERE username = @username AND token = @token AND expiration_date > NOW()";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@username", wrapper.Username },
+                { "@token", wrapper.Token }
+            };
+            var result = await ExecuteQueryAsync(query, parameters);
+            if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
+            {
+                return true;
+            }
+            return false;
         }
     }
     }

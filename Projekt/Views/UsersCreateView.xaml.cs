@@ -16,13 +16,15 @@ using System.Windows.Shapes;
 namespace Projekt.Views
 {
     /// <summary>
-    /// Interaction logic for UserTableView.xaml
+    /// Interaction logic for UsersCreateView.xaml
     /// </summary>
-    public partial class UserTableView : UserControl
+    public partial class UsersCreateView : UserControl
     {
-        public UserTableView()
+        public UsersCreateView()
         {
             InitializeComponent();
         }
+
+      
     }
 }

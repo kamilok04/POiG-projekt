@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace Projekt.Models
 {
-    public class MainMenuModel
+    public class MainMenuModel(LoginWrapper loginWrapper) : BaseTableModel(loginWrapper)
     {
-
-      
     }
 }

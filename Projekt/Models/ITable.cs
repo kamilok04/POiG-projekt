@@ -10,7 +10,7 @@ namespace Projekt.Models
     {
         public string TableName { get; }
 
-        public string DefaultQuery { get;  }
+        public string? DefaultQuery { get;  }
         public Dictionary<string, object>? DefaultParameters { get; }
 
         

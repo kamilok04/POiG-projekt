@@ -16,11 +16,11 @@ namespace Projekt.ViewModels
     public class UsersViewTableViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(UsersViewTableViewModel);
-        public LoginWrapper LoginWrapper { get; init; }
+     
         private UsersViewTableModel Model { get; init; }
 
-        private DataTable _data;
-        public DataTable Data
+        private DataTable? _data;
+        public DataTable? Data
         {
             get => _data;
             private set
@@ -32,7 +32,7 @@ namespace Projekt.ViewModels
 
         public UsersViewTableViewModel(LoginWrapper loginWrapper)
         {
-            LoginWrapper = loginWrapper;
+   
             Model = new(loginWrapper);
             GetDataAsync().ConfigureAwait(false); ;
         }
@@ -41,7 +41,7 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Data = await LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
         }
     }
 }

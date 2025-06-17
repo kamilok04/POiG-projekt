@@ -32,7 +32,8 @@
                 <Fluent:RibbonGroupBox Header="Użytkownicy">
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
-                           LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom" />
+                           LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom"
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersCreateViewModel"/>
                     <Fluent:Button Header="Edytuj" 
                             Icon="/Resources/edit-256.png"
                             LargeIcon="/Resources/edit-256.png"/>
@@ -69,7 +70,7 @@
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
-        <local:ConditionalContentControl Grid.Row="1" Content="{Binding PageViewModel}"/>
+        <local:ConditionalContentControl Grid.Row="1" Content="{Binding CurrentPageViewModel}"/>
         <Label Grid.Row="2" Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
     </Grid>
 </UserControl>
