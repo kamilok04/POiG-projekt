@@ -89,8 +89,7 @@ namespace Projekt.ViewModels
             if (!PageViewModels.Contains(viewModel))
                 PageViewModels.Add(viewModel);
 
-            CurrentPageViewModel = PageViewModels
-                .FirstOrDefault(vm => vm == viewModel);
+            CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
         }
 
       

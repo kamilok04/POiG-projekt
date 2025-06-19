@@ -11,7 +11,7 @@
         Icon="/Resources/calendar-7-256.png"
                      d:DataContext="{d:DesignInstance Type={x:Type viewmodels:MainWindowViewModel}, IsDesignTimeCreatable=True}"
     >
- 
+
     <views:ConditionalContentControl Content="{Binding CurrentPageViewModel}"></views:ConditionalContentControl>
 
 
