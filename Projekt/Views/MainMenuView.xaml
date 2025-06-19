@@ -43,11 +43,12 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <Fluent:RibbonTabItem Header="Plany">
-                <Fluent:RibbonGroupBox Header="Plany">
+            <Fluent:RibbonTabItem Header="Zajęcia">
+                <Fluent:RibbonGroupBox Header="Zajęcia">
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
-                           LargeIcon="/Resources/plus-256.png" />
+                           LargeIcon="/Resources/plus-256.png" 
+                           />
                     <Fluent:Button Header="Edytuj" 
                             Icon="/Resources/edit-256.png"
                             LargeIcon="/Resources/edit-256.png"/>       
@@ -59,8 +60,9 @@
             <Fluent:RibbonTabItem Header="Przedmioty">
                         <Fluent:RibbonGroupBox Header="Przedmioty">
                             <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/plus-256.png"
-                           LargeIcon="/Resources/plus-256.png" />
+                            Icon="/Resources/plus-256.png"
+                            LargeIcon="/Resources/plus-256.png" 
+                            />
                     <Fluent:Button Header="Edytuj" 
                     Icon="/Resources/edit-256.png"
                     LargeIcon="/Resources/edit-256.png"/> 
@@ -69,6 +71,20 @@
                            LargeIcon="/Resources/minus-256.png" />
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="Grupy">
+                <Fluent:RibbonGroupBox Header="Grupy">
+                    <Fluent:Button Header="Dodaj"
+                Icon="/Resources/plus-256.png"
+                LargeIcon="/Resources/plus-256.png" 
+                />
+                <Fluent:Button Header="Edytuj" 
+                Icon="/Resources/edit-256.png"
+                LargeIcon="/Resources/edit-256.png"/>
+                    <Fluent:Button Header="Usuń" 
+                Icon="/Resources/minus-256.png"
+                LargeIcon="/Resources/minus-256.png" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
         <local:ConditionalContentControl Grid.Row="1" Content="{Binding CurrentPageViewModel}"/>
         <Label Grid.Row="2" Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>

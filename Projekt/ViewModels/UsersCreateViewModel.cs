@@ -15,6 +15,12 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => "UsersCreate";
 
+        // for designer only
+        public UsersCreateViewModel() { }
+
+
+        #region Fields
+
         private string? _name;
         private string? _surname;
         private string? _login;
@@ -29,7 +35,11 @@ namespace Projekt.ViewModels
         //private ObservableCollection<Subject> _allSubjects;
         private bool _isStudentVisible = false;
         private bool _isTeacherVisible = false;
-        #region Fields
+
+
+        #endregion
+
+        #region Public Properties/Commands
 
         public string? Name
         {
@@ -125,17 +135,11 @@ namespace Projekt.ViewModels
 
         public bool IsStudentVisible => CurrentRole == "Student";
         public bool IsTeacherVisible => CurrentRole == "Pracownik";
-        #endregion
-
-        #region Public Properties/Commands
         public UsersCreateViewModel(LoginWrapper loginWrapper)
         {
             UsersCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
-
         }
-        // for designer only
-        public UsersCreateViewModel() { }
-
+       
 
         private ICommand? _suggestLoginCommand;
 

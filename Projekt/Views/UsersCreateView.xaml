@@ -121,7 +121,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Button Content="Zapisz" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+        <Button Content="Zatwierdż" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right"/>
         <Button Grid.Column="1"  Content="Anuluj" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/> 
         </Grid>
      </Grid>
