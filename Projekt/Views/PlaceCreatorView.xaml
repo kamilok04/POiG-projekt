@@ -23,9 +23,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label>Nazwa:</Label>
-            <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-
             <Label Grid.Row="1">Kod budynku:</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BuildingCode,UpdateSourceTrigger=PropertyChanged}"/>
 
