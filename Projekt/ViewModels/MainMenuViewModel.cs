@@ -64,6 +64,15 @@ namespace Projekt.ViewModels
                         // Prawdopobnie powoduje wyciek pamięci.
                         CurrentPageViewModel = new UsersCreateViewModel(_model.LoginWrapper);
                         break;
+                    case "LessonsCreateViewModel":
+                        CurrentPageViewModel = new LessonsCreateViewModel(_model.LoginWrapper);
+                        break;
+                    case "SubjectCreateViewModel":
+                        CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
+                        break;
+                    case "PlaceCreateViewModel":
+                        CurrentPageViewModel = new PlaceCreateViewModel(_model.LoginWrapper);
+                        break;
                 }
         }
 

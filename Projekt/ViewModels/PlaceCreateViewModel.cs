@@ -8,11 +8,11 @@ using Projekt.Models;
 
 namespace Projekt.ViewModels
 {
-    public class PlaceCreatorViewModel : ObservableObject, IPageViewModel
+    public class PlaceCreateViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => "CreatePlace";
 
-        public PlaceCreatorViewModel() { }
+        public PlaceCreateViewModel() { }
 
         #region Fields
         private string? _buildingCode;
@@ -77,7 +77,7 @@ namespace Projekt.ViewModels
 
         public PlaceCreateModel PlaceCreateModel { get => _placeCreateModel; set => _placeCreateModel = value; }
 
-        public PlaceCreatorViewModel(LoginWrapper loginWrapper)
+        public PlaceCreateViewModel(LoginWrapper loginWrapper)
         {
             PlaceCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
