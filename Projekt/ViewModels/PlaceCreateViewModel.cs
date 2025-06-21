@@ -16,9 +16,11 @@ namespace Projekt.ViewModels
 
         #region Fields
         private string? _buildingCode;
-        private string? _faculty;
+        private List<string> _faculties = new List<string> { "MS", "MT", "AEI", "Ch"};
         private int _classNumber;
         private string? _address;
+        private string? _capacity;
+        private string? _currentFaculty;
         private PlaceCreateModel _placeCreateModel;
         #endregion
 
@@ -36,17 +38,9 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string Faculty
+        public List<string> Faculties
         {
-            get => _faculty;
-            set
-            {
-                if (_faculty != value)
-                {
-                    _faculty = value;
-                    OnPropertyChanged(nameof(_faculty));
-                }
-            }
+            get => _faculties;
         }
 
         public int ClassNumber
@@ -74,6 +68,41 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        public string Capacity
+        {
+            get => _capacity;
+            set
+            {
+                if (_capacity != value)
+                {
+                    _capacity = value;
+                    OnPropertyChanged(nameof(_capacity));
+                }
+            }
+        }
+
+        public string CurrentFaculty
+        {
+            get => _currentFaculty;
+            set
+            {
+                if (_currentFaculty != value)
+                {
+                    _currentFaculty = value;
+                    OnPropertyChanged(nameof(CurrentFaculty));
+                    OnPropertyChanged(nameof(IsMS));
+                    OnPropertyChanged(nameof(IsMT));
+                    OnPropertyChanged(nameof(IsCh));
+                    OnPropertyChanged(nameof(IsAEI));
+                }
+            }
+        }
+
+        public bool IsMS => _currentFaculty == "MS";
+        public bool IsMT => _currentFaculty == "MT";
+        public bool IsCh => _currentFaculty == "Ch";
+        public bool IsAEI => _currentFaculty == "AEI";
 
         public PlaceCreateModel PlaceCreateModel { get => _placeCreateModel; set => _placeCreateModel = value; }
 
