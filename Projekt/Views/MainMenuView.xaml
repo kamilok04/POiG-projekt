@@ -49,6 +49,7 @@
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
                            LargeIcon="/Resources/plus-256.png" 
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsCreateViewModel"
                            />
                     <Fluent:Button Header="Edytuj" 
                             Icon="/Resources/edit-256.png"
@@ -63,6 +64,7 @@
                             <Fluent:Button Header="Dodaj"
                             Icon="/Resources/plus-256.png"
                             LargeIcon="/Resources/plus-256.png" 
+                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel"
                             />
                     <Fluent:Button Header="Edytuj" 
                     Icon="/Resources/edit-256.png"
@@ -91,6 +93,7 @@
                     <Fluent:Button Header="Dodaj"
                         Icon="/Resources/plus-256.png"
                         LargeIcon="/Resources/plus-256.png" 
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceCreateViewModel"
                         />
                     <Fluent:Button Header="Edytuj" 
                          Icon="/Resources/edit-256.png"
