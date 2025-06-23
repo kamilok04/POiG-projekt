@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Asn1.Mozilla;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -23,6 +24,11 @@ namespace Projekt.Miscellaneous
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
+        }
+
+        public static string GetRandomString(int count)
+        {
+            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(count));
         }
     }
 }

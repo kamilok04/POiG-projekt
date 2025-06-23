@@ -119,6 +119,22 @@ namespace Projekt.Miscellaneous
             }
             return results;
         }
+        public async Task<int> SuggestStudentID()
+        {
+            // Łatwa funkcja, MAX() + 1
+            string query = "SELECT MAX(indeks) + 1 FROM student";
+            var result = await ExecuteScalarAsync(query);
+            if (result == null || result == DBNull.Value)
+            {
+                return 1; // Jeśli nie ma żadnych studentów, zaczynamy od 1
+            }
+            if (int.TryParse(result.ToString(), out int nextId))
+            {
+                return nextId;
+            }
+            throw new InvalidOperationException("Nie można przetworzyć następnego ID studenta.");
+
+        }
 
         private static MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
         {

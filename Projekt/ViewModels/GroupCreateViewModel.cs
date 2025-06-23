@@ -17,7 +17,7 @@ namespace Projekt.ViewModels
         #region Fields
         private List<string> _faculties;
         private List<string> _degree;
-        private List<int> _semesters = new List<int> { 1,2,3,4,5,6,7 };
+        private List<int> _semesters = [1, 2, 3, 4, 5, 6, 7];
         private string _currentFaculty;
         private string _currentDegree;
         private string _currentSemester;

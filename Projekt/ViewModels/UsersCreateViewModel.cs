@@ -28,10 +28,11 @@ namespace Projekt.ViewModels
         private string? _email;
         private string? _currentRole;
         private DateTime? _birthDate;
+        private int? _studentID;
         private string? _teacherTitle;
         private string? _position;
         private UsersCreateModel _usersCreateModel;
-        private List<string> _roles = new List<string> { "Administrator", "Pracownik", "Student" };
+        private List<string> _roles = ["Administrator", "Pracownik", "Student"];
         //private ObservableCollection<Subject> _allSubjects;
         private bool _isStudentVisible = false;
         private bool _isTeacherVisible = false;
@@ -86,6 +87,19 @@ namespace Projekt.ViewModels
                 {
                     _password = value;
                     OnPropertyChanged(nameof(Password));
+                }
+            }
+        }
+
+        public int? StudentID
+        {
+            get => _studentID;
+            set
+            {
+                if (_studentID != value)
+                {
+                    _studentID = value;
+                    OnPropertyChanged(nameof(StudentID));
                 }
             }
         }
@@ -154,16 +168,27 @@ namespace Projekt.ViewModels
             }
         }
 
+        private ICommand? _suggestStudentIDCommand;
+        public ICommand SuggestStudentIDCommand
+        {
+            get
+            {
+                return _suggestStudentIDCommand ??= new RelayCommand(
+                async p => StudentID = await SuggestStudentID()
+                );
+            }
+        }
+
         private ICommand? _randomPasswordCommand;
 
         public ICommand RandomPasswordCommand
         {
             get
             {
-                _randomPasswordCommand ??= new RelayCommand(
+                return _randomPasswordCommand ??= new RelayCommand(
                     p => Password = GenerateRandomPassword(12),
                     p => true);
-                return _randomPasswordCommand;
+               
             }
         }
 
@@ -188,7 +213,10 @@ namespace Projekt.ViewModels
 
         #region Private Methods
 
-
+        private async Task<int> SuggestStudentID()
+        {
+            return await UsersCreateModel.LoginWrapper.DBHandler.SuggestStudentID();
+        }
         private string SuggestLogin()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname))
@@ -200,10 +228,9 @@ namespace Projekt.ViewModels
 
         private string GenerateRandomPassword(int length)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?";
-            Random random = new Random();
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+           // Bezpieczny generator haseł
+           return IHashingHandler.GetRandomString(length);
+
         }
 
         #endregion

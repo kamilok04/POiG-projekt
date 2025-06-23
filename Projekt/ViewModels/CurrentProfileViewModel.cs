@@ -84,7 +84,7 @@ namespace Projekt.ViewModels
         public CurrentProfileViewModel(LoginWrapper loginWrapper)
         {
             _loginWrapper = loginWrapper;
-            GetCurrentUserData();
+            GetCurrentUserData().ConfigureAwait(false);
         }
         public CurrentProfileViewModel() { }
         private async Task GetCurrentUserData()
@@ -103,7 +103,11 @@ namespace Projekt.ViewModels
             Surname = (string)row["nazwisko"];
             BirthDate = ((DateTime)row["data_urodzenia"]).ToShortDateString();
             EMail = (string)row["email"];
-            StudentID = ((int)row["indeks"]).ToString();
+            int? tempID = (int?)row["indeks"];
+            if (tempID.HasValue)
+            {
+                StudentID = tempID.Value.ToString();
+            }
             Title = (string)row["tytul"];
 
             if (!String.IsNullOrEmpty(StudentID))
