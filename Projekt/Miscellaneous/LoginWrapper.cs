@@ -8,11 +8,22 @@ using System.Threading.Tasks;
 
 namespace Projekt.Miscellaneous
 {
-    public class LoginWrapper
+    public class LoginWrapper : ObservableObject
     {
         private DatabaseHandler? _DBHandler;
         private string? _username;
         private string? _token;
+        private bool? _valid;
+
+        public bool Valid
+        {
+            get => _valid ?? throw new ArgumentNullException(nameof(_valid));
+            set
+            {
+                _valid = value;
+                OnPropertyChanged(nameof(Valid));
+            }
+        }
         public string? Token
         {
             get => _token;
@@ -57,6 +68,28 @@ namespace Projekt.Miscellaneous
             return Constants.CheckPermissions(currentPermissions, requiredPermissions);
         }
 
+
+        public void Logout()
+        {
+            _token = null;
+            DestroySession(Username);
+            _username = null;
+        }
+
+        private void DestroySession(string? username)
+        {
+            if (!string.IsNullOrEmpty(username))
+            {
+                if (_DBHandler == null)
+                    throw new InvalidOperationException("DBHandler is not initialized.");
+                _DBHandler.DestroySession(username);
+                _DBHandler = null;
+            }
+           
+        
+            Valid = false;
+            
+        }
 
     }
 }

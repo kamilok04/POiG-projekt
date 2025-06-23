@@ -173,5 +173,21 @@ namespace Projekt.Miscellaneous
             }
             return 0;
         }
+
+        public async void DestroySession(string username)
+        {
+
+            await ExecuteNonQueryAsync(
+                "DELETE FROM sesje WHERE login = @username",
+                new Dictionary<string, object> { { "@username", username } }
+
+            );
+            if (_conn != null)
+            {
+                _conn.Close();
+                _conn.Dispose();
+                _conn = null;
+            }
+        }
     }
     }

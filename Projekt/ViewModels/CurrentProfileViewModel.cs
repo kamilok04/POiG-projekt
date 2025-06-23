@@ -20,6 +20,8 @@ namespace Projekt.ViewModels
         private string _phone { get; set; }
         private string _studentID { get; set; }
         private string _title { get; set; }
+        private bool _studentIDPresent = false;
+        private bool _titlePresent = false;
         public string Name { get => _name; 
             set
             {
@@ -52,14 +54,31 @@ namespace Projekt.ViewModels
                 _studentID = value;
                 OnPropertyChanged(nameof(StudentID));
             } }
-        public string Title { get=>Title; set
+        public string Title { get=>_title; set
             {
                 _title = value;
                 OnPropertyChanged(nameof(Title));
             } }
+        public bool StudentIDPresent
+        {
+            get => _studentIDPresent;
+            set
+            {
+                _studentIDPresent = value;
+                OnPropertyChanged(nameof(StudentIDPresent));
+            }
+        }
 
-        public bool StudentIDPresent = false;
-        public bool TitlePresent = false;
+        public bool TitlePresent
+        {
+            get => _titlePresent;
+            set
+            {
+                _titlePresent = value;
+                OnPropertyChanged(nameof(TitlePresent));
+            }
+        }
+
         private LoginWrapper _loginWrapper { get; init; }
 
         public CurrentProfileViewModel(LoginWrapper loginWrapper)
@@ -67,7 +86,7 @@ namespace Projekt.ViewModels
             _loginWrapper = loginWrapper;
             GetCurrentUserData();
         }
-
+        public CurrentProfileViewModel() { }
         private async Task GetCurrentUserData()
         {
             await _loginWrapper.Authenticate(Constants.CanSeeOwnProfile);
@@ -82,16 +101,16 @@ namespace Projekt.ViewModels
             var row = result[0];
             Name = (string) row["imie"];
             Surname = (string)row["nazwisko"];
-            BirthDate = (string)row["data_urodzenia"];
+            BirthDate = ((DateTime)row["data_urodzenia"]).ToShortDateString();
             EMail = (string)row["email"];
-            StudentID = (string)row["indeks"];
+            StudentID = ((int)row["indeks"]).ToString();
             Title = (string)row["tytul"];
 
-            if (StudentID != null)
+            if (!String.IsNullOrEmpty(StudentID))
             {
                 StudentIDPresent = true;
             }
-            if (TitlePresent)
+            if (!String.IsNullOrEmpty(Title))
             {
                 TitlePresent = true;
             }

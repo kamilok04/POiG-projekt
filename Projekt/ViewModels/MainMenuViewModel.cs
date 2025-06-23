@@ -52,9 +52,26 @@ namespace Projekt.ViewModels
                 return _changePageView;
             }
         }
+
+        public ICommand LogoutCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    param =>
+                    {
+                        Logout();
+                    });
+            }
+        }
         #endregion
 
         #region Private Helpers
+        private void Logout()
+        {
+            _model.LoginWrapper.Logout();
+           
+        }
         private async Task ChangePageView(object? param)
         {
             // Na pewno wolno ustawić taki widok?

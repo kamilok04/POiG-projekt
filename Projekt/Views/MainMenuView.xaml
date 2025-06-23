@@ -123,6 +123,9 @@
 
        
         <local:ConditionalContentControl Grid.Row="1" Content="{Binding CurrentPageViewModel}"/>
-        <Label Grid.Row="2" Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+        <Label  Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
+        <Button Command="{Binding LogoutCommand}" >Wyloguj</Button>
+        </StackPanel>
     </Grid>
 </UserControl>

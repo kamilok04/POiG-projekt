@@ -18,10 +18,36 @@ namespace Projekt.ViewModels
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 _loginWrapper = value;
+                _loginWrapper.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(LoginWrapper.Valid))
+                    {
+                        if(LoginWrapper == null || !LoginWrapper.Valid)
+                        {
+                            
+                            NewLogin();
+                        }
+                      
+                    }
+                };  
             }
         }
 
         public MainWindowViewModel() {
+            NewLogin();
+        }
+
+        private void LoginViewModel_Authenticated()
+        {
+
+            MainMenuViewModel mainmenu = new(LoginWrapper);
+
+            ChangeViewModel(mainmenu);
+
+        }
+
+        private void NewLogin()
+        {
             LoginViewModel loginViewModel = new();
             loginViewModel.Authenticated += () =>
             {
@@ -32,15 +58,6 @@ namespace Projekt.ViewModels
                 LoginViewModel_Authenticated();
             };
             ChangeViewModel(loginViewModel);
-        }
-
-        private void LoginViewModel_Authenticated()
-        {
-
-            MainMenuViewModel mainmenu = new(LoginWrapper);
-
-            ChangeViewModel(mainmenu);
-
         }
     }
 }

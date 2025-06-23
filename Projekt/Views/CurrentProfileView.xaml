@@ -9,30 +9,52 @@
                 xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewmodels:CurrentProfileViewModel}, IsDesignTimeCreatable=True}"
              >
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="StudentIDVisibility"/>
+        <BooleanToVisibilityConverter x:Key="TitleVisibility"/>
+    </UserControl.Resources>
 
- 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Grid.ColumnSpan="2" HorizontalAlignment="Stretch">Obecny profil</Label>
-        <Label Grid.Row="1" >Imię:</Label><Label Grid.Row="1" Grid.Column="1"><Binding Path="Name"></Binding></Label>
-        <Label Grid.Row="2" >Nazwisko:</Label><Label Grid.Row="2" Grid.Column="1"><Binding Path="Surname"></Binding></Label>
-        <Label Grid.Row="3" >Data urodzenia:</Label><Label Grid.Row="3" Grid.Column="1"><Binding Path="BirthDate"></Binding></Label>
-        <Label Grid.Row="4" >Adres e-mail:</Label><Label Grid.Row="4" Grid.Column="1"><Binding Path="EMail"></Binding></Label>
-            
-    </Grid>
-        
-  
+    <StackPanel>
+        <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" FontWeight="Bold" FontSize="24">Obecny profil</Label>
+
+        <DockPanel>
+            <Label FontWeight="Bold">Imię:</Label>
+            <Label>
+                <Binding Path="Name" ></Binding>
+            </Label>
+        </DockPanel>
+        <DockPanel>
+            <Label FontWeight="Bold" >Nazwisko:</Label>
+            <Label>
+                <Binding Path="Surname" ></Binding>
+            </Label>
+        </DockPanel>
+        <DockPanel>
+            <Label FontWeight="Bold" >Data urodzenia:</Label>
+            <Label>
+                <Binding Path="BirthDate"></Binding>
+            </Label>
+        </DockPanel>
+        <DockPanel>
+            <Label FontWeight="Bold" >Adres e-mail:</Label>
+            <Label>
+                <Binding Path="EMail"></Binding>
+            </Label>
+        </DockPanel>
+        <DockPanel Visibility="{Binding Path=StudentIDPresent, Converter={StaticResource StudentIDVisibility}, FallbackValue=Hidden}">
+            <Label FontWeight="Bold">Indeks:</Label>
+            <Label>
+                <Binding Path="StudentID"></Binding>
+            </Label>
+        </DockPanel>
+        <DockPanel Visibility="{Binding Path=TitlePresent, Converter={StaticResource TitleVisibility}, FallbackValue=Hidden}">
+            <Label FontWeight="Bold">Tytuł(y):</Label>
+            <Label>
+                <Binding Path="Title"></Binding>
+            </Label>
+        </DockPanel>
+    </StackPanel>
+
+
+
 </UserControl>
