@@ -18,6 +18,7 @@ namespace Projekt.ViewModels
         private MainMenuModel _model { get; init; }
     
         private ICommand? _changePageView;
+        private ConditionalContentControlViewModel _subView {  get; init; }
 
         public LoginWrapper LoginWrapper
         {
@@ -31,7 +32,8 @@ namespace Projekt.ViewModels
         public MainMenuViewModel(LoginWrapper loginWrapper)
         {
             _model = new(loginWrapper);
-            CurrentPageViewModel = new UsersViewTableViewModel(_model.LoginWrapper);
+            CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
+          
         }
         public MainMenuViewModel() { }
 

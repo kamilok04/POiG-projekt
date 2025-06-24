@@ -21,9 +21,13 @@
             <DataTemplate DataType="{x:Type viewmodels:UsersCreateViewModel}">
                 <views:UsersCreateView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:CurrentProfileViewModel}">
+                <views:CurrentProfileView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:ConditionalContentControlViewModel}">
                 <views:ConditionalContentControl/>
             </DataTemplate>
+           
        </ResourceDictionary>  
    </Application.Resources>  
 </Application>

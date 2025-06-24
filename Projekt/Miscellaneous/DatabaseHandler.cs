@@ -21,12 +21,13 @@ namespace Projekt.Miscellaneous
             _sb = new()
             {
                 Server = "mysql-3740706b-poig-projekt.j.aivencloud.com",
-                Database = "projekt",
+                Database = "szkola",
                 UserID = "avnadmin",
                 Password = "AVNS_VF46Jvt9IUHAENA4NeD",
                 Port = 19306,
                 SslCa = ExtractEmbeddedPem("Projekt.Resources.ca.pem"),
                 SslMode = MySqlSslMode.VerifyCA
+               
             };
 
         }
@@ -157,20 +158,20 @@ namespace Projekt.Miscellaneous
             return tempFile;
         }
 
-        public async Task<bool> AuthenticateAsync(LoginWrapper wrapper)
+        public async Task<int> AuthenticateAsync(LoginWrapper wrapper)
         {
-            string query = "SELECT * FROM sessions WHERE username = @username AND token = @token AND expiration_date > NOW()";
+            string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW()";
             var parameters = new Dictionary<string, object>
             {
                 { "@username", wrapper.Username },
                 { "@token", wrapper.Token }
             };
-            var result = await ExecuteQueryAsync(query, parameters);
+            var result = await ExecuteQueryAsync(query, parameters).ConfigureAwait(false);
             if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
             {
-                return true;
+                return (int) result[0]["uprawnienia"];
             }
-            return false;
+            return 0;
         }
     }
     }

@@ -1,5 +1,4 @@
-﻿using MySqlX.XDevAPI.Common;
-using Org.BouncyCastle.Crypto.Engines;
+﻿
 using Projekt.Miscellaneous;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace Projekt.Models
 {
     public class LoginModel : ObservableObject
@@ -19,6 +20,7 @@ namespace Projekt.Models
         private bool _invalidLogin = false;
         private bool _authenticated = false;
         private string _sessionToken = string.Empty;
+
 
         public string UserName { get => _username; set => _username = value; }
         public string Password { get => _password; set => _password = value; }
@@ -68,7 +70,9 @@ namespace Projekt.Models
 
         private async Task Authenticate()
         {
-            await DBHandler.ExecuteQueryAsync("SELECT * FROM users WHERE username = @username", new Dictionary<string, object>
+
+            string queryString = "SELECT salt, haslo FROM uzytkownik WHERE login = @username";
+            await DBHandler.ExecuteQueryAsync(queryString, new Dictionary<string, object>
                   {
                       { "@username", UserName }
                   }).ContinueWith(async task =>
@@ -79,7 +83,7 @@ namespace Projekt.Models
                           {
                               string salt = $@"{(string)row["salt"]}";
                               string localHash = IHashingHandler.GetHashString(Password + salt);
-                              string remoteHash = (string)row["hash"];
+                              string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
                                   CreateSession();
@@ -91,6 +95,7 @@ namespace Projekt.Models
                           }
                           _authenticated = false;
                           InvalidLogin = true;
+
                       }
                       else
                       {
@@ -113,7 +118,9 @@ namespace Projekt.Models
         {
             SessionToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
           
-            await DBHandler.ExecuteNonQueryAsync("INSERT INTO sessions (username, token, expiration_date) VALUES (@username, @token, DATE_ADD(NOW(), INTERVAL 1 HOUR));", new Dictionary<string, object>
+            await DBHandler.ExecuteNonQueryAsync(
+                "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, (SELECT uprawnienia FROM uzytkownik WHERE login = @username));"
+                , new Dictionary<string, object>
             {
                 { "@username", UserName },
                 { "@token", SessionToken }
@@ -122,7 +129,8 @@ namespace Projekt.Models
                 if (!(task.IsCompletedSuccessfully && task.Result > 0))
                 {
                     // TODO: co w razie podwójnego ID sesji?
-                    throw new Exception("Failed to create session.");
+                    // throw new Exception("Failed to create session.");
+
                 }
             });
         }

@@ -45,9 +45,16 @@ namespace Projekt.Miscellaneous
             Token = token ?? throw new ArgumentNullException(nameof(token));
         }
 
-        public async Task<bool> Authenticate()
+        /// <summary>
+        /// Porównuje uprawnienia w bazie danych z wymaganymi.
+        /// </summary>
+        /// 
+        /// <param name="requiredPermissions">Wymagane uprawnienia.</param>
+        /// <returns>Czy użytkownik ma żądane uprawnienia</returns>
+        public async Task<bool> Authenticate(params int[] requiredPermissions)
         {
-            return await DBHandler.AuthenticateAsync(this);
+            int currentPermissions = await DBHandler.AuthenticateAsync(this);
+            return Constants.CheckPermissions(currentPermissions, requiredPermissions);
         }
 
 

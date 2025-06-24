@@ -29,6 +29,22 @@
             </Fluent:Ribbon.Menu>-->
 
             <!--Tabs-->
+            <Fluent:RibbonTabItem Header="Administracja">
+                <Fluent:RibbonGroupBox Header="Wydziały">
+                    <Fluent:Button Header="Zarządzaj" 
+                        Icon="/Resources/edit-256.png"
+                        LargeIcon="/Resources/edit-256.png"
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyManagementViewModel"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Kierunki">
+                    <Fluent:Button Header="Zarządzaj" 
+         Icon="/Resources/edit-256.png"
+         LargeIcon="/Resources/edit-256.png"
+                                   
+         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="MajorManagementViewModel"/>
+                </Fluent:RibbonGroupBox>
+                
+            </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Użytkownicy">
                 <Fluent:RibbonGroupBox Header="Użytkownicy">
                     <Fluent:Button Header="Dodaj"
