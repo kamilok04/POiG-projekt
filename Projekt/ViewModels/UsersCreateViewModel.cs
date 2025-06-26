@@ -1,13 +1,18 @@
-﻿using Projekt.Miscellaneous;
+﻿using Microsoft.Xaml.Behaviors.Media;
+using MySql.Data.MySqlClient;
+using Projekt.Miscellaneous;
 using Projekt.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mail;
 using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace Projekt.ViewModels
 {
@@ -15,104 +20,101 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => "UsersCreate";
 
-        // for designer only
-        public UsersCreateViewModel() { }
-
-
         #region Fields
 
-        private string? _name;
-        private string? _surname;
-        private string? _login;
-        private string? _password;
-        private string? _email;
-        private string? _currentRole;
-        private DateTime? _birthDate;
-        private int? _studentID;
-        private string? _teacherTitle;
-        private string? _position;
-        private UsersCreateModel _usersCreateModel;
-        private List<string> _roles = ["Administrator", "Pracownik", "Student"];
+        private int Permissions = 0;
+        private UsersCreateModel Model;
+        private readonly string[] _roles = ["Administrator", "Pracownik", "Student"];
         //private ObservableCollection<Subject> _allSubjects;
         private bool _isStudentVisible = false;
         private bool _isTeacherVisible = false;
+        private string _errorString;
+        private string _successString;
 
 
+        #endregion
+        #region Constructors
+        public UsersCreateViewModel(LoginWrapper loginWrapper)
+        {
+            UsersCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+        }
+        // for designer only
+        public UsersCreateViewModel() { }
         #endregion
 
         #region Public Properties/Commands
 
         public string? Name
         {
-            get => _name;
+            get => Model._name;
             set
             {
-                if (_name != value)
+                if (Model._name != value)
                 {
-                    _name = value;
+                    Model._name = value;
                     OnPropertyChanged(nameof(Name));
                 }
             }
         }
         public string? Surname
         {
-            get => _surname;
+            get => Model._surname;
             set
             {
-                if (_surname != value)
+                if (Model._surname != value)
                 {
-                    _surname = value;
+                    Model._surname = value;
                     OnPropertyChanged(nameof(Surname));
                 }
             }
         }
         public string? Login
         {
-            get => _login;
+            get => Model._login;
             set
             {
-                if (_login != value)
+                if (Model._login != value)
                 {
-                    _login = value;
+                    Model._login = value;
                     OnPropertyChanged(nameof(Login));
                 }
             }
         }
         public string? Password
         {
-            get => _password;
+            get => Model._password;
             set
             {
-                if (_password != value)
+                if (Model._password != value)
                 {
-                    _password = value;
+                     Model._password = value;
                     OnPropertyChanged(nameof(Password));
                 }
             }
         }
 
-        public int? StudentID
+        public int StudentID
         {
-            get => _studentID;
+            get => Model._studentID;
             set
             {
-                if (_studentID != value)
+                if (Model._studentID != value)
                 {
-                    _studentID = value;
+                    Model._studentID = value;
                     OnPropertyChanged(nameof(StudentID));
                 }
             }
         }
 
-        public string? Email { get => _email; set => _email = value; }
+        public string? Email { get => Model._email; set => Model._email = value; }
         public DateTime? BirthDate
         {
-            get => _birthDate;
+            get => Model._birthDate;
             set
             {
-                if (_birthDate != value)
+                if (Model._birthDate != value)
                 {
-                    _birthDate = value;
+                    Model._birthDate = value;
                     OnPropertyChanged(nameof(BirthDate));
                 }
             }
@@ -121,12 +123,13 @@ namespace Projekt.ViewModels
 
         public string? CurrentRole
         {
-            get => _currentRole;
+            get => Model._currentRole;
             set
             {
-                if (_currentRole != value)
+                if (Model._currentRole != value)
                 {
-                    _currentRole = value;
+                    Model._currentRole = value;
+                    UpdateUserPermissions();
                     OnPropertyChanged(nameof(CurrentRole));
                     OnPropertyChanged(nameof(IsStudentVisible));
                     OnPropertyChanged(nameof(IsTeacherVisible));
@@ -134,12 +137,12 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? TeacherTitle { get => _teacherTitle; set => _teacherTitle = value; }
+        public string? TeacherTitle { get => Model._teacherTitle; set => Model._teacherTitle = value; }
 
-        public string? Position { get => _position; set => _position = value; }
+        public string? Position { get => Model._position; set => Model._position = value; }
 
-        public UsersCreateModel UsersCreateModel { get => _usersCreateModel; set => _usersCreateModel = value; }
-        public List<string> Roles { get => _roles; }
+        public UsersCreateModel UsersCreateModel { get => Model; init => Model = value; }
+        public string[] Roles { get => _roles; }
 
 
         //public ObservableCollection<Subject> AllSubjects { get => _allSubjects; set => _allSubjects = value; }
@@ -149,11 +152,7 @@ namespace Projekt.ViewModels
 
         public bool IsStudentVisible => CurrentRole == "Student";
         public bool IsTeacherVisible => CurrentRole == "Pracownik";
-        public UsersCreateViewModel(LoginWrapper loginWrapper)
-        {
-            UsersCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
-        }
-       
+  
 
         private ICommand? _suggestLoginCommand;
 
@@ -188,30 +187,68 @@ namespace Projekt.ViewModels
                 return _randomPasswordCommand ??= new RelayCommand(
                     p => Password = GenerateRandomPassword(12),
                     p => true);
-               
+
             }
         }
 
 
 
-        //private ICommand? _saveCommand;
+        private ICommand? _saveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ??= new RelayCommand(
+                    async param => await AddUser(),
+                    param => AreAllFieldsFilled());
+            }
+        }
 
-        //private ICommand? _cancelCommand;
+        private ICommand? _cancelCommand;
 
-        //public ICommand CancelCommand
-        //{
-        //    get
-        //    {
-        //        _cancelCommand ??= new RelayCommand(
-        //            p => Cancel(),
-        //            p => true);
-        //        return _cancelCommand;
-        //    }
-        //}
+        public ICommand CancelCommand
+        {
+            get
+            {
+                _cancelCommand ??= new RelayCommand(
+                    p => Cancel(),
+                    p => true);
+                return _cancelCommand;
+            }
+        }
+
+        public string ErrorString { get => _errorString; set
+            {
+                _errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
+            } }
+        public string SuccessString { get => _successString; set
+            {
+                _successString = value;
+                OnPropertyChanged(nameof(SuccessString));
+            }
+        }
 
         #endregion
 
         #region Private Methods
+
+        private void Cancel()
+        {
+            Name = Surname = Password = Login = Email = TeacherTitle = String.Empty;
+            BirthDate = null;
+            
+        }
+
+      
+
+        private bool IsStudentIDAllowed(string? studentID)
+        {
+
+            if (string.IsNullOrEmpty(studentID) || !int.TryParse(studentID, out _))
+                return false;
+            return true;
+        }
 
         private async Task<int> SuggestStudentID()
         {
@@ -226,13 +263,87 @@ namespace Projekt.ViewModels
             return suggestedLogin;
         }
 
+        // Bezpieczny generator haseł
         private string GenerateRandomPassword(int length)
+            => IHashingHandler.GetRandomString(length);
+
+        private bool AreAllFieldsFilled()
         {
-           // Bezpieczny generator haseł
-           return IHashingHandler.GetRandomString(length);
+            // email
+            try { MailAddress address = new(Email); }
+            catch { return false; }
+
+            bool valid =  !(
+                String.IsNullOrEmpty(Login) ||
+                String.IsNullOrEmpty(Name) ||
+                String.IsNullOrEmpty(Surname) ||
+                String.IsNullOrEmpty(Password) ||
+                BirthDate == null ||
+                BirthDate >= DateTime.Today ||
+                Permissions == 0
+                );
+
+            if(IsStudentVisible)
+                valid &= IsStudentIDAllowed(StudentID.ToString());
+
+            return valid;
+
 
         }
 
+        private void UpdateUserPermissions()
+        {
+
+            switch (CurrentRole)
+            {
+                case "Student":
+                    Permissions = PermissionHelper.CombinePermissions(
+                        PermissionHelper.CanSeeOwnProfile,
+                        PermissionHelper.CanSeeOwnSchedule);
+                    break;
+                case "Pracownik":
+                    Permissions = PermissionHelper.CombinePermissions(
+                        PermissionHelper.CanSeeOwnProfile,
+                        PermissionHelper.CanSeeOtherProfiles,
+                        PermissionHelper.CanEditOwnProfile,
+                        PermissionHelper.CanEditOwnSchedule);
+                    break;
+                case "Administrator":
+                    Permissions = PermissionHelper.CombinePermissions(
+                        PermissionHelper.CanModifyData,
+                        PermissionHelper.CanCreateClasses,
+                        PermissionHelper.CanManageGroups,
+                        PermissionHelper.CanSeeOtherProfiles,
+                        PermissionHelper.CanSeeOtherSchedules,
+                        PermissionHelper.CanEditOtherProfiles,
+                        PermissionHelper.CanEditOtherSchedules
+                        );
+                    break;
+                default:
+                    Permissions = PermissionHelper.Blocked;
+                    break;
+            }
+        }
+
+        private async Task<bool> AddUser()
+        {
+            // TODO: jakieś ErrorText ni
+            if (!AreAllFieldsFilled()) return false;
+            bool success =  await Model.AddUser();
+
+            if (!success)
+            {
+                ErrorString = "Dodawanie nieudane! Sprbuj ponownie";
+                SuccessString = "";
+
+            }
+            else
+            {
+                ErrorString = "";
+                SuccessString = "Dodano pomyślnie!";
+            }
+                return success;
+        }
         #endregion
 
 

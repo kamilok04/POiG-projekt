@@ -89,7 +89,7 @@ namespace Projekt.ViewModels
         public CurrentProfileViewModel() { }
         private async Task GetCurrentUserData()
         {
-            await _loginWrapper.Authenticate(Constants.CanSeeOwnProfile);
+            await _loginWrapper.Authenticate(PermissionHelper.CanSeeOwnProfile);
             var result = await _loginWrapper.DBHandler.ExecuteQueryAsync("SELECT imie, nazwisko, data_urodzenia, email, indeks, tytul FROM dane_uzytkownika WHERE login = @username",
                 new Dictionary<string, object>() {
                     { "@username", _loginWrapper.Username }

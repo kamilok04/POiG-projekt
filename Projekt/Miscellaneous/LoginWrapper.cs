@@ -65,7 +65,7 @@ namespace Projekt.Miscellaneous
         public async Task<bool> Authenticate(params int[] requiredPermissions)
         {
             int currentPermissions = await DBHandler.AuthenticateAsync(this);
-            return Constants.CheckPermissions(currentPermissions, requiredPermissions);
+            return PermissionHelper.CheckPermissions(currentPermissions, requiredPermissions);
         }
 
 

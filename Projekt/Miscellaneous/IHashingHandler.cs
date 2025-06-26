@@ -28,7 +28,9 @@ namespace Projekt.Miscellaneous
 
         public static string GetRandomString(int count)
         {
-            return Convert.ToBase64String(RandomNumberGenerator.GetBytes(count));
+            return RandomNumberGenerator.GetHexString(count);
         }
+
+        
     }
 }

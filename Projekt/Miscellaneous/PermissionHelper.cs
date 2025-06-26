@@ -4,12 +4,14 @@ using System.Linq;
 using System.Security.Cryptography.Pkcs;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Automation.Provider;
 
 namespace Projekt.Miscellaneous
 {
-    public static class Constants
+    public static class PermissionHelper
     {
-
+        public const int Blocked = 0;
+        
         public const int CanSeeOwnProfile = 1;
         public const int CanSeeOwnSchedule = 1 << 1;
         public const int CanSeeOtherProfiles = 1 << 2;
@@ -32,6 +34,14 @@ namespace Projekt.Miscellaneous
                 shouldHaveCombined |= current;
            
             return (has ^ shouldHaveCombined) == 0;
+        }
+
+        public static int CombinePermissions(params int[] permissions)
+        {
+            int combined = 0;
+            foreach(var permission in permissions)
+                combined |= permission;
+            return combined;
         }
     }
 }

@@ -59,17 +59,20 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            using var connection = GetConnection();
-            await connection.OpenAsync();
-            using var command = new MySqlCommand(query, connection);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
+            
+                using var connection = GetConnection();
+                await connection.OpenAsync();
+                using var command = new MySqlCommand(query, connection);
+                if (parameters != null)
                 {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
+                    foreach (var param in parameters)
+                    {
+                        command.Parameters.AddWithValue(param.Key, param.Value);
+                    }
                 }
-            }
-            return await command.ExecuteNonQueryAsync();
+                return await command.ExecuteNonQueryAsync();
+            
+           
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)

@@ -25,6 +25,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -83,7 +85,7 @@
                     <ColumnDefinition Width="100px"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBox Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Name="StudentIDBox" Text="{Binding StudentID, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Grid.Column="1" HorizontalAlignment="Right" Padding="10,0,10,0" Command="{Binding SuggestStudentIDCommand}" Width="100px">Zaproponuj</Button>
             </Grid>
         </Grid>
@@ -110,6 +112,8 @@
         <Button Content="Zatwierdż" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right"/>
         <Button Grid.Column="1"  Content="Anuluj" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/> 
         </Grid>
-     </Grid>
+        <Label Grid.Row="10" Grid.ColumnSpan="2" Content="{Binding ErrorString, FallbackValue='Błąd!', Mode=OneWay}" Foreground="Red"  FontSize="24"></Label>
+        <Label Grid.Row="10" Grid.ColumnSpan="2" Content="{Binding SuccessString, FallbackValue='OK :)', Mode=OneWay}" Foreground="Green" FontSize="24"/>
+    </Grid>
 </UserControl>
 
