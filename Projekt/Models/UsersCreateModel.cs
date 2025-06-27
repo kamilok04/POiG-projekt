@@ -10,6 +10,8 @@ using System.Xml.Linq;
 using ZstdSharp.Unsafe;
 using System.Drawing;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using System.Windows.Forms.Design;
 
 namespace Projekt.Models
 {
@@ -49,18 +51,15 @@ namespace Projekt.Models
 
         public async Task<bool> AddUser()
         {
-            if ( !await EnsureUserIsUnique())
-            {
-                return false;
-            }
-            _salt = IHashingHandler.GetRandomString(20);
-            
-                await DatabaseHandler.ExecuteNonQueryAsync(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
 
-                await InsertRoleData();
-          
-            return true;
-            
+            _salt = IHashingHandler.GetRandomString(20);
+
+            // Transakcja: dodaj użytkownika i przypisz mu rolę
+            MySqlCommand AddUserCommand = await DatabaseHandler.CreateCommand(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
+
+            MySqlCommand AssignRoleCommand = await CreateRoleCommand();
+
+            return await DatabaseHandler.ExecuteInTransactionAsync(AddUserCommand, AssignRoleCommand);
 
         }
         private async Task<bool> EnsureUserIsUnique()
@@ -76,7 +75,7 @@ namespace Projekt.Models
             return false; // not unique
         }
 
-        private async Task<int> InsertRoleData()
+        private async Task<MySqlCommand> CreateRoleCommand()
         {
 
             string Query = "";
@@ -108,8 +107,7 @@ namespace Projekt.Models
                     break;
 
             }
-            int code = await DatabaseHandler.ExecuteNonQueryAsync(Query, Parameters);
-            return code;
+            return await DatabaseHandler.CreateCommand(Query, Parameters);
 
         }
 

@@ -36,7 +36,8 @@ namespace Projekt.Miscellaneous
 
         public MySqlConnection GetConnection()
         {
-            return new MySqlConnection(_sb.ConnectionString);
+           return _conn = new(_sb.ConnectionString);
+
         }
 
 
@@ -59,17 +60,10 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            
-                using var connection = GetConnection();
-                await connection.OpenAsync();
-                using var command = new MySqlCommand(query, connection);
-                if (parameters != null)
-                {
-                    foreach (var param in parameters)
-                    {
-                        command.Parameters.AddWithValue(param.Key, param.Value);
-                    }
-                }
+
+            using var connection = GetConnection();
+                using var command = await CreateCommand(query, parameters);
+            command.Connection = connection;
                 return await command.ExecuteNonQueryAsync();
             
            
@@ -77,16 +71,11 @@ namespace Projekt.Miscellaneous
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
         {
+        
+            using var command = await CreateCommand(query, parameters);
             using var connection = GetConnection();
             await connection.OpenAsync();
-            using var command = new MySqlCommand(query, connection);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
-                }
-            }
+            command.Connection = connection;
             object? result = await command.ExecuteScalarAsync();
             return result;
         }
@@ -101,15 +90,9 @@ namespace Projekt.Miscellaneous
         {
             var results = new List<Dictionary<string, object>>();
             using var connection = GetConnection();
-            await connection.OpenAsync().ConfigureAwait(false);
-            using var command = new MySqlCommand(query, connection);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
-                }
-            }
+            await connection.OpenAsync();
+            using var command = await CreateCommand(query, parameters);
+            command.Connection = connection;
             using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
@@ -156,7 +139,7 @@ namespace Projekt.Miscellaneous
             MySqlDataAdapter adapter = new(GenerateSelect(query, parameters));
             DataTable dataTable = new();
             using var connection = GetConnection();
-            await connection.OpenAsync();
+
             adapter.SelectCommand.Connection = connection;
             adapter.Fill(dataTable);
             return dataTable;
@@ -208,5 +191,51 @@ namespace Projekt.Miscellaneous
                 _conn = null;
             }
         }
+        /// <summary>
+        /// Executes a set of database operations within a transaction. Rolls back if an exception occurs.
+        /// </summary>
+        /// <param name="operation">A function that receives an open MySqlConnection and MySqlTransaction to perform operations.</param>
+        /// <returns>True if committed successfully, false if rolled back due to an error.</returns>
+        public async Task<bool> ExecuteInTransactionAsync(params MySqlCommand[] commands )
+        {
+            using var connection = GetConnection();
+            await connection.OpenAsync();
+
+            using var transaction = await connection.BeginTransactionAsync();
+            try
+            {
+
+                foreach (var command in commands)
+                {
+                    command.Connection = connection;
+                    await command.ExecuteNonQueryAsync();
+                }
+                await transaction.CommitAsync();
+                await connection.CloseAsync();
+                return true;
+            }
+             catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                await connection.CloseAsync();
+                Console.WriteLine($"Transaction rolled back due to error: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<MySqlCommand> CreateCommand(string query, Dictionary<string, object>? parameters)
+        {
+           
+
+            MySqlCommand command = new(query);
+
+            if (parameters != null)
+                foreach (var param in parameters) { 
+                    command.Parameters.AddWithValue(param.Key, param.Value);
+                }
+            return command;
+
+        }
+
     }
-    }
+}
