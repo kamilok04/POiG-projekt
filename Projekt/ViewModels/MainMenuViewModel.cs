@@ -20,6 +20,13 @@ namespace Projekt.ViewModels
         private ICommand? _changePageView;
         private ConditionalContentControlViewModel _subView {  get; init; }
 
+        private bool _usersIsSelected = false;
+        private bool _lessonsIsSelected = false;
+        private bool _groupIsSelected = false;
+        private bool _placeIsSelected = false;
+        private bool _subjectIsSelected = false;   
+        private bool _currentProfileIsSelected = true;
+
         public LoginWrapper LoginWrapper
         {
             get => _model.LoginWrapper;
@@ -41,6 +48,108 @@ namespace Projekt.ViewModels
 
         #region Public Properties/Commands
 
+
+        public bool UsersIsSelected
+        {
+            get => _usersIsSelected;
+            set
+            {
+                if (_usersIsSelected != value)
+                {
+                    _usersIsSelected = value;
+                    OnPropertyChanged(nameof(UsersIsSelected));
+                    if (_usersIsSelected)
+                    {
+                        ChangePageView("UsersViewTableViewModel");
+                    }
+                }
+            }
+        }
+
+        public bool LessonsIsSelected
+        {
+            get => _lessonsIsSelected;
+            set
+            {
+                if (_lessonsIsSelected != value)
+                {
+                    _lessonsIsSelected = value;
+                    OnPropertyChanged(nameof(LessonsIsSelected));
+                    if (_lessonsIsSelected)
+                    {
+                        ChangePageView("LessonsViewTableViewModel");
+                    }
+                }
+            }
+        }
+
+        public bool GroupIsSelected
+        {
+            get => _groupIsSelected;
+            set
+            {
+                if (_groupIsSelected != value)
+                {
+                    _groupIsSelected = value;
+                    OnPropertyChanged(nameof(GroupIsSelected));
+                    if (_groupIsSelected)
+                    {
+                        ChangePageView("GroupViewTableViewModel");
+                    }
+                }
+            }
+        }
+
+        public bool PlaceIsSelected
+        {
+            get => _placeIsSelected;
+            set
+            {
+                if (_placeIsSelected != value)
+                {
+                    _placeIsSelected = value;
+                    OnPropertyChanged(nameof(PlaceIsSelected));
+                    if (_placeIsSelected)
+                    {
+                        ChangePageView("PlaceViewTableViewModel");
+                    }
+                }
+            }
+        }
+
+        public bool SubjectIsSelected
+        {
+            get => _subjectIsSelected;
+            set
+            {
+                if (_subjectIsSelected != value)
+                {
+                    _subjectIsSelected = value;
+                    OnPropertyChanged(nameof(SubjectIsSelected));
+                    if (_subjectIsSelected)
+                    {
+                        ChangePageView("SubjectViewTableViewModel");
+                    }
+                }
+            }
+        }
+
+        public bool CurrentProfileIsSelected
+        {
+            get => _currentProfileIsSelected;
+            set
+            {
+                if (_currentProfileIsSelected != value)
+                {
+                    _currentProfileIsSelected = value;
+                    OnPropertyChanged(nameof(CurrentProfileIsSelected));
+                    if (_currentProfileIsSelected)
+                    {
+                        ChangePageView("CurrentProfileViewModel");
+                    }
+                }
+            }
+        }
 
         public ICommand ChangeCurrentPageViewCommand
         {
@@ -79,6 +188,9 @@ namespace Projekt.ViewModels
             if (param is string pageViewModelName)
                 switch (pageViewModelName)
                 {
+                    case "UsersViewTableViewModel":
+                        CurrentPageViewModel = new UsersViewTableViewModel(_model.LoginWrapper);
+                        break;
                     case "UsersCreateViewModel":
                         // Prawdopobnie powoduje wyciek pamięci.
                         CurrentPageViewModel = new UsersCreateViewModel(_model.LoginWrapper);
@@ -89,7 +201,9 @@ namespace Projekt.ViewModels
                     case "UsersDeleteViewModel":
                         CurrentPageViewModel = new UsersDeleteViewModel(_model.LoginWrapper);
                         break;
-
+                    case "LessonsViewTableViewModel":
+                        CurrentPageViewModel = new LessonsViewTableViewModel(_model.LoginWrapper);
+                        break;
                     case "LessonsCreateViewModel":
                         CurrentPageViewModel = new LessonsCreateViewModel(_model.LoginWrapper);
                         break;
@@ -99,7 +213,9 @@ namespace Projekt.ViewModels
                     case "LessonsDeleteViewModel":
                         CurrentPageViewModel = new LessonsDeleteViewModel(_model.LoginWrapper);
                         break;
-
+                    case "GroupsViewTableViewModel":
+                        CurrentPageViewModel = new GroupViewTableViewModel(_model.LoginWrapper);
+                        break;
                     case "GroupCreateViewModel":
                         CurrentPageViewModel = new GroupCreateViewModel(_model.LoginWrapper);
                         break;
@@ -109,7 +225,9 @@ namespace Projekt.ViewModels
                     case "GroupDeleteViewModel":
                         CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper);
                         break;
-
+                    case "PlacesViewTableViewModel":
+                        CurrentPageViewModel = new PlaceViewTableViewModel(_model.LoginWrapper);
+                        break;
                     case "PlaceCreateViewModel":
                         CurrentPageViewModel = new PlaceCreateViewModel(_model.LoginWrapper);
                         break;
@@ -119,7 +237,9 @@ namespace Projekt.ViewModels
                     case "PlaceDeleteViewModel":
                         CurrentPageViewModel = new PlaceDeleteViewModel(_model.LoginWrapper);
                         break;
-
+                    case "SubjectViewTableViewModel":
+                        CurrentPageViewModel = new SubjectViewTableViewModel(_model.LoginWrapper);
+                        break;
                     case "SubjectCreateViewModel":
                         CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
                         break;
@@ -128,6 +248,9 @@ namespace Projekt.ViewModels
                         break;
                     case "SubjectEditViewModel":
                         CurrentPageViewModel = new SubjectDeleteViewModel(_model.LoginWrapper);
+                        break;
+                    case "CurrentProfileViewModel":
+                        CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
                         break;
 
 

@@ -15,5 +15,7 @@ namespace Projekt.ViewModels
         {
             
         }
+
+        public UsersEditViewModel() { } //for designer only
     }
 }

@@ -29,7 +29,7 @@
             </Fluent:Ribbon.Menu>-->
 
             <!--Tabs-->
-            <Fluent:RibbonTabItem Header="Administracja">
+            <Fluent:RibbonTabItem Header="Administracja" IsSelected="{Binding CurrentProfileIsSelected}">
                 <Fluent:RibbonGroupBox Header="Wydziały">
                     <Fluent:Button Header="Zarządzaj" 
                         Icon="/Resources/edit-256.png"
@@ -45,7 +45,7 @@
                 </Fluent:RibbonGroupBox>
                 
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Użytkownicy">
+            <Fluent:RibbonTabItem Header="Użytkownicy" IsSelected="{Binding UsersIsSelected}">
                 <Fluent:RibbonGroupBox Header="Użytkownicy">
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
@@ -62,7 +62,7 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <Fluent:RibbonTabItem Header="Zajęcia">
+            <Fluent:RibbonTabItem Header="Zajęcia" IsSelected="{Binding LessonsIsSelected}" >
                 <Fluent:RibbonGroupBox Header="Zajęcia">
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
@@ -78,7 +78,7 @@
                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsDeleteViewModel"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Przedmioty">
+            <Fluent:RibbonTabItem Header="Przedmioty" IsSelected="{Binding SubjectIsSelected}">
                         <Fluent:RibbonGroupBox Header="Przedmioty">
                             <Fluent:Button Header="Dodaj"
                             Icon="/Resources/plus-256.png"
@@ -94,7 +94,7 @@
                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectDeleteViewModel"/>
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Grupy">
+            <Fluent:RibbonTabItem Header="Grupy" IsSelected="{Binding GroupIsSelected}">
                 <Fluent:RibbonGroupBox Header="Grupy">
                     <Fluent:Button Header="Dodaj"
                         Icon="/Resources/plus-256.png"
@@ -110,8 +110,8 @@
                         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/> 
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Miejsca">
-                <Fluent:RibbonGroupBox Header="Miejsca">
+            <Fluent:RibbonTabItem Header="Miejsca" IsSelected="{Binding PlaceIsSelected}">
+                <Fluent:RibbonGroupBox Header="Miejsca" >
                     <Fluent:Button Header="Dodaj"
                         Icon="/Resources/plus-256.png"
                         LargeIcon="/Resources/plus-256.png" 

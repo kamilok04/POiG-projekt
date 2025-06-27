@@ -41,7 +41,7 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM dane_uzytkownika");
         }
     }
 }

@@ -13,14 +13,11 @@ using System.Threading.Tasks;
 
 namespace Projekt.ViewModels
 {
-    public class LessonsViewTableViewModel : ObservableObject, IPageViewModel
+    public class GroupViewTableViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => nameof(LessonsViewTableViewModel);
-
-        private LessonsViewTableModel Model { get; init; }
-
+        string IPageViewModel.Name => nameof(GroupViewTableViewModel);
+        private GroupViewTableModel Model { get; init; }
         private DataTable? _data;
-
         public DataTable? Data
         {
             get => _data;
@@ -30,18 +27,15 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(Data));
             }
         }
-
-        public LessonsViewTableViewModel(LoginWrapper loginWrapper)
+        public GroupViewTableViewModel(LoginWrapper loginWrapper)
         {
             Model = new(loginWrapper);
             GetDataAsync().ConfigureAwait(false);
         }
-
-        public LessonsViewTableViewModel() { } //for designer only
-
+        public GroupViewTableViewModel() { } //for designer only
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM dane_przedmiotu");
+            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM grupa");
         }
     }
 }
