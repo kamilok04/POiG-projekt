@@ -15,12 +15,72 @@
            <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">  
                <views:MainMenuView />  
            </DataTemplate>
+           
+           
             <DataTemplate DataType="{x:Type viewmodels:UsersViewTableViewModel}">
                 <views:UsersTableView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:UsersCreateViewModel}">
                 <views:UsersCreateView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:UsersDeleteViewModel}">
+                <views:UsersDeleteView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:UsersEditViewModel}">
+                <views:UsersEditView/>
+            </DataTemplate>
+
+           
+            <DataTemplate DataType="{x:Type viewmodels:GroupCreateViewModel}">
+                <views:GroupCreateView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:GroupDeleteViewModel}">
+                <views:GroupDeleteView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:GroupEditViewModel}">
+                <views:GroupEditView/>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewmodels:LessonsCreateViewModel}">
+                <views:LessonsCreateView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LessonsDeleteViewModel}">
+                <views:LessonsDeleteView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LessonsEditViewModel}">
+                <views:LessonsEditView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:LessonsViewTableViewModel}">
+                <views:LessonsTableView/>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewmodels:PlaceCreateViewModel}">
+                <views:PlaceCreatorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:PlaceDeleteViewModel}">
+                <views:PlaceDeleteView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:PlaceEditViewModel}">
+                <views:PlaceEditView/>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewmodels:SubjectCreateViewModel}">
+                <views:SubjectCreateView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SubjectDeleteViewModel}">
+                <views:SubjectDeleteView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SubjectEditViewModel}">
+                <views:SubjectEditView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SubjectViewTableViewModel}">
+                <views:SubjectTableView/>
+            </DataTemplate>
+
+
             <DataTemplate DataType="{x:Type viewmodels:CurrentProfileViewModel}">
                 <views:CurrentProfileView/>
             </DataTemplate>
