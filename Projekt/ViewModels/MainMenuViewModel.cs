@@ -83,15 +83,54 @@ namespace Projekt.ViewModels
                         // Prawdopobnie powoduje wyciek pamięci.
                         CurrentPageViewModel = new UsersCreateViewModel(_model.LoginWrapper);
                         break;
+                    case "UsersEditViewModel":
+                        CurrentPageViewModel = new UsersEditViewModel(_model.LoginWrapper);
+                        break;
+                    case "UsersDeleteViewModel":
+                        CurrentPageViewModel = new UsersDeleteViewModel(_model.LoginWrapper);
+                        break;
+
                     case "LessonsCreateViewModel":
                         CurrentPageViewModel = new LessonsCreateViewModel(_model.LoginWrapper);
                         break;
-                    case "SubjectCreateViewModel":
-                        CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
+                    case "LessonsEditViewModel":
+                        CurrentPageViewModel = new LessonsEditViewModel(_model.LoginWrapper);
                         break;
+                    case "LessonsDeleteViewModel":
+                        CurrentPageViewModel = new LessonsDeleteViewModel(_model.LoginWrapper);
+                        break;
+
+                    case "GroupCreateViewModel":
+                        CurrentPageViewModel = new GroupCreateViewModel(_model.LoginWrapper);
+                        break;
+                    case "GroupEditViewModel":
+                        CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper);
+                        break;
+                    case "GroupDeleteViewModel":
+                        CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper);
+                        break;
+
                     case "PlaceCreateViewModel":
                         CurrentPageViewModel = new PlaceCreateViewModel(_model.LoginWrapper);
                         break;
+                    case "PlaceEditViewModel":
+                        CurrentPageViewModel = new PlaceEditViewModel(_model.LoginWrapper);
+                        break;
+                    case "PlaceDeleteViewModel":
+                        CurrentPageViewModel = new PlaceDeleteViewModel(_model.LoginWrapper);
+                        break;
+
+                    case "SubjectCreateViewModel":
+                        CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
+                        break;
+                    case "SubjectDeleteViewModel":
+                        CurrentPageViewModel = new SubjectEditViewModel(_model.LoginWrapper);
+                        break;
+                    case "SubjectEditViewModel":
+                        CurrentPageViewModel = new SubjectDeleteViewModel(_model.LoginWrapper);
+                        break;
+
+
                 }
         }
 

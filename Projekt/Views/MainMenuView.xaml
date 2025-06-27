@@ -53,10 +53,12 @@
                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersCreateViewModel"/>
                     <Fluent:Button Header="Edytuj" 
                             Icon="/Resources/edit-256.png"
-                            LargeIcon="/Resources/edit-256.png"/>
+                            LargeIcon="/Resources/edit-256.png"
+                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersEditViewModel"/>
                     <Fluent:Button Header="Usuń" 
                            Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png" />
+                           LargeIcon="/Resources/minus-256.png" 
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersDeleteViewModel"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
@@ -65,14 +67,15 @@
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
                            LargeIcon="/Resources/plus-256.png" 
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsCreateViewModel"
-                           />
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsCreateViewModel"/>
                     <Fluent:Button Header="Edytuj" 
                             Icon="/Resources/edit-256.png"
-                            LargeIcon="/Resources/edit-256.png"/>       
+                            LargeIcon="/Resources/edit-256.png"
+                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsEditViewModel"/>       
                     <Fluent:Button Header="Usuń" 
                            Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png" />
+                           LargeIcon="/Resources/minus-256.png" 
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsDeleteViewModel"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Przedmioty">
@@ -80,28 +83,31 @@
                             <Fluent:Button Header="Dodaj"
                             Icon="/Resources/plus-256.png"
                             LargeIcon="/Resources/plus-256.png" 
-                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel"
-                            />
-                    <Fluent:Button Header="Edytuj" 
-                    Icon="/Resources/edit-256.png"
-                    LargeIcon="/Resources/edit-256.png"/> 
-                    <Fluent:Button Header="Usuń" 
+                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel"/>
+                        <Fluent:Button Header="Edytuj" 
+                            Icon="/Resources/edit-256.png"
+                            LargeIcon="/Resources/edit-256.png"
+                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectEditViewModel"/> 
+                        <Fluent:Button Header="Usuń" 
                            Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png" />
+                           LargeIcon="/Resources/minus-256.png"
+                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectDeleteViewModel"/>
                         </Fluent:RibbonGroupBox>
                     </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Grupy">
                 <Fluent:RibbonGroupBox Header="Grupy">
                     <Fluent:Button Header="Dodaj"
-                Icon="/Resources/plus-256.png"
-                LargeIcon="/Resources/plus-256.png" 
-                />
-                <Fluent:Button Header="Edytuj" 
-                Icon="/Resources/edit-256.png"
-                LargeIcon="/Resources/edit-256.png"/>
+                        Icon="/Resources/plus-256.png"
+                        LargeIcon="/Resources/plus-256.png"
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupCreateViewModel"/>
+                    <Fluent:Button Header="Edytuj" 
+                        Icon="/Resources/edit-256.png"
+                        LargeIcon="/Resources/edit-256.png"
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/>
                     <Fluent:Button Header="Usuń" 
-                Icon="/Resources/minus-256.png"
-                LargeIcon="/Resources/minus-256.png" />
+                        Icon="/Resources/minus-256.png"
+                        LargeIcon="/Resources/minus-256.png"
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/> 
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Miejsca">
@@ -109,14 +115,15 @@
                     <Fluent:Button Header="Dodaj"
                         Icon="/Resources/plus-256.png"
                         LargeIcon="/Resources/plus-256.png" 
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceCreateViewModel"
-                        />
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceCreateViewModel"/>
                     <Fluent:Button Header="Edytuj" 
                          Icon="/Resources/edit-256.png"
-                         LargeIcon="/Resources/edit-256.png"/>
+                         LargeIcon="/Resources/edit-256.png"
+                         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceEditViewModel"/>
                     <Fluent:Button Header="Usuń" 
                         Icon="/Resources/minus-256.png"
-                        LargeIcon="/Resources/minus-256.png" />
+                        LargeIcon="/Resources/minus-256.png"
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceDeleteViewModel"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
