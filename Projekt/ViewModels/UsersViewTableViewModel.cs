@@ -17,7 +17,7 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => nameof(UsersViewTableViewModel);
      
-        private UsersViewTableModel Model { get; init; }
+        private UsersViewTableModel? Model { get; init; }
 
         private DataTable? _data;
         public DataTable? Data
@@ -41,7 +41,10 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+            if(Model?.LoginWrapper != null)
+            {
+                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+            }
         }
     }
 }

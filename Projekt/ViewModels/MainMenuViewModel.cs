@@ -15,15 +15,14 @@ namespace Projekt.ViewModels
     {
         #region Fields
         string IPageViewModel.Name => "MainMenu";
-        private MainMenuModel _model { get; init; }
+        private MainMenuModel? _model { get; init; }
     
         private ICommand? _changePageView;
-        private ConditionalContentControlViewModel _subView {  get; init; }
+        private ConditionalContentControlViewModel? _subView {  get; init; }
 
-        public LoginWrapper LoginWrapper
+        public LoginWrapper? LoginWrapper
         {
-            get => _model.LoginWrapper;
-  
+            get => _model?.LoginWrapper;
         }
 
         #endregion
@@ -69,14 +68,14 @@ namespace Projekt.ViewModels
         #region Private Helpers
         private void Logout()
         {
-            _model.LoginWrapper.Logout();
+            _model?.LoginWrapper?.Logout();
            
         }
         private async Task ChangePageView(object? param)
         {
             // Na pewno wolno ustawić taki widok?
             if(!await Authenticate()) return;
-            if (param is string pageViewModelName)
+            if (param is string pageViewModelName && _model?.LoginWrapper != null)
                 switch (pageViewModelName)
                 {
                     case "UsersCreateViewModel":
@@ -136,7 +135,7 @@ namespace Projekt.ViewModels
 
         private async Task<bool> Authenticate() 
         {
-            return await _model.LoginWrapper.Authenticate();
+            return _model?.LoginWrapper != null && await _model.LoginWrapper.Authenticate();
         }
         #endregion
     }

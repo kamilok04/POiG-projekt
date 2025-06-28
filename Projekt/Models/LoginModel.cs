@@ -15,15 +15,15 @@ namespace Projekt.Models
 {
     public class LoginModel : ObservableObject
     {
-        private string _username;
-        private string _password;
+        private string? _username;
+        private string? _password;
         private bool _invalidLogin = false;
         private bool _authenticated = false;
         private string _sessionToken = string.Empty;
 
 
-        public string UserName { get => _username; set => _username = value; }
-        public string Password { get => _password; set => _password = value; }
+        public string? UserName { get => _username; set => _username = value; }
+        public string? Password { get => _password; set => _password = value; }
         public bool Authenticated { get => _authenticated; }
         public string SessionToken
         {
@@ -36,8 +36,8 @@ namespace Projekt.Models
         }
 
         public DatabaseHandler DBHandler { get; init; } = new();
-        private LoginWrapper _loginWrapper { get; set; }
-        public LoginWrapper LoginWrapper
+        private LoginWrapper? _loginWrapper { get; set; }
+        public LoginWrapper? LoginWrapper
         {
             get => _loginWrapper;
             set => _loginWrapper = value;
@@ -74,15 +74,15 @@ namespace Projekt.Models
             string queryString = "SELECT salt, haslo FROM uzytkownik WHERE login = @username";
             await DBHandler.ExecuteQueryAsync(queryString, new Dictionary<string, object>
                   {
-                      { "@username", UserName }
-                  }).ContinueWith(async task =>
+                      { "@username", UserName ?? string.Empty}
+                  }).ContinueWith(task =>
                   {
                       if (task.IsCompletedSuccessfully && task.Result.Count > 0)
                       {
                           foreach (var row in task.Result)
                           {
                               string salt = $@"{(string)row["salt"]}";
-                              string localHash = IHashingHandler.GetHashString(Password + salt);
+                              string? localHash = IHashingHandler.GetHashString(Password + salt) ?? string.Empty;
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
@@ -110,7 +110,7 @@ namespace Projekt.Models
         private void CreateWrapper()
         {
             
-            _loginWrapper = new LoginWrapper(DBHandler, UserName, SessionToken);
+            _loginWrapper = new LoginWrapper(DBHandler, UserName ?? string.Empty, SessionToken);
             return;
         }
 
@@ -122,7 +122,7 @@ namespace Projekt.Models
                 "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, (SELECT uprawnienia FROM uzytkownik WHERE login = @username));"
                 , new Dictionary<string, object>
             {
-                { "@username", UserName },
+                { "@username", UserName ?? string.Empty },
                 { "@token", SessionToken }
             }).ContinueWith(task =>
             {

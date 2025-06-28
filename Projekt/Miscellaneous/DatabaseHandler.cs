@@ -32,15 +32,11 @@ namespace Projekt.Miscellaneous
 
         }
 
-
-
         public MySqlConnection GetConnection()
         {
            return _conn = new(_sb.ConnectionString);
 
         }
-
-
 
         public async Task<bool> TestConnectionAsync()
         {
@@ -60,19 +56,16 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
-
             using var connection = GetConnection();
-                using var command = await CreateCommand(query, parameters);
+                using var command = CreateCommand(query, parameters);
             command.Connection = connection;
                 return await command.ExecuteNonQueryAsync();
-            
-           
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
         {
         
-            using var command = await CreateCommand(query, parameters);
+            using var command = CreateCommand(query, parameters);
             using var connection = GetConnection();
             await connection.OpenAsync();
             command.Connection = connection;
@@ -91,7 +84,7 @@ namespace Projekt.Miscellaneous
             var results = new List<Dictionary<string, object>>();
             using var connection = GetConnection();
             await connection.OpenAsync();
-            using var command = await CreateCommand(query, parameters);
+            using var command = CreateCommand(query, parameters);
             command.Connection = connection;
             using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -136,14 +129,17 @@ namespace Projekt.Miscellaneous
         }
         public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            MySqlDataAdapter adapter = new(GenerateSelect(query, parameters));
             DataTable dataTable = new();
             using var connection = GetConnection();
+            await connection.OpenAsync();
 
-            adapter.SelectCommand.Connection = connection;
-            adapter.Fill(dataTable);
+            using var command = CreateCommand(query, parameters);
+            command.Connection = connection;
+
+            using var reader = await command.ExecuteReaderAsync();
+            dataTable.Load(reader);
+
             return dataTable;
-
         }
 
 
@@ -165,8 +161,8 @@ namespace Projekt.Miscellaneous
             string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW()";
             var parameters = new Dictionary<string, object>
             {
-                { "@username", wrapper.Username },
-                { "@token", wrapper.Token }
+                { "@username", wrapper.Username ?? string.Empty},
+                { "@token", wrapper.Token ?? string.Empty}
             };
             var result = await ExecuteQueryAsync(query, parameters).ConfigureAwait(false);
             if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
@@ -223,19 +219,16 @@ namespace Projekt.Miscellaneous
             }
         }
 
-        public async Task<MySqlCommand> CreateCommand(string query, Dictionary<string, object>? parameters)
+        public MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
         {
-           
-
             MySqlCommand command = new(query);
 
             if (parameters != null)
-                foreach (var param in parameters) { 
+                foreach (var param in parameters)
+                {
                     command.Parameters.AddWithValue(param.Key, param.Value);
                 }
             return command;
-
         }
-
     }
 }

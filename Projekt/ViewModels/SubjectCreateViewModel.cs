@@ -22,7 +22,7 @@ namespace Projekt.ViewModels
         private string? _description;
         private string? _passingCriteria;
         private string? _literature;
-        private SubjectCreateModel _subjectCreateModel;
+        private SubjectCreateModel? _subjectCreateModel;
 
 
         #endregion
@@ -101,7 +101,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public SubjectCreateModel SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
+        public SubjectCreateModel? SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
 
         public SubjectCreateViewModel(LoginWrapper loginWrapper)
         {
