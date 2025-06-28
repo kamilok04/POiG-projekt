@@ -26,7 +26,7 @@ namespace Projekt.ViewModels
         private string? _description;
         private string? _passingCriteria;
         private string? _literature;
-        private SubjectCreateModel _subjectCreateModel;
+        private SubjectCreateModel? _subjectCreateModel;
 
         private string _errorString;
         private string _successString;
@@ -106,24 +106,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string ErrorString
-        {
-            get => _errorString; set
-            {
-                _errorString = value;
-                OnPropertyChanged(nameof(ErrorString));
-            }
-        }
-        public string SuccessString
-        {
-            get => _successString; set
-            {
-                _successString = value;
-                OnPropertyChanged(nameof(SuccessString));
-            }
-        }
-
-        public SubjectCreateModel SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
+        public SubjectCreateModel? SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
 
         public SubjectCreateViewModel(LoginWrapper loginWrapper)
         {

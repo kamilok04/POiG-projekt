@@ -12,37 +12,40 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => "GroupCreate";
 
-        public GroupCreateViewModel() { }
+        public GroupCreateViewModel() {
+            _faculties = ["Informatyka", "Matematyka", "Fizyka"];
+            _degree = ["Licencjat", "Magister", "Doktor"];
+        }
 
         #region Fields
-        private List<string> _faculties;
-        private List<string> _degree;
-        private List<int> _semesters = [1, 2, 3, 4, 5, 6, 7];
-        private string _currentFaculty;
-        private string _currentDegree;
-        private string _currentSemester;
-        private GroupCreateModel _model;
+        private List<string>? _faculties;
+        private List<string>? _degree;
+        private List<int>? _semesters = [1, 2, 3, 4, 5, 6, 7];
+        private string? _currentFaculty;
+        private string? _currentDegree;
+        private string? _currentSemester;
+        private GroupCreateModel? _model;
         #endregion
 
         #region Public Properties/Commands
-        public List<string> Faculties { get => _faculties; }
-        public List<string> Degrees { get => _degree; }
-        public List<int> Semesters {  get => _semesters; }
+        public List<string>? Faculties { get => _faculties; }
+        public List<string>? Degrees { get => _degree; }
+        public List<int>? Semesters {  get => _semesters; }
 
-        public string CurrentFaculty 
+        public string? CurrentFaculty 
         { 
             get => _currentFaculty; 
             set 
             {
                 if (_currentFaculty != value)
                 {
-                    value = _currentFaculty;
-                    OnPropertyChanged(CurrentFaculty);
+                    _currentFaculty = value;
+                    OnPropertyChanged(nameof(CurrentFaculty));
                 }
             } 
         }
 
-        public string CurrentDegree
+        public string? CurrentDegree
         {
             get => _currentDegree;
             set
@@ -50,12 +53,12 @@ namespace Projekt.ViewModels
                 if (_currentDegree != value)
                 {
                     _currentDegree = value;
-                    OnPropertyChanged(CurrentDegree);
+                    OnPropertyChanged(nameof(CurrentDegree));
                 }
             }
         }
 
-        public string CurrentSemester
+        public string? CurrentSemester
         {
             get => _currentSemester;
             set
@@ -63,12 +66,12 @@ namespace Projekt.ViewModels
                 if (_currentSemester != value)
                 {
                     _currentSemester = value;
-                    OnPropertyChanged(CurrentSemester);
+                    OnPropertyChanged(nameof(CurrentSemester));
                 }
             }
         }
 
-        public GroupCreateModel Model { get => _model; set => _model = value; }
+        public GroupCreateModel? Model { get => _model; set => _model = value; }
 
         public GroupCreateViewModel(LoginWrapper loginWrapper)
         {

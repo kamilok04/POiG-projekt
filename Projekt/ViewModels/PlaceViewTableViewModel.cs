@@ -15,8 +15,9 @@ namespace Projekt.ViewModels
 {
     public class PlaceViewTableViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => nameof(PlaceViewTableViewModel);
-        private PlaceViewTableModel Model { get; init; }
+        string IPageViewModel.Name => nameof(UsersViewTableViewModel);
+     
+        private UsersViewTableModel? Model { get; init; }
 
         private DataTable? _data;
 
@@ -40,7 +41,10 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM miejsce");
+            if(Model?.LoginWrapper != null)
+            {
+                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+            }
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Projekt.Models
 {
     public class BaseTableModel 
     {
-        private LoginWrapper _loginWrapper;
-        public LoginWrapper LoginWrapper
+        private LoginWrapper? _loginWrapper;
+        public LoginWrapper? LoginWrapper
         {
             get => _loginWrapper;
             init => _loginWrapper = value ?? throw new ArgumentNullException(nameof(value));
@@ -22,18 +22,26 @@ namespace Projekt.Models
         }
         public async Task<List<Dictionary<string, object>>> RetrieveDefaultQuery()
         {
-            List<Dictionary<string, object>> result = [];
-            await _loginWrapper.DBHandler.ExecuteQueryAsync(((ITable)this).DefaultQuery)
-                .ContinueWith(task =>
-                {
-                    if (task.IsCompletedSuccessfully && task.Result.Count > 0)
-                    {
-                        result = task.Result;
-                    }
+            if (_loginWrapper == null)
+            {
+                throw new InvalidOperationException("LoginWrapper is not initialized.");
+            }
 
-                });
+            var defaultQuery = ((ITable)this).DefaultQuery;
+            if (string.IsNullOrWhiteSpace(defaultQuery))
+            {
+                throw new InvalidOperationException("DefaultQuery cannot be null or empty.");
+            }
 
-            return result;
+            try
+            {
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(defaultQuery);
+                return result ?? new List<Dictionary<string, object>>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to retrieve default query.", ex);
+            }
         }
     }
 }

@@ -23,13 +23,13 @@ namespace Projekt.ViewModels
         #region Fields
 
         private int Permissions = 0;
-        private UsersCreateModel Model;
+        private UsersCreateModel? Model;
         private readonly string[] _roles = ["Administrator", "Pracownik", "Student"];
         //private ObservableCollection<Subject> _allSubjects;
-        private bool _isStudentVisible = false;
-        private bool _isTeacherVisible = false;
-        private string _errorString;
-        private string _successString;
+        //private bool _isStudentVisible = false;
+        //private bool _isTeacherVisible = false;
+        private string? _errorString;
+        private string? _successString;
 
 
         #endregion
@@ -46,10 +46,10 @@ namespace Projekt.ViewModels
 
         public string? Name
         {
-            get => Model._name;
+            get => Model?._name;
             set
             {
-                if (Model._name != value)
+                if (Model?._name != value && Model != null)
                 {
                     Model._name = value;
                     OnPropertyChanged(nameof(Name));
@@ -58,10 +58,10 @@ namespace Projekt.ViewModels
         }
         public string? Surname
         {
-            get => Model._surname;
+            get => Model?._surname;
             set
             {
-                if (Model._surname != value)
+                if (Model?._surname != value && Model != null)
                 {
                     Model._surname = value;
                     OnPropertyChanged(nameof(Surname));
@@ -70,10 +70,10 @@ namespace Projekt.ViewModels
         }
         public string? Login
         {
-            get => Model._login;
+            get => Model?._login;
             set
             {
-                if (Model._login != value)
+                if (Model?._login != value && Model != null)
                 {
                     Model._login = value;
                     OnPropertyChanged(nameof(Login));
@@ -82,10 +82,10 @@ namespace Projekt.ViewModels
         }
         public string? Password
         {
-            get => Model._password;
+            get => Model?._password;
             set
             {
-                if (Model._password != value)
+                if (Model?._password != value && Model != null)
                 {
                      Model._password = value;
                     OnPropertyChanged(nameof(Password));
@@ -95,10 +95,10 @@ namespace Projekt.ViewModels
 
         public int StudentID
         {
-            get => Model._studentID;
+            get => Model?._studentID ?? 0;
             set
             {
-                if (Model._studentID != value)
+                if (Model?._studentID != value && Model != null)
                 {
                     Model._studentID = value;
                     OnPropertyChanged(nameof(StudentID));
@@ -106,13 +106,22 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? Email { get => Model._email; set => Model._email = value; }
-        public DateTime? BirthDate
-        {
-            get => Model._birthDate;
+        public string? Email { 
+            get => Model?._email; 
             set
             {
-                if (Model._birthDate != value)
+                if (Model?._email != value && Model != null)
+                {
+                    Model._email = value;
+                }
+            } 
+        }
+        public DateTime? BirthDate
+        {
+            get => Model?._birthDate;
+            set
+            {
+                if (Model?._birthDate != value && Model != null)
                 {
                     Model._birthDate = value;
                     OnPropertyChanged(nameof(BirthDate));
@@ -123,10 +132,10 @@ namespace Projekt.ViewModels
 
         public string? CurrentRole
         {
-            get => Model._currentRole;
+            get => Model?._currentRole;
             set
             {
-                if (Model._currentRole != value)
+                if (Model?._currentRole != value && Model != null)
                 {
                     Model._currentRole = value;
                     UpdateUserPermissions();
@@ -137,11 +146,29 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? TeacherTitle { get => Model._teacherTitle; set => Model._teacherTitle = value; }
+        public string? TeacherTitle { 
+            get => Model?._teacherTitle;
+            set
+            {
+                if (Model?._teacherTitle != value && Model != null)
+                {
+                    Model._teacherTitle = value;
+                }
+            }
+        }
 
-        public string? Position { get => Model._position; set => Model._position = value; }
+        public string? Position {
+            get => Model?._position;
+            set
+            {
+                if (Model?._position != value && Model != null)
+                {
+                    Model._position = value;
+                }
+            }
+        } 
 
-        public UsersCreateModel UsersCreateModel { get => Model; init => Model = value; }
+        public UsersCreateModel? UsersCreateModel { get => Model; init => Model = value; }
         public string[] Roles { get => _roles; }
 
 
@@ -217,12 +244,12 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string ErrorString { get => _errorString; set
+        public string? ErrorString { get => _errorString; set
             {
                 _errorString = value;
                 OnPropertyChanged(nameof(ErrorString));
             } }
-        public string SuccessString { get => _successString; set
+        public string? SuccessString { get => _successString; set
             {
                 _successString = value;
                 OnPropertyChanged(nameof(SuccessString));
@@ -252,7 +279,7 @@ namespace Projekt.ViewModels
 
         private async Task<int> SuggestStudentID()
         {
-            return await UsersCreateModel.LoginWrapper.DBHandler.SuggestStudentID();
+            return await (UsersCreateModel?.LoginWrapper?.DBHandler?.SuggestStudentID() ?? Task.FromResult(0));
         }
         private string SuggestLogin()
         {
@@ -270,7 +297,11 @@ namespace Projekt.ViewModels
         private bool AreAllFieldsFilled()
         {
             // email
-            try { MailAddress address = new(Email); }
+            try {
+                if (string.IsNullOrEmpty(Email))
+                    return false;
+                _ = new MailAddress(Email);
+            }
             catch { return false; }
 
             bool valid =  !(
@@ -328,7 +359,9 @@ namespace Projekt.ViewModels
         private async Task<bool> AddUser()
         {
             // TODO: jakieś ErrorText ni
-            if (!AreAllFieldsFilled()) return false;
+            if (!AreAllFieldsFilled() || Model == null) 
+                return false;
+
             bool success =  await Model.AddUser();
 
             if (!success)

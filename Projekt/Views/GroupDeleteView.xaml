@@ -7,7 +7,7 @@
              xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupDeleteViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupDeleteViewModel}, IsDesignTimeCreatable=False}">
     <Grid>
             
     </Grid>
