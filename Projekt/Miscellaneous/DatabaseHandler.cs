@@ -127,21 +127,10 @@ namespace Projekt.Miscellaneous
 
         }
 
-        private static MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
-        {
-            MySqlCommand command = new(query);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
-                }
-            }
-            return command;
-        }
+
         public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            MySqlDataAdapter adapter = new(GenerateSelect(query, parameters));
+            MySqlDataAdapter adapter = new(CreateCommand(query, parameters));
             DataTable dataTable = new();
             using var connection = GetConnection();
 

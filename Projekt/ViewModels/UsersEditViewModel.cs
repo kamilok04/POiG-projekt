@@ -10,16 +10,35 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class UsersEditViewModel : ObservableObject, IPageViewModel
+    public class UsersEditViewModel : TableViewModel, IPageViewModel, ITable
     {
+        #region Interface Implementations
         string IPageViewModel.Name => nameof(UsersEditViewModel);
-     
-        private UsersViewTableModel Model { get; init; }
+        string ITable.DefaultQuery => "SELECT * FROM dane_uzytkownika";
+        string ITable.TableName => "dane_uzytkownika";
+        Dictionary<string, object>? ITable.DefaultParameters => null;
+
+        #endregion
+
+        #region Private Fields
+        private UsersEditModel Model { get; init; }
 
         private DataTable? _data;
+
+   
+        #endregion
+        #region Public Members / Commands
+
+
+
+      
+
+
         public DataTable? TableData
         {
             get => _data;
@@ -30,19 +49,35 @@ namespace Projekt.ViewModels
             }
         }
 
+            
+
         public UsersEditViewModel(LoginWrapper loginWrapper)
         {
-   
+
             Model = new(loginWrapper);
             GetDataAsync().ConfigureAwait(false); ;
         }
 
+        private void ActiveCell_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+          
+        }
+
         public UsersEditViewModel() { } //for designer only
+        #endregion
+        #region Private Methods
 
         private async Task GetDataAsync()
         {
-            TableData = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM dane_uzytkownika");
+            TableData = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(((ITable)this).DefaultQuery);
+
         }
 
-    }
+       
+
+        #endregion
+
+        public ITable ToITable() => this;
+
+     }
 }
