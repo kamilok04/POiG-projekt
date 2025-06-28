@@ -18,9 +18,9 @@ namespace Projekt.Views
     /// <summary>
     /// Interaction logic for UserTableView.xaml
     /// </summary>
-    public partial class UsersTableView : UserControl
+    public partial class TableView : UserControl
     {
-        public UsersTableView()
+        public TableView()
         {
             InitializeComponent();
         }

@@ -13,35 +13,38 @@ using System.Threading.Tasks;
 
 namespace Projekt.ViewModels
 {
-    public class UsersViewTableViewModel : ObservableObject, IPageViewModel
+    public class FacultyEditViewModel : ObservableObject, IPageViewModel, ITable
     {
-        string IPageViewModel.Name => nameof(UsersViewTableViewModel);
-     
+        string ITable.DefaultQuery => "SELECT * FROM wydzial";
+        string ITable.TableName => "wydzial";
+        Dictionary<string, object>? ITable.DefaultParameters => null;
+        string IPageViewModel.Name => nameof(FacultyEditViewModel);
+
         private UsersViewTableModel Model { get; init; }
 
         private DataTable? _data;
-        public DataTable? Data
+        public DataTable? TableData
         {
             get => _data;
             private set
             {
                 _data = value;
-                OnPropertyChanged(nameof(Data));
+                OnPropertyChanged(nameof(TableData));
             }
         }
 
-        public UsersViewTableViewModel(LoginWrapper loginWrapper)
+        public FacultyEditViewModel(LoginWrapper loginWrapper)
         {
-   
+
             Model = new(loginWrapper);
             GetDataAsync().ConfigureAwait(false); ;
         }
 
-        public UsersViewTableViewModel() { } //for designer only
+        public FacultyEditViewModel() { } //for designer only
 
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM dane_uzytkownika");
+            TableData = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(((ITable)this).DefaultQuery);
         }
     }
 }

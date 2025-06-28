@@ -55,7 +55,7 @@ namespace Projekt.Models
             _salt = IHashingHandler.GetRandomString(20);
 
             // Transakcja: dodaj użytkownika i przypisz mu rolę
-            MySqlCommand AddUserCommand = await DatabaseHandler.CreateCommand(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
+            MySqlCommand AddUserCommand = DatabaseHandler.CreateCommand(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
 
             MySqlCommand AssignRoleCommand = await CreateRoleCommand();
 
@@ -67,9 +67,9 @@ namespace Projekt.Models
             string query = "SELECT COUNT(*) FROM uzytkownik WHERE login = @login";
             Dictionary<string, object> parameters = new() { { "@login", _login } };
             List<Dictionary<string, object>> result = await DatabaseHandler.ExecuteQueryAsync(query, parameters);
-            if (result.Count > 0 && result[0].ContainsKey("COUNT(*)"))
+            if (result.Count > 0 && result[0].TryGetValue("COUNT(*)", out object? value))
             {
-                int count = Convert.ToInt32(result[0]["COUNT(*)"]);
+                int count = Convert.ToInt32(value);
                 return count == 0; // true if unique
             }
             return false; // not unique
@@ -107,7 +107,7 @@ namespace Projekt.Models
                     break;
 
             }
-            return await DatabaseHandler.CreateCommand(Query, Parameters);
+            return DatabaseHandler.CreateCommand(Query, Parameters);
 
         }
 

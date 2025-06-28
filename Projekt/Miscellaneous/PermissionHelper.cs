@@ -24,6 +24,7 @@ namespace Projekt.Miscellaneous
         public const int CanManageGroups = 1 << 9;
         public const int CanModifyData = 1 << 10; // wydziały, adresy, etc.
         public const int CanChangePermissions = 1 << 11;
+        public const int CanManageUsers = 1 << 12; // dodawanie, usuwanie, edytowanie użytkowników
 
         public const int God = ~0;
 
@@ -33,7 +34,7 @@ namespace Projekt.Miscellaneous
             foreach(var current in shouldHave)
                 shouldHaveCombined |= current;
            
-            return (has ^ shouldHaveCombined) == 0;
+            return (has & shouldHaveCombined) == shouldHaveCombined;
         }
 
         public static int CombinePermissions(params int[] permissions)

@@ -16,21 +16,21 @@ namespace Projekt.ViewModels
         #region Fields
         string IPageViewModel.Name => "MainMenu";
         private MainMenuModel _model { get; init; }
-    
+
         private ICommand? _changePageView;
-        private ConditionalContentControlViewModel _subView {  get; init; }
+        private ConditionalContentControlViewModel _subView { get; init; }
 
         private bool _usersIsSelected = false;
         private bool _lessonsIsSelected = false;
         private bool _groupIsSelected = false;
         private bool _placeIsSelected = false;
         private bool _subjectIsSelected = false;   
-        private bool _currentProfileIsSelected = true;
+        private bool _currentProfileIsSelected = false;
 
         public LoginWrapper LoginWrapper
         {
             get => _model.LoginWrapper;
-  
+
         }
 
         #endregion
@@ -40,7 +40,7 @@ namespace Projekt.ViewModels
         {
             _model = new(loginWrapper);
             CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
-          
+
         }
         public MainMenuViewModel() { }
 
@@ -156,7 +156,7 @@ namespace Projekt.ViewModels
             get
             {
                 _changePageView ??= new RelayCommand(
-                    async param => await ChangePageView(param) 
+                    async param => await ChangePageView(param)
                 );
                 return _changePageView;
             }
@@ -179,87 +179,151 @@ namespace Projekt.ViewModels
         private void Logout()
         {
             _model.LoginWrapper.Logout();
-           
+
         }
         private async Task ChangePageView(object? param)
         {
             // Na pewno wolno ustawić taki widok?
-            if(!await Authenticate()) return;
+
             if (param is string pageViewModelName)
+            {
+
                 switch (pageViewModelName)
                 {
-                    case "UsersViewTableViewModel":
-                        CurrentPageViewModel = new UsersViewTableViewModel(_model.LoginWrapper);
-                        break;
+
+                    // TODO: zbombardować tego switcha
+                    // Możliwe rozwiązanie:
+                    //      Type type = Type.GetType("pageViewModelName");
+                    //      CurrentPageViewModel = new type(_model.LoginWrapper);
+
+                    // Problem: każdy panel ma inne uprawnienia dostępu
+                    //      przeniesienie weryfikacji do konstruktora może mijać się z celem? (TODO: sprawdzić)
+
                     case "UsersCreateViewModel":
-                        // Prawdopobnie powoduje wyciek pamięci.
+
+                        if (!await Authenticate(PermissionHelper.CanManageUsers))
+                          return;
                         CurrentPageViewModel = new UsersCreateViewModel(_model.LoginWrapper);
                         break;
                     case "UsersEditViewModel":
+                        if (!await Authenticate(PermissionHelper.CanManageUsers))
+                           return;
                         CurrentPageViewModel = new UsersEditViewModel(_model.LoginWrapper);
                         break;
+                    
                     case "UsersDeleteViewModel":
+                        if (!await Authenticate(PermissionHelper.CanManageUsers))
+                            return;
                         CurrentPageViewModel = new UsersDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "LessonsViewTableViewModel":
                         CurrentPageViewModel = new LessonsViewTableViewModel(_model.LoginWrapper);
                         break;
                     case "LessonsCreateViewModel":
+                        if (!await Authenticate(
+                            PermissionHelper.CanSeeOwnSchedule,
+                            PermissionHelper.CanEditOwnSchedule,
+                            PermissionHelper.CanSeeOtherSchedules,
+                            PermissionHelper.CanEditOtherSchedules))
+                            return;
                         CurrentPageViewModel = new LessonsCreateViewModel(_model.LoginWrapper);
                         break;
                     case "LessonsEditViewModel":
+                        if (!await Authenticate(
+                           PermissionHelper.CanSeeOwnSchedule,
+                           PermissionHelper.CanEditOwnSchedule,
+                           PermissionHelper.CanSeeOtherSchedules,
+                           PermissionHelper.CanEditOtherSchedules))
+                            return;
                         CurrentPageViewModel = new LessonsEditViewModel(_model.LoginWrapper);
                         break;
                     case "LessonsDeleteViewModel":
+                        if (!await Authenticate(
+                           PermissionHelper.CanSeeOwnSchedule,
+                           PermissionHelper.CanEditOwnSchedule,
+                           PermissionHelper.CanSeeOtherSchedules,
+                           PermissionHelper.CanEditOtherSchedules))
+                            return;
                         CurrentPageViewModel = new LessonsDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "GroupsViewTableViewModel":
                         CurrentPageViewModel = new GroupViewTableViewModel(_model.LoginWrapper);
                         break;
                     case "GroupCreateViewModel":
+                        if (!await Authenticate(
+                            PermissionHelper.CanManageGroups,
+                            PermissionHelper.CanSeeOtherProfiles))
+                            return;
                         CurrentPageViewModel = new GroupCreateViewModel(_model.LoginWrapper);
                         break;
                     case "GroupEditViewModel":
+                        if (!await Authenticate(
+                           PermissionHelper.CanManageGroups,
+                           PermissionHelper.CanSeeOtherProfiles))
+                            return;
                         CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper);
                         break;
                     case "GroupDeleteViewModel":
+                        if (!await Authenticate(
+                           PermissionHelper.CanManageGroups,
+                           PermissionHelper.CanSeeOtherProfiles))
+                            return;
                         CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "PlacesViewTableViewModel":
                         CurrentPageViewModel = new PlaceViewTableViewModel(_model.LoginWrapper);
                         break;
                     case "PlaceCreateViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new PlaceCreateViewModel(_model.LoginWrapper);
                         break;
                     case "PlaceEditViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new PlaceEditViewModel(_model.LoginWrapper);
                         break;
                     case "PlaceDeleteViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new PlaceDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "SubjectViewTableViewModel":
                         CurrentPageViewModel = new SubjectViewTableViewModel(_model.LoginWrapper);
                         break;
                     case "SubjectCreateViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
                         break;
                     case "SubjectDeleteViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new SubjectEditViewModel(_model.LoginWrapper);
                         break;
                     case "SubjectEditViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
                         CurrentPageViewModel = new SubjectDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "CurrentProfileViewModel":
                         CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
                         break;
 
+                    case "FacultyEditViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
+                        CurrentPageViewModel = new FacultyEditViewModel(_model.LoginWrapper);
+                        break;
+
 
                 }
+            }
         }
 
-        private async Task<bool> Authenticate() 
+        private async Task<bool> Authenticate(params int[] requiredPermissions)
         {
-            return await _model.LoginWrapper.Authenticate();
+            return await _model.LoginWrapper.Authenticate(requiredPermissions);
         }
         #endregion
     }

@@ -1,13 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projekt.Miscellaneous
 {
@@ -62,17 +56,28 @@ namespace Projekt.Miscellaneous
         {
 
             using var connection = GetConnection();
-                using var command = await CreateCommand(query, parameters);
-            command.Connection = connection;
+                using var command = CreateCommand(query, parameters);
+            try
+            {
+                await connection.OpenAsync();
+                command.Connection = connection;
                 return await command.ExecuteNonQueryAsync();
-            
+
+            }
+            catch (IOException ioex)
+            {
+                Console.WriteLine($"Łączność padła na amen: {ioex.Message}");
+                return -1;
+
+            }
+           
            
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
         {
         
-            using var command = await CreateCommand(query, parameters);
+            using var command = CreateCommand(query, parameters);
             using var connection = GetConnection();
             await connection.OpenAsync();
             command.Connection = connection;
@@ -91,7 +96,7 @@ namespace Projekt.Miscellaneous
             var results = new List<Dictionary<string, object>>();
             using var connection = GetConnection();
             await connection.OpenAsync();
-            using var command = await CreateCommand(query, parameters);
+            using var command = CreateCommand(query, parameters);
             command.Connection = connection;
             using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
             while (await reader.ReadAsync().ConfigureAwait(false))
@@ -118,7 +123,7 @@ namespace Projekt.Miscellaneous
             {
                 return nextId;
             }
-            throw new InvalidOperationException("Nie można przetworzyć następnego ID studenta.");
+            return 0; // Nie rzucaj użytkownikom wyjątków
 
         }
 
@@ -150,10 +155,7 @@ namespace Projekt.Miscellaneous
         private static string ExtractEmbeddedPem(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using var stream = assembly.GetManifestResourceStream(resourceName);
-            if (stream == null)
-                throw new FileNotFoundException("Resource not found: " + resourceName);
-
+            using var stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException("Resource not found: " + resourceName);
             string tempFile = Path.GetTempFileName();
             using var fileStream = File.Create(tempFile);
             stream.CopyTo(fileStream);
@@ -162,7 +164,8 @@ namespace Projekt.Miscellaneous
 
         public async Task<int> AuthenticateAsync(LoginWrapper wrapper)
         {
-            string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW()";
+            // TODO: nie zezwalaj na przedawnione tokeny
+            string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW();";
             var parameters = new Dictionary<string, object>
             {
                 { "@username", wrapper.Username },
@@ -223,7 +226,7 @@ namespace Projekt.Miscellaneous
             }
         }
 
-        public async Task<MySqlCommand> CreateCommand(string query, Dictionary<string, object>? parameters)
+        public static MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
         {
            
 
