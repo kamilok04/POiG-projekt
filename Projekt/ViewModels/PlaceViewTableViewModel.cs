@@ -13,13 +13,14 @@ using System.Threading.Tasks;
 
 namespace Projekt.ViewModels
 {
-    public class UsersViewTableViewModel : ObservableObject, IPageViewModel
+    public class PlaceViewTableViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(UsersViewTableViewModel);
      
         private UsersViewTableModel? Model { get; init; }
 
         private DataTable? _data;
+
         public DataTable? Data
         {
             get => _data;
@@ -30,14 +31,13 @@ namespace Projekt.ViewModels
             }
         }
 
-        public UsersViewTableViewModel(LoginWrapper loginWrapper)
+        public PlaceViewTableViewModel(LoginWrapper loginWrapper)
         {
-   
             Model = new(loginWrapper);
-            GetDataAsync().ConfigureAwait(false); ;
+            GetDataAsync().ConfigureAwait(false);
         }
 
-        public UsersViewTableViewModel() { } //for designer only
+        public PlaceViewTableViewModel() { } //for designer only
 
         private async Task GetDataAsync()
         {

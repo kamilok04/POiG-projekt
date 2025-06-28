@@ -17,8 +17,8 @@
            </DataTemplate>
            
            
-            <DataTemplate DataType="{x:Type viewmodels:UsersViewTableViewModel}">
-                <views:UsersTableView/>
+            <DataTemplate DataType="{x:Type viewmodels:FacultyEditViewModel}">
+                <views:TableView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:UsersCreateViewModel}">
                 <views:UsersCreateView/>
@@ -27,7 +27,7 @@
                 <views:UsersDeleteView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:UsersEditViewModel}">
-                <views:UsersEditView/>
+                <views:TableView/>
             </DataTemplate>
 
            

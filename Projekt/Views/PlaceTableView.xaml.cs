@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Projekt.Views
 {
     /// <summary>
-    /// Interaction logic for UserTableView.xaml
+    /// Logika interakcji dla klasy PlaceTableView.xaml
     /// </summary>
-    public partial class UsersTableView : UserControl
+    public partial class PlaceTableView : UserControl
     {
-        public UsersTableView()
+        public PlaceTableView()
         {
             InitializeComponent();
         }

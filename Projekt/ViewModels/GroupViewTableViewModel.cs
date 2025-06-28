@@ -13,36 +13,29 @@ using System.Threading.Tasks;
 
 namespace Projekt.ViewModels
 {
-    public class UsersEditViewModel : ObservableObject, IPageViewModel
+    public class GroupViewTableViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => nameof(UsersEditViewModel);
-     
-        private UsersViewTableModel Model { get; init; }
-
+        string IPageViewModel.Name => nameof(GroupViewTableViewModel);
+        private GroupViewTableModel Model { get; init; }
         private DataTable? _data;
-        public DataTable? TableData
+        public DataTable? Data
         {
             get => _data;
             private set
             {
                 _data = value;
-                OnPropertyChanged(nameof(TableData));
+                OnPropertyChanged(nameof(Data));
             }
         }
-
-        public UsersEditViewModel(LoginWrapper loginWrapper)
+        public GroupViewTableViewModel(LoginWrapper loginWrapper)
         {
-   
             Model = new(loginWrapper);
-            GetDataAsync().ConfigureAwait(false); ;
+            GetDataAsync().ConfigureAwait(false);
         }
-
-        public UsersEditViewModel() { } //for designer only
-
+        public GroupViewTableViewModel() { } //for designer only
         private async Task GetDataAsync()
         {
-            TableData = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM dane_uzytkownika");
+            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM grupa");
         }
-
     }
 }

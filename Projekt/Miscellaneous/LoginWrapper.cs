@@ -51,9 +51,9 @@ namespace Projekt.Miscellaneous
 
         public LoginWrapper(DatabaseHandler DBHandler, string username, string token)
         {
-            this.DBHandler = DBHandler ?? throw new ArgumentNullException(nameof(DBHandler));
-            Username = username ?? throw new ArgumentNullException(nameof(username));
-            Token = token ?? throw new ArgumentNullException(nameof(token));
+            this.DBHandler = DBHandler;
+            Username = username;
+            Token = token;
         }
 
         /// <summary>
@@ -65,6 +65,7 @@ namespace Projekt.Miscellaneous
         public async Task<bool> Authenticate(params int[] requiredPermissions)
         {
             int currentPermissions = await DBHandler.AuthenticateAsync(this);
+            if (currentPermissions == 0) Logout(); // https://www.youtube.com/watch?v=GwmJ76VjXaE
             return PermissionHelper.CheckPermissions(currentPermissions, requiredPermissions);
         }
 

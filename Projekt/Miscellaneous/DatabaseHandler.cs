@@ -1,13 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Projekt.Miscellaneous
 {
@@ -111,7 +105,7 @@ namespace Projekt.Miscellaneous
             {
                 return nextId;
             }
-            throw new InvalidOperationException("Nie można przetworzyć następnego ID studenta.");
+            return 0; // Nie rzucaj użytkownikom wyjątków
 
         }
 
@@ -146,10 +140,7 @@ namespace Projekt.Miscellaneous
         private static string ExtractEmbeddedPem(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using var stream = assembly.GetManifestResourceStream(resourceName);
-            if (stream == null)
-                throw new FileNotFoundException("Resource not found: " + resourceName);
-
+            using var stream = assembly.GetManifestResourceStream(resourceName) ?? throw new FileNotFoundException("Resource not found: " + resourceName);
             string tempFile = Path.GetTempFileName();
             using var fileStream = File.Create(tempFile);
             stream.CopyTo(fileStream);
@@ -158,7 +149,8 @@ namespace Projekt.Miscellaneous
 
         public async Task<int> AuthenticateAsync(LoginWrapper wrapper)
         {
-            string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW()";
+            // TODO: nie zezwalaj na przedawnione tokeny
+            string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW();";
             var parameters = new Dictionary<string, object>
             {
                 { "@username", wrapper.Username ?? string.Empty},

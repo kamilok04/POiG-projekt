@@ -1,10 +1,14 @@
-﻿using Projekt.Miscellaneous;
+﻿using Microsoft.VisualBasic.Logging;
+using Projekt.Miscellaneous;
 using Projekt.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Projekt.ViewModels
 {
@@ -17,14 +21,15 @@ namespace Projekt.ViewModels
         #region Fields
 
         private string? _name;
-        private string? _ectsPoints;
+        private uint _ectsPoints;
         private string? _code;
         private string? _description;
         private string? _passingCriteria;
         private string? _literature;
         private SubjectCreateModel? _subjectCreateModel;
 
-
+        private string _errorString;
+        private string _successString;
         #endregion
 
         #region Public Properties/Commands
@@ -40,7 +45,7 @@ namespace Projekt.ViewModels
                 }
             }
         }
-        public string? EctsPoints
+        public uint EctsPoints
         {
             get => _ectsPoints;
             set
@@ -108,10 +113,76 @@ namespace Projekt.ViewModels
             SubjectCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
 
+        private ICommand? _saveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ??= new RelayCommand(
+                    async param => await AddSubject(),
+                    param => AreAllFieldsFilled());
+            }
+        }
+
+        private ICommand? _cancelCommand;
+        public ICommand CancelCommand
+        {
+            get
+            {
+                _cancelCommand ??= new RelayCommand(
+                    p => Cancel(),
+                    p => true);
+                return _cancelCommand;
+            }
+        }
+
         #endregion
 
         #region Private Methods
 
+        private void Cancel()
+        {
+            Name = null;
+            EctsPoints = 0;
+            Code = null;
+            Description = null;
+            PassingCriteria = null;
+            Literature = null;
+        }
+
+        private bool AreAllFieldsFilled()
+        {
+            bool valid = !(
+                String.IsNullOrEmpty(Code) ||
+                String.IsNullOrEmpty(Name) ||
+                EctsPoints == 0 ||
+                String.IsNullOrEmpty(PassingCriteria) ||
+                String.IsNullOrEmpty(Literature) ||
+                String.IsNullOrEmpty(Description)
+                );
+
+            return valid;
+        }
+
+        private async Task<bool> AddSubject()
+        {
+            // TODO: jakieś ErrorText ni
+            if (!AreAllFieldsFilled()) return false;
+            bool success = await SubjectCreateModel.AddSubject();
+
+            if (!success)
+            {
+                ErrorString = "Dodawanie nieudane! Sprbuj ponownie";
+                SuccessString = "";
+
+            }
+            else
+            {
+                ErrorString = "";
+                SuccessString = "Dodano pomyślnie!";
+            }
+            return success;
+        }
         #endregion
 
 

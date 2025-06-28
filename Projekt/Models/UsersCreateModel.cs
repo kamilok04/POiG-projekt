@@ -78,9 +78,9 @@ namespace Projekt.Models
             string query = "SELECT COUNT(*) FROM uzytkownik WHERE login = @login";
             Dictionary<string, object> parameters = new() { { "@login", _login ?? string.Empty } };
             List<Dictionary<string, object>> result = await DatabaseHandler.ExecuteQueryAsync(query, parameters);
-            if (result.Count > 0 && result[0].ContainsKey("COUNT(*)"))
+            if (result.Count > 0 && result[0].TryGetValue("COUNT(*)", out object? value))
             {
-                int count = Convert.ToInt32(result[0]["COUNT(*)"]);
+                int count = Convert.ToInt32(value);
                 return count == 0; // true if unique
             }
             return false; // not unique

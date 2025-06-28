@@ -34,7 +34,7 @@
                     <Fluent:Button Header="Zarządzaj" 
                         Icon="/Resources/edit-256.png"
                         LargeIcon="/Resources/edit-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyManagementViewModel"/>
+                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyEditViewModel"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Kierunki">
                     <Fluent:Button Header="Zarządzaj" 
@@ -62,7 +62,7 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <Fluent:RibbonTabItem Header="Zajęcia">
+            <Fluent:RibbonTabItem Header="Zajęcia"  >
                 <Fluent:RibbonGroupBox Header="Zajęcia">
                     <Fluent:Button Header="Dodaj"
                            Icon="/Resources/plus-256.png"
@@ -110,8 +110,8 @@
                         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/> 
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem Header="Miejsca">
-                <Fluent:RibbonGroupBox Header="Miejsca">
+            <Fluent:RibbonTabItem Header="Miejsca" >
+                <Fluent:RibbonGroupBox Header="Miejsca" >
                     <Fluent:Button Header="Dodaj"
                         Icon="/Resources/plus-256.png"
                         LargeIcon="/Resources/plus-256.png" 
