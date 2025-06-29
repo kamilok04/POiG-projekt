@@ -34,12 +34,12 @@ namespace Projekt.Models
             if (columnName == null || RowKey == null) return;
             MySqlCommand? command;
             string properColumnName = TranslateColumnName(columnName);
-            if (oldValue == null)
+            if (oldValue == null || oldValue == "")
             {
                 command = CreateInsertCommand(properColumnName, RowKey, newValue);
                 if (command != null) Commands.Add(command);
             }
-            if (newValue == null)
+            if (newValue == null ||  newValue == "")
             {
                 command = ConsiderDelete(properColumnName, RowKey);
                 if (command != null) Commands.Add(command);

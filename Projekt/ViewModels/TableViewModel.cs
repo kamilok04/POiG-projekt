@@ -1,20 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
-using Projekt.Miscellaneous;
-using Projekt.Models;
-using System;
-using System.Collections.Generic;
+﻿using Projekt.Miscellaneous;
 using System.Data;
-using System.Data.OleDb;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Automation.Provider;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Projekt.ViewModels
@@ -107,6 +93,13 @@ namespace Projekt.ViewModels
         {
             get => _tableUndoCommand ??= new RelayCommand(
                 param => GetDataAsync().Wait());
+        }
+
+        private ICommand? _clearSelectedCellCommand;
+        public ICommand? ClearSelectedCellCommand
+        {
+            get => _clearSelectedCellCommand ??= new RelayCommand(
+                param =>  SelectedRow[SelectedColumnName] = DBNull.Value);
         }
 
         private void HandleNewCellSelection(DataGridCellInfo value)
