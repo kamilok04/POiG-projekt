@@ -127,23 +127,25 @@ public static class WatermarkService
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">A <see cref="EventArgs"/> that contains the event data.</param>
-        private static void ItemsSourceChanged(object sender, EventArgs e)
+        private static void ItemsSourceChanged(object? sender, EventArgs e)
         {
-            ItemsControl c = (ItemsControl)sender;
-            if (c.ItemsSource != null)
+            if(sender is ItemsControl c)
             {
-                if (ShouldShowWatermark(c))
+                if (c.ItemsSource != null)
                 {
-                    ShowWatermark(c);
+                    if (ShouldShowWatermark(c))
+                    {
+                        ShowWatermark(c);
+                    }
+                    else
+                    {
+                        RemoveWatermark(c);
+                    }
                 }
                 else
                 {
-                    RemoveWatermark(c);
+                    ShowWatermark(c);
                 }
-            }
-            else
-            {
-                ShowWatermark(c);
             }
         }
 
@@ -154,7 +156,7 @@ public static class WatermarkService
         /// <param name="e">A <see cref="ItemsChangedEventArgs"/> that contains the event data.</param>
         private static void ItemsChanged(object sender, ItemsChangedEventArgs e)
         {
-            ItemsControl control;
+            ItemsControl? control;
             if (itemsControls.TryGetValue(sender, out control))
             {
                 if (ShouldShowWatermark(control))
@@ -220,23 +222,23 @@ public static class WatermarkService
         /// </summary>
         /// <param name="c"><see cref="Control"/> to test</param>
         /// <returns>true if the watermark should be shown; false otherwise</returns>
-        private static bool ShouldShowWatermark(Control c)
+        private static bool ShouldShowWatermark(Control? c)
         {
             if (c is ComboBox)
             {
-                return (c as ComboBox).Text == string.Empty;
+                return ((ComboBox)c).Text == string.Empty;
             }
             else if (c is TextBoxBase)
             {
-                return (c as TextBox).Text == string.Empty;
+                return ((TextBox)c).Text == string.Empty;
             }
             else if (c is ItemsControl)
             {
-                return (c as ItemsControl).Items.Count == 0;
+                return ((ItemsControl)c).Items.Count == 0;
             }
             else if (c is PasswordBox)
             {
-                return (c as PasswordBox).Password == string.Empty;
+                return ((PasswordBox)c).Password == string.Empty;
             }
             else
             {

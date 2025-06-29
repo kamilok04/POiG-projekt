@@ -20,7 +20,7 @@ namespace Projekt.ViewModels
         Dictionary<string, object>? ITable.DefaultParameters => null;
         string IPageViewModel.Name => nameof(FacultyEditViewModel);
 
-        private UsersViewTableModel Model { get; init; }
+        private UsersEditModel Model { get; init; }
 
         private DataTable? _data;
         public DataTable? TableData

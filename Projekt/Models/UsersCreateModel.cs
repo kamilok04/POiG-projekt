@@ -21,33 +21,42 @@ namespace Projekt.Models
 
         public string? DefaultQuery => "INSERT INTO uzytkownik VALUES (@username, @name, @surname, @birth_date, @email, @salt, @password, @permissions);";
 
-        public Dictionary<string, object>? DefaultParameters => new()
+        public Dictionary<string, object>? DefaultParameters
+        {
+            get
             {
-                { "@username",_login },
-                { "@name", _name },
-                { "@surname", _surname },
-                { "@birth_date", _birthDate },
-                { "@email", _email },
-                { "@salt", _salt },
-                { "@password", IHashingHandler.GetHashString(_password + _salt) },
-                { "@permissions", _permissions }
-            };
+                var password = _password ?? string.Empty;
+                var salt = _salt ?? string.Empty;
+
+                return new(){
+                    { "@username",_login ?? string.Empty },
+                    { "@name", _name ?? string.Empty},
+                    { "@surname", _surname ?? string.Empty},
+                    { "@birth_date", _birthDate ?? DateTime.MinValue},
+                    { "@email", _email ?? string.Empty},
+                    { "@salt", _salt ?? string.Empty},
+                    { "@password", IHashingHandler.GetHashString(password + salt) ?? string.Empty },
+                    { "@permissions", _permissions }
+                    }
+                ;
+            }         
+        }
         
 
-        public string _name;
-        public string _surname;
-        public string _login;
-        public string _password;
-        public string _email;
-        public string _currentRole;
+        public string? _name;
+        public string? _surname;
+        public string? _login;
+        public string? _password;
+        public string? _email;
+        public string? _currentRole;
         public DateTime? _birthDate;
         public int _permissions;
         public int _studentID;
-        public string _teacherTitle;
-        public string _position;
-        private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
+        public string? _teacherTitle;
+        public string? _position;
+        private DatabaseHandler DatabaseHandler => LoginWrapper?.DBHandler ?? throw new InvalidOperationException("LoginWrapper or DBHandler is already null");
 
-        private string _salt;
+        private string? _salt;
 
         public async Task<bool> AddUser()
         {
@@ -55,9 +64,11 @@ namespace Projekt.Models
             _salt = IHashingHandler.GetRandomString(20);
 
             // Transakcja: dodaj użytkownika i przypisz mu rolę
-            MySqlCommand AddUserCommand = DatabaseHandler.CreateCommand(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
+            var defaultQuery = ((ITable)this).DefaultQuery ?? throw new InvalidOperationException("DefaultQuery can't be null");
+            var defaultParameters = ((ITable)this).DefaultParameters ?? throw new InvalidOperationException("DefaultParameters can't be null");
 
-            MySqlCommand AssignRoleCommand = await CreateRoleCommand();
+            MySqlCommand AddUserCommand = DatabaseHandler.CreateCommand(defaultQuery, defaultParameters);
+            MySqlCommand AssignRoleCommand = CreateRoleCommand();
 
             return await DatabaseHandler.ExecuteInTransactionAsync(AddUserCommand, AssignRoleCommand);
 
@@ -65,7 +76,7 @@ namespace Projekt.Models
         private async Task<bool> EnsureUserIsUnique()
         {
             string query = "SELECT COUNT(*) FROM uzytkownik WHERE login = @login";
-            Dictionary<string, object> parameters = new() { { "@login", _login } };
+            Dictionary<string, object> parameters = new() { { "@login", _login ?? string.Empty } };
             List<Dictionary<string, object>> result = await DatabaseHandler.ExecuteQueryAsync(query, parameters);
             if (result.Count > 0 && result[0].TryGetValue("COUNT(*)", out object? value))
             {
@@ -75,7 +86,7 @@ namespace Projekt.Models
             return false; // not unique
         }
 
-        private async Task<MySqlCommand> CreateRoleCommand()
+        private MySqlCommand CreateRoleCommand()
         {
 
             string Query = "";
@@ -83,36 +94,33 @@ namespace Projekt.Models
             // TODO: Przebudować - tu powinno przypisywać się 1 LUB WIĘCEJ ról.
             switch (_currentRole)
             {
-                case "Student": 
-                   
+                case "Student":
+
                     Query = "INSERT INTO student (login, indeks) VALUES( @login, @studentID)";
-                    Parameters = new() { 
-                        { "@login", _login },
+                    Parameters = new() {
+                        { "@login", _login ?? string.Empty },
                         { "@studentID", _studentID }}
                     ;
                     break;
                 case "Pracownik":
                     Query = "INSERT INTO pracownik (login, tytul) VALUES (@login, @title)";
                     Parameters = new() {
-                        { "@login", _login },
-                        { "@title", _teacherTitle }}
+                        { "@login", _login ?? string.Empty },
+                        { "@title", _teacherTitle ?? string.Empty }}
                     ;
                     break;
-                case "Administrator":
-                    Query = "INSERT INTO admin (login) VALUES (@login)";
-                    Parameters = new() {
-                        { "@login", _login }
-                    }
-                    ;
-                    break;
+
+                    // Nie ma tabeli admin na razie, jest niepotrzebna
+                //case "Administrator":
+                //    Query = "INSERT INTO admin (login) VALUES (@login)";
+                //    Parameters = new() {
+                //        { "@login", _login }
+                //    }
+                //    ;
+                //    break;
 
             }
             return DatabaseHandler.CreateCommand(Query, Parameters);
-
         }
-
-
-
-
     }
 }

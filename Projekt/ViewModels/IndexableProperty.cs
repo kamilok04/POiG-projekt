@@ -19,7 +19,10 @@ namespace Projekt.ViewModels
         public static implicit operator T[](IndexableProperty<T> t) => t.Values;
         public static explicit operator IndexableProperty<T>(T[] t) => new(t);
 
-        private IndexableProperty() { }
+        private IndexableProperty() {
+            _values = Array.Empty<T>();
+            Length = 0;
+        }
         public IndexableProperty(int initialSize)
         {
             _values = new T[initialSize];
@@ -43,10 +46,5 @@ namespace Projekt.ViewModels
         {
             get { return _values; }
         }
-
-
-
     }
-
-
 }

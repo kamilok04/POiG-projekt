@@ -26,15 +26,11 @@ namespace Projekt.Miscellaneous
 
         }
 
-
-
         public MySqlConnection GetConnection()
         {
            return _conn = new(_sb.ConnectionString);
 
         }
-
-
 
         public async Task<bool> TestConnectionAsync()
         {
@@ -54,24 +50,10 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
-
             using var connection = GetConnection();
                 using var command = CreateCommand(query, parameters);
-            try
-            {
-                await connection.OpenAsync();
-                command.Connection = connection;
+            command.Connection = connection;
                 return await command.ExecuteNonQueryAsync();
-
-            }
-            catch (IOException ioex)
-            {
-                Console.WriteLine($"Łączność padła na amen: {ioex.Message}");
-                return -1;
-
-            }
-           
-           
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
@@ -127,28 +109,16 @@ namespace Projekt.Miscellaneous
 
         }
 
-        private static MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
-        {
-            MySqlCommand command = new(query);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
-                }
-            }
-            return command;
-        }
+
         public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            MySqlDataAdapter adapter = new(GenerateSelect(query, parameters));
+
+            MySqlDataAdapter adapter = new(CreateCommand(query, parameters));
             DataTable dataTable = new();
             using var connection = GetConnection();
-
             adapter.SelectCommand.Connection = connection;
             adapter.Fill(dataTable);
             return dataTable;
-
         }
 
 
@@ -168,8 +138,8 @@ namespace Projekt.Miscellaneous
             string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW();";
             var parameters = new Dictionary<string, object>
             {
-                { "@username", wrapper.Username },
-                { "@token", wrapper.Token }
+                { "@username", wrapper.Username ?? string.Empty},
+                { "@token", wrapper.Token ?? string.Empty}
             };
             var result = await ExecuteQueryAsync(query, parameters).ConfigureAwait(false);
             if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
@@ -226,19 +196,16 @@ namespace Projekt.Miscellaneous
             }
         }
 
-        public static MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
+        public MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
         {
-           
-
             MySqlCommand command = new(query);
 
             if (parameters != null)
-                foreach (var param in parameters) { 
+                foreach (var param in parameters)
+                {
                     command.Parameters.AddWithValue(param.Key, param.Value);
                 }
             return command;
-
         }
-
     }
 }

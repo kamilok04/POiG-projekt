@@ -13,7 +13,11 @@ namespace Projekt.ViewModels
 
         public LessonsDeleteViewModel(LoginWrapper loginWrapper)
         {
-            
+
+        }
+        public LessonsDeleteViewModel()
+        {
+
         }
     }
 }
