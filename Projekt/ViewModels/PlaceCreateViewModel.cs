@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Projekt.Miscellaneous;
 using Projekt.Models;
 
@@ -23,6 +24,9 @@ namespace Projekt.ViewModels
         private string? _currentFaculty;
         private PlaceCreateModel? _placeCreateModel;
         #endregion
+
+        private string? _errorString;
+        private string? _successString;
 
         #region Public Properties/Commands
         public string BuildingCode
@@ -99,6 +103,31 @@ namespace Projekt.ViewModels
             }
         }
 
+        public string? ErrorString
+        {
+            get => _errorString;
+            set
+            {
+                if (_errorString != value)
+                {
+                    _errorString = value;
+                    OnPropertyChanged(nameof(ErrorString));
+                }
+            }
+        }
+        public string? SuccessString
+        {
+            get => _successString;
+            set
+            {
+                if (_successString != value)
+                {
+                    _successString = value;
+                    OnPropertyChanged(nameof(SuccessString));
+                }
+            }
+        }
+
         public bool IsMS => _currentFaculty == "MS";
         public bool IsMT => _currentFaculty == "MT";
         public bool IsCh => _currentFaculty == "Ch";
@@ -111,6 +140,75 @@ namespace Projekt.ViewModels
             PlaceCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
 
+        private ICommand? _saveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ??= new RelayCommand(
+                    async param => await AddPlace(),
+                    param => AreAllFieldsFilled());
+            }
+        }
+
+        private ICommand? _cancelCommand;
+        public ICommand CancelCommand
+        {
+            get
+            {
+                _cancelCommand ??= new RelayCommand(
+                    p => Cancel(),
+                    p => true);
+                return _cancelCommand;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void Cancel()
+        {
+            BuildingCode = string.Empty;
+            ClassNumber = 0;
+            Address = string.Empty;
+            Capacity = string.Empty;
+            CurrentFaculty = string.Empty;
+            PlaceCreateModel = null;
+        }
+
+        private bool AreAllFieldsFilled()
+        {
+            return !string.IsNullOrEmpty(BuildingCode) &&
+                   ClassNumber > 0 &&
+                   !string.IsNullOrEmpty(Address) &&
+                   !string.IsNullOrEmpty(Capacity) &&
+                   !string.IsNullOrEmpty(CurrentFaculty);
+        }
+
+        private async Task<bool> AddPlace()
+        {
+            if (PlaceCreateModel == null)
+                throw new InvalidOperationException("PlaceCreateModel is not initialized.");
+            PlaceCreateModel.BuildingCode = BuildingCode;
+            PlaceCreateModel.ClassNumber = ClassNumber;
+            PlaceCreateModel.Address = Address;
+            PlaceCreateModel.Capacity = Capacity;
+            PlaceCreateModel.CurrentFaculty = CurrentFaculty;
+            bool success = await PlaceCreateModel.AddPlace();
+            if (success)
+            {
+                ErrorString = null;
+                SuccessString = "Miejsce utworzono z powodzeniem!";
+                Cancel();
+            }
+            else
+            {
+                SuccessString = null;
+                ErrorString = "Dodawanie nieudane! Spróbuj ponownie.";
+            }
+            return success;
+        }
         #endregion
     }
 }
