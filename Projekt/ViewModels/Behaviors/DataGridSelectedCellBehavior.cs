@@ -13,7 +13,9 @@ namespace Projekt.ViewModels.Behaviors
         public DataGridCellInfo SelectedCell
         {
             get => (DataGridCellInfo)GetValue(SelectedCellProperty);
-            set => SetValue(SelectedCellProperty, value);
+            set =>
+                SetValue(SelectedCellProperty, value);
+             
         }
 
         protected override void OnAttached()

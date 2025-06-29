@@ -182,8 +182,12 @@ namespace Projekt.ViewModels
 
         }
         private async Task ChangePageView(object? param)
-        {
-            // Na pewno wolno ustawić taki widok?
+        { 
+            if(CurrentPageViewModel is TableViewModel table)
+            {
+                if (!table.ConfirmExit()) return;
+               
+            }
 
             if (param is string pageViewModelName)
             {

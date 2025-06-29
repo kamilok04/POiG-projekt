@@ -98,12 +98,13 @@ namespace Projekt.Models
                         { "@title", _teacherTitle }}
                     ;
                     break;
-                case "Administrator":
-                    Query = "INSERT INTO admin (login) VALUES (@login)";
-                    Parameters = new() {
-                        { "@login", _login }
-                    }
-                    ;
+                    // Nie ma tabeli admin na razie, jest niepotrzebna
+                //case "Administrator":
+                //    Query = "INSERT INTO admin (login) VALUES (@login)";
+                //    Parameters = new() {
+                //        { "@login", _login }
+                //    }
+                //    ;
                     break;
 
             }

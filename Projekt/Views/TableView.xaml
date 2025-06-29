@@ -31,7 +31,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="3" Command="{Binding TableViewDeleteCommand}" >Usuń zaznaczone</Button>
+            <Button Command="{Binding TableDeleteCommand}" FontWeight="Bold" >Usuń zaznaczone</Button>
+            <Button Grid.Column="2" Command="{Binding TableCancelCommand}">Cofnij zmiany</Button>
             <!-- 
             Tego prawdopodobnie NIE będzie
             DataGrid pozwala na edycję komórek przez dwuklik, przycisk jest zbędny
@@ -40,8 +41,8 @@
                 Edytuj
             </Button>
             -->
-            <TextBlock Grid.Column="4" Text="{Binding SelectedCellValue}" />
-            <Button Grid.Column="5" Command="{Binding TableViewAddCommand}">Dodaj nowy</Button>
+            <Button Grid.Column="4" Command="{Binding TableSaveCommand}">Zapisz zmiany</Button>
+            <Button Grid.Column="5" Command="{Binding TableCreateCommand}">Dodaj nowy</Button>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,7 +1,12 @@
-﻿using Projekt.Miscellaneous;
+﻿using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
+using Projekt.Miscellaneous;
 using Projekt.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -9,45 +14,152 @@ using System.Threading.Tasks;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public partial class TableViewModel : ObservableObject
+    public abstract partial class TableViewModel : ObservableObject
     {
         private DataGridCellInfo _selectedCell;
+        private string? _rowKey;
+
+        public string? RowKey
+        {
+            get { return _rowKey; }
+            set { _rowKey = value; }
+        }
+
+
+
         public DataGridCellInfo SelectedCell
         {
             get => _selectedCell;
             set
             {
-                if (_selectedCell != value)
-                {
-                    _selectedCell = value;
-                    OnPropertyChanged(nameof(SelectedCell));
-                    OnPropertyChanged(nameof(SelectedCellValue));
-                }
+
+                HandleNewCellSelection(value);
+                OnPropertyChanged(nameof(SelectedCell));
+
             }
         }
+        private string? _selectedCellValue;
 
-        public object SelectedCellValue
+        public string? SelectedCellValue
         {
-            get
+            //get => 
+            get => _selectedCellValue;
+            set
             {
-                if (SelectedCell.Item == null || SelectedCell.Column == null)
-                    return null;
 
-                var binding = (SelectedCell.Column as DataGridBoundColumn)?.Binding as Binding;
-                if (binding == null)
-                    return null;
-
-                var propertyName = binding.Path.Path;
-                var property = SelectedCell.Item.GetType().GetProperty(propertyName);
-                if (property == null)
-                    return null;
-
-                return property.GetValue(SelectedCell.Item);
+                _selectedCellValue = value;
+                OnPropertyChanged(nameof(SelectedCellValue));
             }
         }
+
+        private string? _previousCellValue;
+        public string? PreviousCellValue
+        {
+            get => _previousCellValue;
+            set => _previousCellValue = value;
+        }
+
+        private string? _selectedColumnName;
+        public string? SelectedColumnName
+        {
+
+            get => _selectedColumnName;
+            set
+            {
+                _selectedColumnName = value;
+                OnPropertyChanged(nameof(SelectedColumnName));
+            }
+        }
+
+
+        private DataRowView? _selectedRow;
+        public DataRowView? SelectedRow
+        {
+            //  get => 
+            get => _selectedRow;
+            set
+            {
+                _selectedRow = value;
+                OnPropertyChanged(nameof(SelectedRow));
+            }
+        }
+
+        private string? _selectedRowKey;
+
+        public string? SelectedRowKey
+        { //get =>
+            get => _selectedRowKey;
+            set
+            {
+                _selectedRowKey = value;
+                OnPropertyChanged(nameof(SelectedRowKey));
+            }
+        }
+
+
+        private ICommand? _tableUndoCommand;
+        public ICommand TableUndoCommand
+        {
+            get => _tableUndoCommand ??= new RelayCommand(
+                param => GetDataAsync().Wait());
+        }
+
+        private void HandleNewCellSelection(DataGridCellInfo value)
+        {
+
+
+            if (_selectedCell != value)
+            {
+                string? oldKey = SelectedRowKey;
+                string? oldColumn = SelectedColumnName;
+                DataRowView? oldRow = SelectedRow;
+
+                string? oldValue = SelectedCellValue;
+
+                _selectedCell = value;
+                SelectedColumnName = SelectedCell.Column == null ? "" : (string?)SelectedCell.Column.Header;
+                SelectedRow = SelectedCell.Item as DataRowView;
+                SelectedRowKey = SelectedRow?[RowKey].ToString();
+                SelectedCellValue = (SelectedColumnName == null || SelectedRow == null) ? null : SelectedRow[SelectedColumnName].ToString();
+
+
+                if (
+                    oldRow != null &&
+                    oldColumn != null &&
+                   oldKey != null &&
+                    oldRow[oldColumn].ToString() != oldValue &&
+                    oldRow[RowKey].ToString() == oldKey
+
+                    )
+                    CreateTransactionCommand(oldColumn, oldRow[RowKey].ToString(), oldValue, oldRow[oldColumn].ToString());
+
+
+            }
+        }
+
+
+
+
+        public abstract void CreateTransactionCommand(string? columnName, string? RowKey, string? oldValue, string? newValue);
+
+
+        public abstract Task GetDataAsync();
+
+        public abstract bool ConfirmExit();
+
+        public abstract ICommand TableSaveCommand { get; }
+        public abstract ICommand TableDeleteCommand { get; }
+        public abstract ICommand TableCancelCommand { get; }
+        public abstract ICommand TableCreateCommand { get; }
 
     }
+
+
+
+
 }
