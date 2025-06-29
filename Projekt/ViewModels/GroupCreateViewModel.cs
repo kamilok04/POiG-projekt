@@ -1,48 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Projekt.Models;
 using Projekt.Miscellaneous;
-using Projekt.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class GroupCreateViewModel: ObservableObject, IPageViewModel
+    public class GroupCreateViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => "GroupCreate";
+        private readonly GroupCreateModel _model;
+        private readonly LoginWrapper _loginWrapper;
 
-        public GroupCreateViewModel() {
-            _faculties = ["Informatyka", "Matematyka", "Fizyka"];
-            _degree = ["Licencjat", "Magister", "Doktor"];
-        }
-
-        #region Fields
-        private List<string>? _faculties;
-        private List<string>? _degree;
-        private List<int>? _semesters = [1, 2, 3, 4, 5, 6, 7];
+        private string? _groupNumber;
         private string? _currentFaculty;
         private string? _currentDegree;
         private string? _currentSemester;
-        private GroupCreateModel? _model;
-        #endregion
+        private bool _isLoading;
 
-        #region Public Properties/Commands
-        public List<string>? Faculties { get => _faculties; }
-        public List<string>? Degrees { get => _degree; }
-        public List<int>? Semesters {  get => _semesters; }
+        public string Name => "Tworzenie grupy";
 
-        public string? CurrentFaculty 
-        { 
-            get => _currentFaculty; 
-            set 
+        public ObservableCollection<string> Faculties { get; set; } = new();
+        public ObservableCollection<string> Degrees { get; set; } = new();
+        public ObservableCollection<int> Semesters { get; set; } = new() { 1, 2, 3, 4, 5, 6, 7 };
+
+        public string? GroupNumber
+        {
+            get => _groupNumber;
+            set
             {
-                if (_currentFaculty != value)
-                {
-                    _currentFaculty = value;
-                    OnPropertyChanged(nameof(CurrentFaculty));
-                }
-            } 
+                _groupNumber = value;
+                _model.GroupNumber = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? CurrentFaculty
+        {
+            get => _currentFaculty;
+            set
+            {
+                _currentFaculty = value;
+                _model._currentFaculty = value;
+                OnPropertyChanged();
+                _ = LoadDegreesAsync();
+            }
         }
 
         public string? CurrentDegree
@@ -50,11 +56,9 @@ namespace Projekt.ViewModels
             get => _currentDegree;
             set
             {
-                if (_currentDegree != value)
-                {
-                    _currentDegree = value;
-                    OnPropertyChanged(nameof(CurrentDegree));
-                }
+                _currentDegree = value;
+                _model._currentDegree = value;
+                OnPropertyChanged();
             }
         }
 
@@ -63,21 +67,160 @@ namespace Projekt.ViewModels
             get => _currentSemester;
             set
             {
-                if (_currentSemester != value)
-                {
-                    _currentSemester = value;
-                    OnPropertyChanged(nameof(CurrentSemester));
-                }
+                _currentSemester = value;
+                _model._currentSemester = value;
+                OnPropertyChanged();
             }
         }
 
-        public GroupCreateModel? Model { get => _model; set => _model = value; }
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public event Action? OnSaved;
+        public event Action? OnCancelled;
 
         public GroupCreateViewModel(LoginWrapper loginWrapper)
         {
-            Model = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+            _loginWrapper = loginWrapper;
+            _model = new GroupCreateModel(loginWrapper);
+
+            _ = LoadFacultiesAsync();
         }
 
-        #endregion
+        private async Task LoadFacultiesAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                var query = "SELECT nazwa_krotka FROM wydzial ORDER BY nazwa_krotka";
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                Faculties.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        if (row.ContainsKey("nazwa_krotka"))
+                        {
+                            Faculties.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading faculties: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private async Task LoadDegreesAsync()
+        {
+            if (string.IsNullOrEmpty(CurrentFaculty))
+            {
+                Degrees.Clear();
+                return;
+            }
+
+            try
+            {
+                IsLoading = true;
+                var query = @"SELECT DISTINCT dk.nazwa 
+                             FROM dane_kierunku dk
+                             JOIN kierunek k ON dk.id = k.id_danych_kierunku
+                             JOIN wydzial w ON k.id_wydzialu = w.id
+                             WHERE w.nazwa_krotka = @faculty
+                             ORDER BY dk.nazwa";
+
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@faculty", CurrentFaculty }
+                };
+
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query, parameters);
+
+                Degrees.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        if (row.ContainsKey("nazwa"))
+                        {
+                            Degrees.Add(row["nazwa"]?.ToString() ?? string.Empty);
+                        }
+                    }
+                }
+
+                // Reset current degree if not available in new list
+                if (!string.IsNullOrEmpty(CurrentDegree) && !Degrees.Contains(CurrentDegree))
+                {
+                    CurrentDegree = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading degrees: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        private bool CanSave()
+        {
+            return !string.IsNullOrWhiteSpace(GroupNumber) &&
+                   !string.IsNullOrWhiteSpace(CurrentFaculty) &&
+                   !string.IsNullOrWhiteSpace(CurrentDegree) &&
+                   !string.IsNullOrWhiteSpace(CurrentSemester) &&
+                   !IsLoading;
+        }
+
+        private async Task SaveAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                var success = await _model.AddGroup();
+
+                if (success)
+                {
+                    OnSaved?.Invoke();
+                }
+                else
+                {
+                    // Handle error - you might want to show a message to the user
+                    Console.WriteLine("Failed to create group");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving group: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
