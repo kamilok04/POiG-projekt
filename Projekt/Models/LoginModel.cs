@@ -19,13 +19,13 @@ namespace Projekt.Models
         private string? _password;
         private bool _invalidLogin = false;
         private bool _authenticated = false;
-        private string _sessionToken;
+        private string? _sessionToken;
 
 
         public string? UserName { get => _username; set => _username = value; }
         public string? Password { get => _password; set => _password = value; }
         public bool Authenticated { get => _authenticated; }
-        public string SessionToken
+        public string? SessionToken
         {
             get => _sessionToken;
             set
@@ -86,16 +86,16 @@ namespace Projekt.Models
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
-                                   CreateSession().Wait();
+                                  CreateSession().Wait();
                                   CreateWrapper(); // Wrapper wymaga ID sesji
                                   _authenticated = true;
                                   InvalidLogin = false;
-                              return;
+                                  return;
                               }
-                          
-                          _authenticated = false;
-                          InvalidLogin = true;
 
+                              _authenticated = false;
+                              InvalidLogin = true;
+                          }
                       }
                       else
                       {
@@ -113,7 +113,7 @@ namespace Projekt.Models
         private void CreateWrapper()
         {
             
-            _loginWrapper = new LoginWrapper(DBHandler, UserName ?? string.Empty, SessionToken);
+            _loginWrapper = new LoginWrapper(DBHandler, UserName ?? string.Empty, SessionToken ?? string.Empty);
             return;
         }
 
@@ -121,7 +121,7 @@ namespace Projekt.Models
         {
             // Jeśli użytkownik jest zalogowany, kontynuuj jego sesję
             // TODO: nie zezwalaj na przedawnione tokeny
-            Dictionary<string, object> param = new() { { "@username", UserName } };
+            Dictionary<string, object> param = new() { { "@username", UserName ?? string.Empty } };
 
             await DBHandler.ExecuteQueryAsync("SELECT * FROM sesje WHERE login = @username AND data_waznosci > NOW();", param)
                 .ContinueWith(async task =>
