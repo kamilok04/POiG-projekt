@@ -105,7 +105,7 @@ namespace Projekt.Models
                 //        { "@login", _login }
                 //    }
                 //    ;
-                    break;
+                //    break;
 
             }
             return DatabaseHandler.CreateCommand(Query, Parameters);

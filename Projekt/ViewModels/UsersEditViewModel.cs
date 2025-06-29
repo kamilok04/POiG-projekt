@@ -117,7 +117,7 @@ namespace Projekt.ViewModels
         public override async Task GetDataAsync()
         {
             TableData = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(((ITable)this).DefaultQuery);
-
+         
         }
 
 
