@@ -28,8 +28,8 @@ namespace Projekt.ViewModels
         private string? _literature;
         private SubjectCreateModel? _subjectCreateModel;
 
-        private string _errorString;
-        private string _successString;
+        private string? _errorString;
+        private string? _successString;
         #endregion
 
         #region Public Properties/Commands
@@ -105,6 +105,30 @@ namespace Projekt.ViewModels
                 }
             }
         }
+        public string? ErrorString
+        {
+            get => _errorString;
+            set
+            {
+                if (_errorString != value)
+                {
+                    _errorString = value;
+                    OnPropertyChanged(nameof(ErrorString));
+                }
+            }
+        }
+        public string? SuccessString
+        {
+            get => _successString;
+            set
+            {
+                if (_successString != value)
+                {
+                    _successString = value;
+                    OnPropertyChanged(nameof(SuccessString));
+                }
+            }
+        }
 
         public SubjectCreateModel? SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
 
@@ -167,7 +191,7 @@ namespace Projekt.ViewModels
         private async Task<bool> AddSubject()
         {
             // TODO: jakieś ErrorText ni
-            if (!AreAllFieldsFilled()) return false;
+            if (!AreAllFieldsFilled() || SubjectCreateModel == null) return false;
             bool success = await SubjectCreateModel.AddSubject();
 
             if (!success)

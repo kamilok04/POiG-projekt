@@ -40,6 +40,12 @@ namespace Projekt.ViewModels
 
         #region Public Properties/Commands
 
+        private bool _currentProfileIsSelected;
+        private bool _usersIsSelected;
+        private bool _groupIsSelected;
+        private bool _lessonsIsSelected;
+        private bool _placeIsSelected;
+        private bool _subjectIsSelected;
 
         public bool UsersIsSelected
         {
@@ -52,7 +58,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(UsersIsSelected));
                     if (_usersIsSelected)
                     {
-                        ChangePageView("UsersViewTableViewModel");
+                        _ = ChangePageView("UsersViewTableViewModel");
                     }
                 }
             }
@@ -69,7 +75,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(LessonsIsSelected));
                     if (_lessonsIsSelected)
                     {
-                        ChangePageView("LessonsViewTableViewModel");
+                        _ = ChangePageView("LessonsViewTableViewModel");
                     }
                 }
             }
@@ -86,7 +92,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(GroupIsSelected));
                     if (_groupIsSelected)
                     {
-                        ChangePageView("GroupViewTableViewModel");
+                        _ = ChangePageView("GroupViewTableViewModel");
                     }
                 }
             }
@@ -103,7 +109,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(PlaceIsSelected));
                     if (_placeIsSelected)
                     {
-                        ChangePageView("PlaceViewTableViewModel");
+                        _ = ChangePageView("PlaceViewTableViewModel");
                     }
                 }
             }
@@ -120,7 +126,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(SubjectIsSelected));
                     if (_subjectIsSelected)
                     {
-                        ChangePageView("SubjectViewTableViewModel");
+                        _ = ChangePageView("SubjectViewTableViewModel");
                     }
                 }
             }
@@ -137,7 +143,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(CurrentProfileIsSelected));
                     if (_currentProfileIsSelected)
                     {
-                        ChangePageView("CurrentProfileViewModel");
+                        _ = ChangePageView("CurrentProfileViewModel");
                     }
                 }
             }
@@ -177,7 +183,8 @@ namespace Projekt.ViewModels
         {
             // Na pewno wolno ustawić taki widok?
             if(!await Authenticate()) return;
-            if (param is string pageViewModelName && _model?.LoginWrapper != null)
+            if (param is string pageViewModelName && _model?.LoginWrapper != null) 
+            {
                 switch (pageViewModelName)
                 {
 

@@ -13,11 +13,12 @@ namespace Projekt.ViewModels
 
         public LessonsEditViewModel(LoginWrapper loginWrapper)
         {
-            
+
         }
 
         public LessonsEditViewModel()
         {
 
         }
+    }
 }

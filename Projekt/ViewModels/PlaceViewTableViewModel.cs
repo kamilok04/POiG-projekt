@@ -15,7 +15,7 @@ namespace Projekt.ViewModels
 {
     public class PlaceViewTableViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => nameof(UsersViewTableViewModel);
+        string IPageViewModel.Name => nameof(PlaceViewTableViewModel);
      
         private UsersViewTableModel? Model { get; init; }
 
