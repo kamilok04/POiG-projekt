@@ -1,0 +1,148 @@
+﻿using Projekt.Miscellaneous;
+using Projekt.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Projekt.Models
+{
+    public class GroupDeleteModel : BaseTableModel, ITable
+    {
+        public int GroupId { get; set; }
+        public string? GroupNumber { get; set; }
+        public string? Faculty { get; set; }
+        public string? Degree { get; set; }
+        public string? Semester { get; set; }
+        public int StudentCount { get; set; }
+
+        public string TableName => "groups";
+        public string? DefaultQuery => BuildDefaultQuery();
+        public Dictionary<string, object>? DefaultParameters => new()
+        {
+            { "@groupId", GroupId }
+        };
+
+        private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
+
+        public GroupDeleteModel(LoginWrapper loginWrapper) : base(loginWrapper)
+        {
+        }
+
+        public async Task<bool> LoadGroupData(int groupId)
+        {
+            try
+            {
+                GroupId = groupId;
+
+                var query = @"SELECT g.id, g.numer, w.nazwa_krotka as wydział, dk.nazwa as kierunek, r.semestr,
+                             (SELECT COUNT(*) FROM grupa_student_rocznik gsr WHERE gsr.id_grupy = g.id) as student_count
+                             FROM grupa g
+                             JOIN rocznik r ON g.id_rocznika = r.id
+                             JOIN kierunek k ON r.id_kierunku = k.id
+                             JOIN wydzial w ON k.id_wydzialu = w.id
+                             JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id
+                             WHERE g.id = @groupId";
+
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@groupId", groupId }
+                };
+
+                var result = await DatabaseHandler.ExecuteQueryAsync(query, parameters);
+
+                if (result?.Count > 0)
+                {
+                    var row = result[0];
+                    GroupNumber = row["numer"]?.ToString();
+                    Faculty = row["wydział"]?.ToString();
+                    Degree = row["kierunek"]?.ToString();
+                    Semester = row["semestr"]?.ToString();
+                    StudentCount = Convert.ToInt32(row["student_count"] ?? 0);
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading group data: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteGroup()
+        {
+            try
+            {
+                // Usuń najpierw powiązania z tabeli pośredniej
+                var deleteIntermediateQuery = "DELETE FROM grupa_student_rocznik WHERE id_grupy = @groupId";
+                var deleteIntermediateParams = new Dictionary<string, object>
+                {
+                    { "@groupId", GroupId }
+                };
+
+                var deleteIntermediateCommand = DatabaseHandler.CreateCommand(deleteIntermediateQuery, deleteIntermediateParams);
+                var deleteIntermediateSuccess = await DatabaseHandler.ExecuteInTransactionAsync(deleteIntermediateCommand);
+
+                if (!deleteIntermediateSuccess)
+                {
+                    return false;
+                }
+
+                // Następnie usuń grupę
+                var deleteGroupQuery = "DELETE FROM grupa WHERE id = @groupId";
+                var deleteGroupParams = new Dictionary<string, object>
+                {
+                    { "@groupId", GroupId }
+                };
+
+                var deleteGroupCommand = DatabaseHandler.CreateCommand(deleteGroupQuery, deleteGroupParams);
+                var deleteGroupSuccess = await DatabaseHandler.ExecuteInTransactionAsync(deleteGroupCommand);
+
+                return deleteGroupSuccess;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting group: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> CanDeleteGroup()
+        {
+            try
+            {
+                // Sprawdź czy grupa ma przypisanych studentów
+                var checkStudentsQuery = "SELECT COUNT(*) as count FROM grupa_student_rocznik WHERE id_grupy = @groupId";
+                var checkStudentsParams = new Dictionary<string, object>
+                {
+                    { "@groupId", GroupId }
+                };
+
+                var result = await DatabaseHandler.ExecuteQueryAsync(checkStudentsQuery, checkStudentsParams);
+
+                if (result?.Count > 0 && result[0].ContainsKey("count"))
+                {
+                    int studentCount = Convert.ToInt32(result[0]["count"]);
+                    return studentCount == 0; // Można usunąć tylko jeśli brak studentów
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking if group can be deleted: {ex.Message}");
+                return false;
+            }
+        }
+
+        public string BuildDefaultQuery()
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append("DELETE FROM grupa WHERE id = @groupId");
+            return queryBuilder.ToString();
+        }
+    }
+}
