@@ -15,22 +15,14 @@ namespace Projekt.ViewModels
     {
         #region Fields
         string IPageViewModel.Name => "MainMenu";
-        private MainMenuModel _model { get; init; }
-
+        private MainMenuModel? _model { get; init; }
+    
         private ICommand? _changePageView;
-        private ConditionalContentControlViewModel _subView { get; init; }
+        private ConditionalContentControlViewModel? _subView {  get; init; }
 
-        private bool _usersIsSelected = false;
-        private bool _lessonsIsSelected = false;
-        private bool _groupIsSelected = false;
-        private bool _placeIsSelected = false;
-        private bool _subjectIsSelected = false;   
-        private bool _currentProfileIsSelected = false;
-
-        public LoginWrapper LoginWrapper
+        public LoginWrapper? LoginWrapper
         {
-            get => _model.LoginWrapper;
-
+            get => _model?.LoginWrapper;
         }
 
         #endregion
@@ -48,6 +40,12 @@ namespace Projekt.ViewModels
 
         #region Public Properties/Commands
 
+        private bool _currentProfileIsSelected;
+        private bool _usersIsSelected;
+        private bool _groupIsSelected;
+        private bool _lessonsIsSelected;
+        private bool _placeIsSelected;
+        private bool _subjectIsSelected;
 
         public bool UsersIsSelected
         {
@@ -60,7 +58,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(UsersIsSelected));
                     if (_usersIsSelected)
                     {
-                        ChangePageView("UsersViewTableViewModel");
+                        _ = ChangePageView("UsersViewTableViewModel");
                     }
                 }
             }
@@ -77,7 +75,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(LessonsIsSelected));
                     if (_lessonsIsSelected)
                     {
-                        ChangePageView("LessonsViewTableViewModel");
+                        _ = ChangePageView("LessonsViewTableViewModel");
                     }
                 }
             }
@@ -94,7 +92,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(GroupIsSelected));
                     if (_groupIsSelected)
                     {
-                        ChangePageView("GroupViewTableViewModel");
+                        _ = ChangePageView("GroupViewTableViewModel");
                     }
                 }
             }
@@ -111,7 +109,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(PlaceIsSelected));
                     if (_placeIsSelected)
                     {
-                        ChangePageView("PlaceViewTableViewModel");
+                        _ = ChangePageView("PlaceViewTableViewModel");
                     }
                 }
             }
@@ -128,7 +126,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(SubjectIsSelected));
                     if (_subjectIsSelected)
                     {
-                        ChangePageView("SubjectViewTableViewModel");
+                        _ = ChangePageView("SubjectViewTableViewModel");
                     }
                 }
             }
@@ -145,7 +143,7 @@ namespace Projekt.ViewModels
                     OnPropertyChanged(nameof(CurrentProfileIsSelected));
                     if (_currentProfileIsSelected)
                     {
-                        ChangePageView("CurrentProfileViewModel");
+                        _ = ChangePageView("CurrentProfileViewModel");
                     }
                 }
             }
@@ -178,8 +176,8 @@ namespace Projekt.ViewModels
         #region Private Helpers
         private void Logout()
         {
-            _model.LoginWrapper.Logout();
-
+            _model?.LoginWrapper?.Logout();
+           
         }
         private async Task ChangePageView(object? param)
         { 
@@ -189,9 +187,10 @@ namespace Projekt.ViewModels
                
             }
 
-            if (param is string pageViewModelName)
-            {
 
+            if (param is string pageViewModelName && _model?.LoginWrapper != null) 
+
+            {
                 switch (pageViewModelName)
                 {
 
@@ -327,7 +326,7 @@ namespace Projekt.ViewModels
 
         private async Task<bool> Authenticate(params int[] requiredPermissions)
         {
-            return await _model.LoginWrapper.Authenticate(requiredPermissions);
+            return _model?.LoginWrapper != null && await _model.LoginWrapper.Authenticate();
         }
         #endregion
     }

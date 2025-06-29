@@ -15,29 +15,17 @@ namespace Projekt.ViewModels
     {
         #region Fields
 
-        private ICommand _changePageCommand;
+        private ICommand? _changePageCommand;
 
-        private IPageViewModel _currentPageViewModel;
-        private List<IPageViewModel> _pageViewModels;
+        private IPageViewModel? _currentPageViewModel;
+        private List<IPageViewModel>? _pageViewModels;
 
         string IPageViewModel.Name => "ConditionalContentControl";
-
-    
-
-
 
         public ConditionalContentControlViewModel()
         {
          
         }
-
-      
-
-
-
-
-
-
 
         #endregion
         #region Properties / Commands
@@ -61,9 +49,7 @@ namespace Projekt.ViewModels
 
         }
 
-
-
-        public IPageViewModel CurrentPageViewModel
+        public IPageViewModel? CurrentPageViewModel
         {
             get
             {
@@ -79,7 +65,6 @@ namespace Projekt.ViewModels
             }
         }
 
-
         #endregion
 
         #region Methods
@@ -92,9 +77,6 @@ namespace Projekt.ViewModels
             CurrentPageViewModel = PageViewModels.FirstOrDefault(vm => vm == viewModel);
         }
 
-      
-
-    
         #endregion
     }
 }
