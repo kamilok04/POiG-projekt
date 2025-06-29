@@ -33,7 +33,12 @@
   <ItemGroup>
     <PackageReference Include="Fluent.Ribbon" Version="11.0.1" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="MySql.Data" Version="9.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Behaviors\" />
   </ItemGroup>
 
 </Project>

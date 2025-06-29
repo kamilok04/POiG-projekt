@@ -109,13 +109,15 @@ namespace Projekt.Models
                         { "@title", _teacherTitle ?? string.Empty }}
                     ;
                     break;
-                case "Administrator":
-                    Query = "INSERT INTO admin (login) VALUES (@login)";
-                    Parameters = new() {
-                        { "@login", _login ?? string.Empty }
-                    }
-                    ;
-                    break;
+
+                    // Nie ma tabeli admin na razie, jest niepotrzebna
+                //case "Administrator":
+                //    Query = "INSERT INTO admin (login) VALUES (@login)";
+                //    Parameters = new() {
+                //        { "@login", _login }
+                //    }
+                //    ;
+                //    break;
 
             }
             return DatabaseHandler.CreateCommand(Query, Parameters);

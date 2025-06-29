@@ -65,10 +65,9 @@ namespace Projekt.ViewModels
 
         public void Execute(object? parameters)
         {
-            if(parameters != null)
-            {
+           
                 _execute(parameters);
-            }
+            
         }
 
         #endregion // ICommand Members

@@ -109,30 +109,15 @@ namespace Projekt.Miscellaneous
 
         }
 
-        private static MySqlCommand GenerateSelect(string query, Dictionary<string, object>? parameters = null)
-        {
-            MySqlCommand command = new(query);
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    command.Parameters.AddWithValue(param.Key, param.Value);
-                }
-            }
-            return command;
-        }
+
         public async Task<DataTable> GenerateDatatableAsync(string query, Dictionary<string, object>? parameters = null)
         {
+
+            MySqlDataAdapter adapter = new(CreateCommand(query, parameters));
             DataTable dataTable = new();
             using var connection = GetConnection();
-            await connection.OpenAsync();
-
-            using var command = CreateCommand(query, parameters);
-            command.Connection = connection;
-
-            using var reader = await command.ExecuteReaderAsync();
-            dataTable.Load(reader);
-
+            adapter.SelectCommand.Connection = connection;
+            adapter.Fill(dataTable);
             return dataTable;
         }
 
@@ -211,7 +196,7 @@ namespace Projekt.Miscellaneous
             }
         }
 
-        public MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
+        public static MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
         {
             MySqlCommand command = new(query);
 
