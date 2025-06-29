@@ -11,11 +11,11 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class GroupEditViewModel : ObservableObject, IPageViewModel
+    public class GroupEditViewModel : INotifyPropertyChanged, IPageViewModel
     {
         private readonly GroupEditModel _model;
         private readonly LoginWrapper _loginWrapper;
-        private readonly int _groupId;
+        private int _groupId;
 
         private string? _groupNumber;
         private string? _currentFaculty;

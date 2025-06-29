@@ -12,7 +12,7 @@ namespace Projekt.ViewModels
     {
         private readonly GroupDeleteModel _model;
         private readonly LoginWrapper _loginWrapper;
-        private readonly int _groupId;
+        private int _groupId;
 
         private string? _groupNumber;
         private string? _faculty;
