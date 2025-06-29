@@ -17,8 +17,8 @@ namespace Projekt.ViewModels
     {
         #region Fields
 
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
+        readonly Action<object?> _execute;
+        readonly Predicate<object?>? _canExecute;
 
         #endregion // Fields
 
@@ -28,7 +28,7 @@ namespace Projekt.ViewModels
         /// Creates a new command that can always execute.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
-        public RelayCommand(Action<object> execute)
+        public RelayCommand(Action<object?> execute)
             : this(execute, null)
         {
         }
@@ -38,12 +38,12 @@ namespace Projekt.ViewModels
         /// </summary>
         /// <param name="execute">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute)
         {
             if (execute == null)
                 throw new ArgumentNullException("execute");
 
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -52,20 +52,23 @@ namespace Projekt.ViewModels
         #region ICommand Members
 
         [DebuggerStepThrough]
-        public bool CanExecute(object parameters)
+        public bool CanExecute(object? parameters)
         {
-            return _canExecute == null || _canExecute(parameters);
+            return _canExecute?.Invoke(parameters) ?? true;
         }
 
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public void Execute(object parameters)
+        public void Execute(object? parameters)
         {
-            _execute(parameters);
+            if(parameters != null)
+            {
+                _execute(parameters);
+            }
         }
 
         #endregion // ICommand Members

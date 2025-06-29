@@ -15,5 +15,9 @@ namespace Projekt.ViewModels
         {
             
         }
+        public GroupDeleteViewModel()
+        {
+            
+        }
     }
 }

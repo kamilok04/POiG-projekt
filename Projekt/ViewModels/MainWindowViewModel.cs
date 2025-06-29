@@ -9,8 +9,8 @@ namespace Projekt.ViewModels
 {
     public class MainWindowViewModel : ConditionalContentControlViewModel
     {
-        private LoginWrapper _loginWrapper;
-        public LoginWrapper LoginWrapper
+        private LoginWrapper? _loginWrapper;
+        public LoginWrapper? LoginWrapper
         {
             get => _loginWrapper;
             set
@@ -39,11 +39,11 @@ namespace Projekt.ViewModels
 
         private void LoginViewModel_Authenticated()
         {
-
-            MainMenuViewModel mainmenu = new(LoginWrapper);
-
-            ChangeViewModel(mainmenu);
-
+            if(LoginWrapper != null)
+            {
+                MainMenuViewModel mainmenu = new(LoginWrapper);
+                ChangeViewModel(mainmenu);
+            }
         }
 
         private void NewLogin()

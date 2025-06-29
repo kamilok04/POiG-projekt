@@ -21,13 +21,13 @@ namespace Projekt.ViewModels
         private string? _address;
         private string? _capacity;
         private string? _currentFaculty;
-        private PlaceCreateModel _placeCreateModel;
+        private PlaceCreateModel? _placeCreateModel;
         #endregion
 
         #region Public Properties/Commands
         public string BuildingCode
         {
-            get => _buildingCode;
+            get => _buildingCode ?? string.Empty;
             set
             {
                 if (_buildingCode != value)
@@ -58,7 +58,7 @@ namespace Projekt.ViewModels
 
         public string Address
         {
-            get => _address;
+            get => _address ?? string.Empty;
             set
             {
                 if (_address != value)
@@ -71,7 +71,7 @@ namespace Projekt.ViewModels
 
         public string Capacity
         {
-            get => _capacity;
+            get => _capacity ?? string.Empty;
             set
             {
                 if (_capacity != value)
@@ -84,7 +84,7 @@ namespace Projekt.ViewModels
 
         public string CurrentFaculty
         {
-            get => _currentFaculty;
+            get => _currentFaculty ?? string.Empty;
             set
             {
                 if (_currentFaculty != value)
@@ -104,7 +104,7 @@ namespace Projekt.ViewModels
         public bool IsCh => _currentFaculty == "Ch";
         public bool IsAEI => _currentFaculty == "AEI";
 
-        public PlaceCreateModel PlaceCreateModel { get => _placeCreateModel; set => _placeCreateModel = value; }
+        public PlaceCreateModel? PlaceCreateModel { get => _placeCreateModel; set => _placeCreateModel = value; }
 
         public PlaceCreateViewModel(LoginWrapper loginWrapper)
         {

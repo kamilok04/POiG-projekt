@@ -32,7 +32,7 @@ namespace Projekt.ViewModels
         private string? _selectedDayOfWeek;
         private string? _startTime;
         private string? _endTime;
-        private LessonsCreateModel _lessonsCreateModel;
+        private LessonsCreateModel? _lessonsCreateModel;
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public LessonsCreateModel LessonsCreateModel { get => _lessonsCreateModel; set => _lessonsCreateModel = value; }
+        public LessonsCreateModel? LessonsCreateModel { get => _lessonsCreateModel; set => _lessonsCreateModel = value; }
 
         public LessonsCreateViewModel(LoginWrapper loginWrapper)
         {

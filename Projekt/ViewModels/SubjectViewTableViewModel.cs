@@ -17,7 +17,7 @@ namespace Projekt.ViewModels
     public class SubjectViewTableViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(SubjectViewTableViewModel);
-        private SubjectViewTableModel Model { get; init; }
+        private SubjectViewTableModel? Model { get; init; }
 
         private DataTable? _data;
         public DataTable? Data
@@ -39,7 +39,10 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM .....");
+            if (Model?.LoginWrapper != null)
+            {
+                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM .....");
+            }
         }
     }
 }
