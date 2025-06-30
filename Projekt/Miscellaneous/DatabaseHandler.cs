@@ -21,24 +21,24 @@ namespace Projekt.Miscellaneous
                 Port = 19306,
                 SslCa = ExtractEmbeddedPem("Projekt.Resources.ca.pem"),
                 SslMode = MySqlSslMode.VerifyCA
-               
+
             };
 
         }
 
-        public MySqlConnection GetConnection()
-        {
-           return _conn = new(_sb.ConnectionString);
 
+        public async Task<MySqlConnection> GetConnectionAsync()
+        {
+            _conn = new MySqlConnection(_sb.ConnectionString);
+            await _conn.OpenAsync();
+            return _conn;
         }
 
         public async Task<bool> TestConnectionAsync()
         {
             try
             {
-                using var connection = GetConnection();
-
-                await connection.OpenAsync();
+                using var connection = await GetConnectionAsync();
 
                 return true;
             }
@@ -50,19 +50,19 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
-            using var connection = GetConnection();
-            await connection.OpenAsync();
+
             using var command = CreateCommand(query, parameters);
+            using var connection = await GetConnectionAsync();
+
             command.Connection = connection;
             return await command.ExecuteNonQueryAsync();
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
         {
-        
+
             using var command = CreateCommand(query, parameters);
-            using var connection = GetConnection();
-            await connection.OpenAsync();
+            using var connection = await GetConnectionAsync();
             command.Connection = connection;
             object? result = await command.ExecuteScalarAsync();
             return result;
@@ -77,8 +77,7 @@ namespace Projekt.Miscellaneous
         public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
             var results = new List<Dictionary<string, object>>();
-            using var connection = GetConnection();
-            await connection.OpenAsync();
+            using var connection = await GetConnectionAsync();
             using var command = CreateCommand(query, parameters);
             command.Connection = connection;
             using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
@@ -116,7 +115,7 @@ namespace Projekt.Miscellaneous
 
             MySqlDataAdapter adapter = new(CreateCommand(query, parameters));
             DataTable dataTable = new();
-            using var connection = GetConnection();
+            using var connection = await GetConnectionAsync(); 
             adapter.SelectCommand.Connection = connection;
             adapter.Fill(dataTable);
             return dataTable;
@@ -145,14 +144,13 @@ namespace Projekt.Miscellaneous
             var result = await ExecuteQueryAsync(query, parameters).ConfigureAwait(false);
             if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
             {
-                return (int) result[0]["uprawnienia"];
+                return (int)result[0]["uprawnienia"];
             }
             return 0;
         }
 
-        public async void DestroySession(string username)
+        public async Task DestroySession(string username)
         {
-
             await ExecuteNonQueryAsync(
                 "DELETE FROM sesje WHERE login = @username",
                 new Dictionary<string, object> { { "@username", username } }
@@ -170,10 +168,9 @@ namespace Projekt.Miscellaneous
         /// </summary>
         /// <param name="operation">A function that receives an open MySqlConnection and MySqlTransaction to perform operations.</param>
         /// <returns>True if committed successfully, false if rolled back due to an error.</returns>
-        public async Task<bool> ExecuteInTransactionAsync(params MySqlCommand[] commands )
+        public async Task<bool> ExecuteInTransactionAsync(params MySqlCommand[] commands)
         {
-            using var connection = GetConnection();
-            await connection.OpenAsync();
+            using var connection = await GetConnectionAsync();
 
             using var transaction = await connection.BeginTransactionAsync();
             try
@@ -188,7 +185,7 @@ namespace Projekt.Miscellaneous
                 await connection.CloseAsync();
                 return true;
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 await connection.CloseAsync();
