@@ -35,6 +35,10 @@
                         Icon="/Resources/edit-256.png"
                         LargeIcon="/Resources/edit-256.png"
                         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyEditViewModel"/>
+                    <Fluent:Button Header="Dodaj" 
+          Icon="/Resources/plus-256.png"
+          LargeIcon="/Resources/plus-256.png"
+          Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyCreateViewModel"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Kierunki">
                     <Fluent:Button Header="Zarządzaj" 

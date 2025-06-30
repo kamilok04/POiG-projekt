@@ -6,6 +6,9 @@ namespace Projekt.ViewModels.Behaviors
 {
     public class DataGridSelectedCellBehavior : Behavior<DataGrid>
     {
+
+
+
         public static readonly DependencyProperty SelectedCellProperty =
             DependencyProperty.Register(nameof(SelectedCell), typeof(DataGridCellInfo), typeof(DataGridSelectedCellBehavior),
                 new FrameworkPropertyMetadata(default(DataGridCellInfo), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
