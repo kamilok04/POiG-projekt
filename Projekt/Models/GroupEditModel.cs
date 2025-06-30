@@ -15,9 +15,9 @@ namespace Projekt.Models
         public List<string>? _faculties;
         public List<string>? _degree;
         public List<int>? _semesters = [1, 2, 3, 4, 5, 6, 7];
-        public string? _currentFaculty;
-        public string? _currentDegree;
-        public string? _currentSemester;
+        public string? CurrentFaculty;
+        public string? CurrentDegree;
+        public string? CurrentSemester;
         public GroupEditModel? _model;
 
         public string TableName => "groups";
@@ -26,9 +26,9 @@ namespace Projekt.Models
         {
             { "@groupId", GroupId },
             { "@groupnumber", GroupNumber ?? string.Empty },
-            { "@currentFaculty", _currentFaculty ?? string.Empty },
-            { "@currentDegree", _currentDegree ?? string.Empty },
-            { "@currentSemester", _currentSemester ?? string.Empty },
+            { "@currentFaculty", CurrentFaculty ?? string.Empty },
+            { "@currentDegree", CurrentDegree ?? string.Empty },
+            { "@currentSemester", CurrentSemester ?? string.Empty },
         };
 
         private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
@@ -47,7 +47,7 @@ namespace Projekt.Models
                              FROM grupa g
                              JOIN rocznik r ON g.id_rocznika = r.id
                              JOIN kierunek k ON r.id_kierunku = k.id
-                             JOIN wydzial w ON k.id_wydzialu = w.id
+                             JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka
                              JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id
                              WHERE g.id = @groupId";
 
@@ -62,9 +62,9 @@ namespace Projekt.Models
                 {
                     var row = result[0];
                     GroupNumber = row["numer"]?.ToString();
-                    _currentFaculty = row["wydział"]?.ToString();
-                    _currentDegree = row["kierunek"]?.ToString();
-                    _currentSemester = row["semestr"]?.ToString();
+                    CurrentFaculty = row["wydział"]?.ToString();
+                    CurrentDegree = row["kierunek"]?.ToString();
+                    CurrentSemester = row["semestr"]?.ToString();
                     return true;
                 }
 
@@ -85,7 +85,7 @@ namespace Projekt.Models
                 var checkFacultyQuery = "SELECT COUNT(*) as count FROM wydzial WHERE nazwa_krotka = @currentFaculty";
                 var checkFacultyParams = new Dictionary<string, object>
                 {
-                    { "@currentFaculty", _currentFaculty ?? string.Empty }
+                    { "@currentFaculty", CurrentFaculty ?? string.Empty }
                 };
 
                 var facultyResult = await DatabaseHandler.ExecuteQueryAsync(checkFacultyQuery, checkFacultyParams);
@@ -98,7 +98,7 @@ namespace Projekt.Models
                 var checkDegreeQuery = "SELECT COUNT(*) as count FROM dane_kierunku WHERE nazwa = @currentDegree";
                 var checkDegreeParams = new Dictionary<string, object>
                 {
-                    { "@currentDegree", _currentDegree ?? string.Empty }
+                    { "@currentDegree", CurrentDegree ?? string.Empty }
                 };
 
                 var degreeResult = await DatabaseHandler.ExecuteQueryAsync(checkDegreeQuery, checkDegreeParams);
@@ -151,7 +151,7 @@ namespace Projekt.Models
                 var findSemesterParams = new Dictionary<string, object>
                 {
                     { "@degreeId", degreeIdFinal },
-                    { "@currentSemester", _currentSemester ?? string.Empty }
+                    { "@currentSemester", CurrentSemester ?? string.Empty }
                 };
 
                 var existingSemesterResult = await DatabaseHandler.ExecuteQueryAsync(findSemesterQuery, findSemesterParams);
@@ -204,6 +204,36 @@ namespace Projekt.Models
                 Console.WriteLine($"Error updating group: {ex.Message}");
                 return false;
             }
+        }
+
+        public async Task<List<GroupEditModel>> GetAllGroupsAsync()
+        {
+            var query = @"
+        SELECT g.id as GroupId, g.numer as GroupNumber, w.nazwa_krotka as Faculty, dk.nazwa as Degree, r.semestr as Semester
+        FROM grupa g
+        JOIN rocznik r ON g.id_rocznika = r.id
+        JOIN kierunek k ON r.id_kierunku = k.id
+        JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka
+        JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id;
+    ";
+
+            var result = await DatabaseHandler.ExecuteQueryAsync(query);
+
+            var groups = new List<GroupEditModel>();
+
+            foreach (var row in result)
+            {
+                groups.Add(new GroupEditModel(LoginWrapper)
+                {
+                    GroupId = Convert.ToInt32(row["GroupId"]),
+                    GroupNumber = row["GroupNumber"]?.ToString(),
+                    CurrentFaculty = row["Faculty"]?.ToString(),
+                    CurrentDegree = row["Degree"]?.ToString(),
+                    CurrentSemester = row["Semester"]?.ToString()
+                });
+            }
+
+            return groups;
         }
 
         public string BuildDefaultQuery()

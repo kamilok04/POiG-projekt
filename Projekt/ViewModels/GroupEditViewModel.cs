@@ -46,7 +46,7 @@ namespace Projekt.ViewModels
             set
             {
                 _currentFaculty = value;
-                _model._currentFaculty = value;
+                _model.CurrentFaculty = value;
                 OnPropertyChanged();
                 LoadDegreesAsync();
             }
@@ -58,7 +58,7 @@ namespace Projekt.ViewModels
             set
             {
                 _currentDegree = value;
-                _model._currentDegree = value;
+                _model.CurrentDegree = value;
                 OnPropertyChanged();
             }
         }
@@ -69,7 +69,7 @@ namespace Projekt.ViewModels
             set
             {
                 _currentSemester = value;
-                _model._currentSemester = value;
+                _model.CurrentSemester = value;
                 OnPropertyChanged();
             }
         }
@@ -90,6 +90,8 @@ namespace Projekt.ViewModels
         public event Action? OnSaved;
         public event Action? OnCancelled;
 
+        internal RelayCommand RefreshCommand { get; private set; }
+
         public GroupEditViewModel(LoginWrapper loginWrapper, int groupId)
         {
             _loginWrapper = loginWrapper;
@@ -99,8 +101,24 @@ namespace Projekt.ViewModels
             // Poprawione komendy - dodanie parametru object
             SaveCommand = new RelayCommand(async (parameter) => await SaveAsync(), (parameter) => CanSave());
             CancelCommand = new RelayCommand((parameter) => OnCancelled?.Invoke());
+            RefreshCommand = new RelayCommand(async _ => await LoadGroupsAsync());
 
-            LoadDataAsync();
+            _ = LoadGroupsAsync();
+            _ = LoadDataAsync();
+        }
+
+        public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
+
+        public async Task LoadGroupsAsync()
+        {
+            var model = new GroupEditModel(_loginWrapper);
+            var groups = await model.GetAllGroupsAsync();
+
+            Groups.Clear();
+            foreach (var group in groups)
+            {
+                Groups.Add(group);
+            }
         }
 
         private async Task LoadDataAsync()
@@ -117,12 +135,12 @@ namespace Projekt.ViewModels
                 if (success)
                 {
                     GroupNumber = _model.GroupNumber;
-                    CurrentFaculty = _model._currentFaculty;
-                    CurrentSemester = _model._currentSemester;
+                    CurrentFaculty = _model.CurrentFaculty;
+                    CurrentSemester = _model.CurrentSemester;
 
                     // Load degrees for the selected faculty
                     await LoadDegreesAsync();
-                    CurrentDegree = _model._currentDegree;
+                    CurrentDegree = _model.CurrentDegree;
                 }
             }
             catch (Exception ex)

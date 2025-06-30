@@ -25,7 +25,7 @@ namespace Projekt.ViewModels
         public string Name => "Tworzenie grupy";
 
         public ObservableCollection<string> Faculties { get; set; } = new();
-        public ObservableCollection<string> Degrees { get; set; } = new();
+        public ObservableCollection<string> Degrees { get; set; } = new() { "Matematyka", "Informatyka", "Chemia", "Mechatronika", "Kontrolery"};
         public ObservableCollection<int> Semesters { get; set; } = new() { 1, 2, 3, 4, 5, 6, 7 };
 
         public string? GroupNumber

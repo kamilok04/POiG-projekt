@@ -138,6 +138,35 @@ namespace Projekt.Models
             }
         }
 
+        public async Task<List<GroupDeleteModel>> GetAllGroupsAsync()
+        {
+            var query = @"
+        SELECT g.id as GroupId, g.numer as GroupNumber, w.nazwa_krotka as Faculty, dk.nazwa as Degree, r.semestr as Semester
+        FROM grupa g
+        JOIN rocznik r ON g.id_rocznika = r.id
+        JOIN kierunek k ON r.id_kierunku = k.id
+        JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka
+        JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id;
+    ";
+
+            var result = await DatabaseHandler.ExecuteQueryAsync(query);
+
+            var groups = new List<GroupDeleteModel>();
+
+            foreach (var row in result)
+            {
+                groups.Add(new GroupDeleteModel(LoginWrapper)
+                {
+                    GroupId = Convert.ToInt32(row["GroupId"]),
+                    GroupNumber = row["GroupNumber"]?.ToString(),
+                    Faculty = row["Faculty"]?.ToString(),
+                    Degree = row["Degree"]?.ToString(),
+                    Semester = row["Semester"]?.ToString()
+                });
+            }
+
+            return groups;
+        }
         public string BuildDefaultQuery()
         {
             StringBuilder queryBuilder = new StringBuilder();

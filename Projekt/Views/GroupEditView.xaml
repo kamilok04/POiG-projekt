@@ -7,80 +7,242 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
-             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupEditViewModel}, IsDesignTimeCreatable=True}">
-    <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupEditViewModel}}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Odśwież" 
+                    Command="{Binding RefreshCommand}" 
+                    Width="80" Height="30" 
+                    Margin="0,0,10,0"/>
+            <Button Content="Dodaj Grupę" 
+                    Command="{Binding AddGroupCommand}" 
+                    Width="100" Height="30" 
+                    Margin="0,0,10,0"/>
+        </StackPanel>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Groups}" 
+                  SelectedItem="{Binding SelectedGroup}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="True"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  AlternatingRowBackground="LightGray"
+                  RowHeight="35">
+
+            <DataGrid.Columns>
+                <!-- ID (ukryta kolumna dla operacji) -->
+                <DataGridTextColumn Header="ID" 
+                                    Binding="{Binding Id}" 
+                                    Visibility="Hidden"/>
+
+                <!-- Numer grupy -->
+                <DataGridTemplateColumn Header="Numer Grupy" Width="120" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding GroupNumber}" 
+                                       VerticalAlignment="Center" 
+                                       Margin="5,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding GroupNumber, UpdateSourceTrigger=PropertyChanged}" 
+                                     VerticalAlignment="Center" 
+                                     Margin="2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Wydział -->
+                <DataGridTemplateColumn Header="Wydział" Width="150" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding CurrentFaculty}" 
+                                       VerticalAlignment="Center" 
+                                       Margin="5,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding CurrentFaculty, UpdateSourceTrigger=PropertyChanged}" 
+                                      VerticalAlignment="Center" 
+                                      Margin="2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Kierunek -->
+                <DataGridTemplateColumn Header="Kierunek" Width="200" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding CurrentDegree}" 
+                                       VerticalAlignment="Center" 
+                                       Margin="5,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding CurrentDegree, UpdateSourceTrigger=PropertyChanged}" 
+                                      VerticalAlignment="Center" 
+                                      Margin="2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Semestr -->
+                <DataGridTemplateColumn Header="Semestr" Width="80" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding CurrentSemester}" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       Margin="5,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding CurrentSemester, UpdateSourceTrigger=PropertyChanged}" 
+                                      VerticalAlignment="Center" 
+                                      Margin="2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Liczba studentów -->
+                <DataGridTextColumn Header="Studenci" 
+                                    Binding="{Binding StudentCount}" 
+                                    Width="80" 
+                                    IsReadOnly="True"
+                                    CanUserSort="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StudentCount}" Value="0">
+                                    <Setter Property="Foreground" Value="Green"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HasStudents}" Value="True">
+                                    <Setter Property="Foreground" Value="Red"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Data utworzenia -->
+                <DataGridTextColumn Header="Data Utworzenia" 
+                                    Binding="{Binding CreatedDate, StringFormat=dd.MM.yyyy HH:mm}" 
+                                    Width="140" 
+                                    IsReadOnly="True"
+                                    CanUserSort="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Status grupy -->
+                <DataGridTemplateColumn Header="Status" Width="100" CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding StatusColor}" 
+                                    CornerRadius="12" 
+                                    Padding="8,2"
+                                    HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding Status}" 
+                                           Foreground="White" 
+                                           FontSize="10" 
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Akcje - Edit/Delete -->
+                <DataGridTemplateColumn Header="Akcje" Width="120" CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <!-- Edit Button -->
+                                <Button Content="✏️" 
+                                        Command="{Binding DataContext.EditGroupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Width="30" Height="25" 
+                                        Margin="2,0"
+                                        ToolTip="Edytuj grupę"
+                                        Background="LightBlue"
+                                        BorderBrush="Blue"
+                                        Cursor="Hand">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DataContext.IsLoading, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+            <!-- DataGrid Style -->
+            <DataGrid.Style>
+                <Style TargetType="DataGrid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Opacity" Value="0.7"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Style>
+        </DataGrid>
+
+        <!-- Status Bar -->
+        <Grid Grid.Row="3" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Header -->
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
-                       Text="Edycja Grupy" 
-                       FontSize="18" FontWeight="Bold" 
-                       Margin="0,0,0,20" 
-                       HorizontalAlignment="Center"/>
+            <!-- Group Count -->
+            <TextBlock Grid.Column="1" 
+                       Text="{Binding Groups.Count, StringFormat='Liczba grup: {0}'}" 
+                       VerticalAlignment="Center"
+                       Margin="0,0,20,0"
+                       FontWeight="Bold"/>
 
-            <!-- Group Number -->
-            <Label Grid.Row="1" Content="Numer grupy:"/>
-            <TextBox Grid.Row="1" Grid.Column="1" 
-                     Text="{Binding GroupNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     IsEnabled="{Binding IsLoading}"/>
-
-            <!-- Faculty -->
-            <Label Grid.Row="2" Content="Wydział:"/>
-            <ComboBox Grid.Row="2" Grid.Column="1" 
-                      SelectedItem="{Binding CurrentFaculty, Mode=TwoWay}" 
-                      ItemsSource="{Binding Faculties, Mode=OneWay}"
-                      IsEnabled="{Binding IsLoading}"/>
-
-            <!-- Degree -->
-            <Label Grid.Row="3" Content="Kierunek:"/>
-            <ComboBox Grid.Row="3" Grid.Column="1" 
-                      SelectedItem="{Binding CurrentDegree, Mode=TwoWay}" 
-                      ItemsSource="{Binding Degrees, Mode=OneWay}"
-                      IsEnabled="{Binding IsLoading}"/>
-
-            <!-- Semester -->
-            <Label Grid.Row="4" Content="Semestr:"/>
-            <ComboBox Grid.Row="4" Grid.Column="1" 
-                      SelectedItem="{Binding CurrentSemester, Mode=TwoWay}" 
-                      ItemsSource="{Binding Semesters, Mode=OneWay}"
-                      IsEnabled="{Binding IsLoading}"/>
-
-            <!-- Loading Indicator -->
-            <ProgressBar Grid.Row="5" Grid.ColumnSpan="2" 
-                         Height="20" Margin="0,10"
-                         IsIndeterminate="{Binding IsLoading}"
-                         Visibility="{Binding IsLoading}"/>
-
-            <!-- Buttons -->
-            <Grid Grid.Row="6" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Zapisz" 
-                        Command="{Binding SaveCommand}" 
-                        Width="100" Margin="0,0,10,0" 
-                        HorizontalAlignment="Right"
-                        IsEnabled="{Binding IsLoading}"/>
-                <Button Grid.Column="1"  
-                        Content="Anuluj" 
-                        Command="{Binding CancelCommand}" 
-                        Width="100" 
-                        HorizontalAlignment="Right"/>
-            </Grid>
+            <!-- Selected Group Info -->
+            <TextBlock Grid.Column="2" 
+                       Text="{Binding SelectedGroup.GroupInfo}" 
+                       VerticalAlignment="Center"
+                       FontStyle="Italic"
+                       Foreground="DarkGreen"/>
         </Grid>
     </Grid>
 </UserControl>

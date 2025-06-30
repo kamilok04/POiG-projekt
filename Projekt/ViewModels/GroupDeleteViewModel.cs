@@ -1,6 +1,7 @@
-﻿using Projekt.Models;
-using Projekt.Miscellaneous;
+﻿using Projekt.Miscellaneous;
+using Projekt.Models;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -114,6 +115,8 @@ namespace Projekt.ViewModels
         public event Action? OnDeleted;
         public event Action? OnCancelled;
 
+        internal RelayCommand RefreshCommand { get; private set; }
+
         public GroupDeleteViewModel(LoginWrapper loginWrapper, int groupId)
         {
             _loginWrapper = loginWrapper;
@@ -122,8 +125,24 @@ namespace Projekt.ViewModels
 
             DeleteCommand = new RelayCommand(async (parameter) => await DeleteAsync(), (parameter) => CanDelete && !IsLoading);
             CancelCommand = new RelayCommand((parameter) => OnCancelled?.Invoke());
+            RefreshCommand = new RelayCommand(async _ => await LoadGroupsAsync());
 
-            LoadDataAsync();
+            _ = LoadGroupsAsync();
+            _ = LoadDataAsync();
+        }
+
+        public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
+
+        public async Task LoadGroupsAsync()
+        {
+            var model = new GroupEditModel(_loginWrapper);
+            var groups = await model.GetAllGroupsAsync();
+
+            Groups.Clear();
+            foreach (var group in groups)
+            {
+                Groups.Add(group);
+            }
         }
 
         private async Task LoadDataAsync()
