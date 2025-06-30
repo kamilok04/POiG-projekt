@@ -50,8 +50,10 @@ namespace Projekt.Miscellaneous
         }
         public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
         {
+
             using var command = CreateCommand(query, parameters);
             using var connection = await GetConnectionAsync();
+
             command.Connection = connection;
             return await command.ExecuteNonQueryAsync();
         }

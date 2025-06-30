@@ -16,7 +16,7 @@ namespace Projekt.ViewModels
     public class GroupViewTableViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(GroupViewTableViewModel);
-        private GroupViewTableModel Model { get; init; }
+        private GroupViewTableModel? Model { get; init; }
         private DataTable? _data;
         public DataTable? Data
         {
@@ -35,7 +35,10 @@ namespace Projekt.ViewModels
         public GroupViewTableViewModel() { } //for designer only
         private async Task GetDataAsync()
         {
-            Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM grupa");
+            if (Model?.LoginWrapper != null)
+            {
+                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM grupa");
+            }
         }
     }
 }
