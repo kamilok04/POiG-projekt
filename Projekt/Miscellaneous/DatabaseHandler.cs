@@ -196,7 +196,7 @@ namespace Projekt.Miscellaneous
             }
         }
 
-        public MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
+        public static MySqlCommand CreateCommand(string query, Dictionary<string, object>? parameters)
         {
             MySqlCommand command = new(query);
 

@@ -17,7 +17,7 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => nameof(PlaceViewTableViewModel);
      
-        private UsersViewTableModel? Model { get; init; }
+        private UsersEditModel? Model { get; init; }
 
         private DataTable? _data;
 
