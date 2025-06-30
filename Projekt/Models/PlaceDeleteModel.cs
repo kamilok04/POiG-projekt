@@ -78,6 +78,32 @@ namespace Projekt.Models
             }
         }
 
+        public async Task<List<PlaceDeleteModel>> GetAllPlacesAsync()
+        {
+            var query = @"
+        SELECT m.id AS PlaceId, 
+               m.id_wydzialu AS CurrentFaculty, 
+               m.numer AS ClassNumber, 
+               m.pojemnosc AS Capacity, 
+               a.adres AS Address, 
+               w.nazwa_krotka AS BuildingCode
+        FROM miejsce m
+        JOIN adres a ON m.id_adresu = a.id
+        JOIN wydzial w ON m.id_wydzialu = w.nazwa_krotka";
+
+            var results = await DatabaseHandler.ExecuteQueryAsync(query);
+
+            return results?.Select(r => new PlaceDeleteModel(LoginWrapper)
+            {
+                PlaceId = Convert.ToInt32(r["PlaceId"]),
+                CurrentFaculty = r["CurrentFaculty"].ToString(),
+                ClassNumber = Convert.ToInt32(r["ClassNumber"]),
+                Capacity = r["Capacity"].ToString(),
+                Address = r["Address"].ToString(),
+                BuildingCode = r["BuildingCode"].ToString()
+            }).ToList() ?? new List<PlaceDeleteModel>();
+        }
+
         public async Task<Dictionary<string, object>> GetPlaceById(int placeId)
         {
             try

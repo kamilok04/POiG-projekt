@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Projekt.Miscellaneous;
+using Projekt.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Projekt.Miscellaneous;
-using Projekt.Models;
 
 namespace Projekt.ViewModels
 {
@@ -149,10 +151,16 @@ namespace Projekt.ViewModels
         public bool IsAEI => _currentFaculty == "AEI";
 
         public PlaceDeleteModel? PlaceDeleteModel { get => _placeDeleteModel; set => _placeDeleteModel = value; }
+        private readonly LoginWrapper _loginWrapper;
+        internal RelayCommand RefreshCommand { get; private set; }
+        public ObservableCollection<PlaceDeleteModel> Places { get; set; } = new();
 
         public PlaceDeleteViewModel(LoginWrapper loginWrapper)
         {
+            _loginWrapper = loginWrapper;
             PlaceDeleteModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+            RefreshCommand = new RelayCommand(async _ => await LoadPlacesAsync());
+            _ = LoadPlacesAsync();
         }
 
         private ICommand? _saveCommand;
@@ -191,6 +199,17 @@ namespace Projekt.ViewModels
             CurrentFaculty = string.Empty;
             PlaceId = 0;
             PlaceDeleteModel = null;
+        }
+
+        private async Task LoadPlacesAsync()
+        {
+            var placeModel = new PlaceDeleteModel(_loginWrapper);
+            var places = await placeModel.GetAllPlacesAsync();
+            Places.Clear();
+            foreach (var place in places)
+            {
+                Places.Add(place);
+            }
         }
 
         private async Task<bool> DeletePlace()

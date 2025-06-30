@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Projekt.Miscellaneous;
+using Projekt.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Projekt.Miscellaneous;
-using Projekt.Models;
 
 namespace Projekt.ViewModels
 {
@@ -149,10 +150,16 @@ namespace Projekt.ViewModels
         public bool IsAEI => _currentFaculty == "AEI";
 
         public PlaceEditModel? PlaceEditModel { get => _placeEditModel; set => _placeEditModel = value; }
+        internal RelayCommand RefreshCommand { get; private set; }
+        public ObservableCollection<PlaceEditModel> Places { get; set; } = new();
+        private readonly LoginWrapper _loginWrapper;
 
         public PlaceEditViewModel(LoginWrapper loginWrapper)
         {
+            _loginWrapper = loginWrapper;
             PlaceEditModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+            RefreshCommand = new RelayCommand(async _ => await LoadPlacesAsync());
+            _ = LoadPlacesAsync();
         }
 
         private ICommand? _saveCommand;
@@ -201,6 +208,17 @@ namespace Projekt.ViewModels
                    !string.IsNullOrEmpty(Address) &&
                    !string.IsNullOrEmpty(Capacity) &&
                    !string.IsNullOrEmpty(CurrentFaculty);
+        }
+
+        private async Task LoadPlacesAsync()
+        {
+            var placeModel = new PlaceEditModel(_loginWrapper);
+            var places = await placeModel.GetAllPlacesAsync();
+            Places.Clear();
+            foreach (var place in places)
+            {
+                Places.Add(place);
+            }
         }
 
         private async Task<bool> UpdatePlace()
