@@ -30,7 +30,7 @@ namespace Projekt.Miscellaneous
         public async Task<MySqlConnection> GetConnectionAsync()
         {
             _conn = new MySqlConnection(_sb.ConnectionString);
-            await _conn.OpenAsync();
+            _conn.Open();
             return _conn;
         }
 

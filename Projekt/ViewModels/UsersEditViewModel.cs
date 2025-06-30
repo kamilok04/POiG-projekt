@@ -31,7 +31,7 @@ namespace Projekt.ViewModels
 
         #region Private Fields
         private UsersEditModel Model { get; init; }
-
+        private bool ChangesPending = false;
         private DataTable? _data;
 
 
@@ -60,14 +60,17 @@ namespace Projekt.ViewModels
 
             Model = new(loginWrapper);
             RowKey = "Login";
+
             GetDataAsync().ConfigureAwait(false); ;
+
+
         }
 
         private ICommand? _tableSaveCommand;
         public override ICommand TableSaveCommand
         {
             get => _tableSaveCommand ??= new RelayCommand(
-                param => Model.CommitTransaction());
+                async param => { await Model.CommitTransaction(); await GetDataAsync(); } );
         
         }
 
@@ -78,14 +81,7 @@ namespace Projekt.ViewModels
                 param => GetDataAsync().Wait());
         }
 
-        private ICommand _tableDeleteCommand;
-        public override ICommand TableDeleteCommand
-        {
-            get => _tableDeleteCommand ??= new RelayCommand(
-                // TODO: uzupełnić
-                param => { }
-                );
-        }
+
 
         private ICommand _tableCreateCommand;
         public override ICommand TableCreateCommand
@@ -100,10 +96,10 @@ namespace Projekt.ViewModels
         private void SendToCreator()
         {
 
-            var mainMenuVm = Application.Current.MainWindow.DataContext as MainMenuViewModel;
-            if (mainMenuVm != null)
+            var mwwm = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+            if (mwwm != null)
             {
-                mainMenuVm.CurrentPageViewModel = new UsersCreateViewModel(Model.LoginWrapper);
+                mwwm.SetMainMenuItem(new UsersCreateViewModel(Model.LoginWrapper));
             }
         }
         #endregion
@@ -125,11 +121,14 @@ namespace Projekt.ViewModels
         public override void CreateTransactionCommand(string? columnName, string? RowKey, string? oldValue, string? newValue)
         {
             Model.CreateTransactionCommand(columnName, RowKey, oldValue, newValue);
+            ChangesPending = true;
 
         }
 
         public override bool ConfirmExit()
         {
+            if(!ChangesPending) return true; // no changes, no need to ask
+
             MessageBoxResult result = MessageBox.Show(
                 "Zmiany nie zostały zapisane. Zapisać?", 
                 "Uwaga, niezapisane zmiany!",
@@ -139,7 +138,8 @@ namespace Projekt.ViewModels
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    Model.CommitTransaction();
+                    Model.CommitTransaction().Wait() ;
+                    ChangesPending = false;
                     return true;
 
                 case MessageBoxResult.No: 

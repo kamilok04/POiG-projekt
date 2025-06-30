@@ -13,7 +13,9 @@
     <!--<UserControl.DataContext>
         <viewmodels:LoginViewModel/>
     </UserControl.DataContext>-->
-
+    <UserControl.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding LoginCommand}"/>
+    </UserControl.InputBindings>
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
         <Label FontSize="42" HorizontalAlignment="Center" Margin="0 0 0 40px" >Plan zajęć</Label>
         <DockPanel Margin="0 0 0 10px">
@@ -38,7 +40,7 @@
                 </PasswordBox>
             </AdornerDecorator>
         </DockPanel>
-        <Label Content="{Binding ErrorString}" Foreground="Red" ></Label>
+        <Label Content="{Binding ErrorString}" Foreground="Red" />
         <Button Command="{Binding LoginCommand}">ZALOGUJ SIĘ</Button>
     </StackPanel>
 
