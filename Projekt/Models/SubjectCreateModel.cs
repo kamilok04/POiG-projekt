@@ -23,10 +23,28 @@ namespace Projekt.Models
 
         private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
 
-        public string TableName => "subjects";
+        public string TableName => "przedmiot";
 
         // Czy to zapytanie jest poprawne?
-        public string? DefaultQuery => BuildDefaultQuery();
+        public string? DefaultQuery => @"
+            INSERT INTO opis (opis) VALUES (@description);
+            SET @id_opisu = LAST_INSERT_ID();
+
+            INSERT INTO literatura (literatura) VALUES (@literature);
+            SET @id_literatury = LAST_INSERT_ID();
+
+            INSERT INTO warunki_zaliczenia (warunki_zaliczenia) VALUES (@passingCriteria);
+            SET @id_warunkow = LAST_INSERT_ID();
+
+            SET @wydzial_id = (SELECT id FROM wydzial WHERE nazwa = @faculty);
+
+            INSERT INTO dane_przedmiotu (kod, nazwa, id_opisu, id_literatury, id_warunkow, punkty, wydzial_org)
+            VALUES (@code, @name, @id_opisu, @id_literatury, @id_warunkow, @points, @wydzial_id);
+
+            SET @id_danych = LAST_INSERT_ID();
+            INSERT INTO przedmiot (id_danych) VALUES (@id_danych);
+            ";
+
 
         public Dictionary<string, object>? DefaultParameters => new()
             {
@@ -45,48 +63,6 @@ namespace Projekt.Models
             MySqlCommand AddSubjectCommand = DatabaseHandler.CreateCommand(((ITable)this).DefaultQuery, ((ITable)this).DefaultParameters);
 
             return await DatabaseHandler.ExecuteInTransactionAsync(AddSubjectCommand);
-        }
-
-        // TODO: Sprawdzić czy działa poprawnie
-        private string BuildDefaultQuery()
-        {
-            StringBuilder mainQuery = new();
-
-            StringBuilder insertDescriptionQuery = new();
-            insertDescriptionQuery.Append("INSERT INTO opis VALUES (@description);");
-
-            StringBuilder insertLiteratureQuery = new();
-            insertLiteratureQuery.Append("INSERT INTO literatura VALUES (@literature);");
-
-            StringBuilder insertPassingCriteriaQuery = new();
-            insertPassingCriteriaQuery.Append("INSERT INTO literatura VALUES (@literature);");
-
-            StringBuilder selectFacultyIdQuery = new();
-            selectFacultyIdQuery.Append("SELECT id FROM wydzial WHERE nazwa=@faculty");
-
-            StringBuilder selectDescriptionIdQuery = new();
-            selectDescriptionIdQuery.Append("SELECT id FROM opis WHERE opis=@description");
-
-            StringBuilder selectLiteratureIdQuery = new();
-            selectLiteratureIdQuery.Append("SELECT id FROM literatura WHERE literatura=@literature");
-
-            StringBuilder selectPassingCriteriaIdQuery = new();
-            selectPassingCriteriaIdQuery.Append("SELECT id FROM opis WHERE warunki_zaliczenia=@passingCriteria");
-
-            mainQuery.Append(insertDescriptionQuery)
-                .Append(insertLiteratureQuery)
-                .Append(insertPassingCriteriaQuery)
-                .Append("INSERT INTO dane_przedmiotu (kod, nazwa, punkty)")
-                .Append("VALUES (@code, @name, @passing_terms, @points);")
-                .Append("INSERT INTO dane_przedmiotu (id_opisu, id_literatury, id_warunkow, wydzial_org)")
-                .Append("SELECT opis.id, literatura.id, warunki_zaliczenia.id, wydzial.id")
-                .Append("FROM opis, literatura, warunki_zaliczenia, wydzial")
-                .Append($"WHERE opis.id={selectDescriptionIdQuery}")
-                .Append($"AND literatura.id={selectLiteratureIdQuery}")
-                .Append($"AND warunki_zaliczenia.id={selectPassingCriteriaIdQuery}")
-                .Append($"AND wydzial.id={selectFacultyIdQuery};");
-
-            return mainQuery.ToString();
         }
     }
 }

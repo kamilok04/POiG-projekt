@@ -301,12 +301,12 @@ namespace Projekt.ViewModels
                             return;
                         CurrentPageViewModel = new SubjectCreateViewModel(_model.LoginWrapper);
                         break;
-                    case "SubjectDeleteViewModel":
+                    case "SubjectEditViewModel":
                         if (!await Authenticate(PermissionHelper.CanModifyData))
                             return;
                         CurrentPageViewModel = new SubjectEditViewModel(_model.LoginWrapper);
                         break;
-                    case "SubjectEditViewModel":
+                    case "SubjectDeleteViewModel":
                         if (!await Authenticate(PermissionHelper.CanModifyData))
                             return;
                         CurrentPageViewModel = new SubjectDeleteViewModel(_model.LoginWrapper);
