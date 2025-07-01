@@ -324,7 +324,11 @@ namespace Projekt.ViewModels
                             return;
                         CurrentPageViewModel = new FacultyEditViewModel(_model.LoginWrapper);
                         break;
-
+                    case "MajorManagementViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
+                        CurrentPageViewModel = new MajorManagmentViewModel(_model.LoginWrapper);
+                        break;
 
                 }
             }
