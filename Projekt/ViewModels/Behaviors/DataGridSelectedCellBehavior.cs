@@ -21,6 +21,8 @@ namespace Projekt.ViewModels.Behaviors
              
         }
 
+
+
         protected override void OnAttached()
         {
             base.OnAttached();

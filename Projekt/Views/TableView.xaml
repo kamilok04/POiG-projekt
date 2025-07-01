@@ -17,14 +17,18 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding Path=TableData}" SelectionUnit="Cell" CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="True"
-               >
+    CellEditEnding="DataGrid_CellEditEnding"                  >
          
+   
             <i:Interaction.Behaviors>
-                <behaviors:DataGridSelectedCellBehavior SelectedCell="{Binding SelectedCell, Mode=TwoWay}"  />
-            </i:Interaction.Behaviors>
+                <behaviors:DataGridSelectedCellBehavior 
+                    SelectedCell="{Binding SelectedCell}"  
+                    
+                   />
+          </i:Interaction.Behaviors>
             <DataGrid.InputBindings>
                 <KeyBinding Key="Delete" Command="{Binding ClearSelectedCellCommand}" />
-               
+                
             </DataGrid.InputBindings>
         </DataGrid>
         <Grid Grid.Row="1">
