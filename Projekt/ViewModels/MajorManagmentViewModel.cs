@@ -11,7 +11,7 @@ namespace Projekt.ViewModels
 {
     public class MajorManagmentViewModel : ObservableObject, IPageViewModel, ITable
     {
-        string ITable.DefaultQuery => "SELECT dk.nazwa AS kierunek, w.nazwa AS wydział FROM kierunek k JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id JOIN wydzial w ON k.id_wydzialu = w.id;";
+        string ITable.DefaultQuery => "SELECT dk.nazwa AS kierunek, w.nazwa AS wydział FROM kierunek k JOIN dane_kierunku dk ON k.id_danych_kierunku = dk.id JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka;";
         string ITable.TableName => "kierunek";
         Dictionary<string, object>? ITable.DefaultParameters => null;
         string IPageViewModel.Name => nameof(MajorManagmentViewModel);
