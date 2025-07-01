@@ -18,7 +18,7 @@ namespace Projekt.Models
                 l.literatura,
                 wz.warunki_zaliczenia,
                 dp.punkty,
-                w.nazwa AS wydział
+                w.nazwa_krotka AS wydział
             FROM 
                 dane_przedmiotu dp
             JOIN 
