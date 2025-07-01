@@ -26,23 +26,8 @@ namespace Projekt.Models
 
         public string TableName => "przedmiot";
 
-        // Zapytanie jest poprawne, ale z jakiegoś powodu nie działa (testowałem bezpośrednio na bazie). Chyba trzeba je jakoś rozbić 
-        public string? DefaultQuery => """
-            INSERT INTO opis (opis) VALUES (@description);
-            SET @`id_opisu` = LAST_INSERT_ID();
-
-            INSERT INTO literatura (literatura) VALUES (@literature);
-            SET @`id_literatury` = LAST_INSERT_ID();
-
-            INSERT INTO warunki_zaliczenia (warunki_zaliczenia) VALUES (@passingCriteria);
-            SET @`id_warunkow` = LAST_INSERT_ID();
-
-            INSERT INTO dane_przedmiotu (kod, nazwa, id_opisu, id_literatury, id_warunkow, punkty, wydzial_org)
-            VALUES (@code, @name, @`id_opisu`, @`id_literatury`, @`id_warunkow`, @points, @currentFaculty);
-
-            SET @id_danych = LAST_INSERT_ID();
-            INSERT INTO przedmiot (id_danych) VALUES (@id_danych);
-            """;
+        // Procedura w SQL do tworzenia przedmiotów 
+        public string? DefaultQuery => "CALL AddSubject(@description, @literature, @passingCriteria, @code, @name, @points, @currentFaculty);";
 
 
         public Dictionary<string, object>? DefaultParameters => new()
