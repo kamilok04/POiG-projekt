@@ -77,13 +77,13 @@ namespace Projekt.Miscellaneous
             _username = null;
         }
 
-        private void DestroySession(string? username)
+        private async void DestroySession(string? username)
         {
             if (!string.IsNullOrEmpty(username))
             {
                 if (_DBHandler == null)
                     throw new InvalidOperationException("DBHandler is not initialized.");
-                _DBHandler.DestroySession(username);
+                await _DBHandler.DestroySession(username);
                 _DBHandler = null;
             }
            

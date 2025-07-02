@@ -9,14 +9,15 @@
            <ResourceDictionary.MergedDictionaries>  
                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />  
            </ResourceDictionary.MergedDictionaries>  
+           
            <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">  
                <views:LoginView />  
            </DataTemplate>  
            <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">  
                <views:MainMenuView />  
            </DataTemplate>
-           
-           
+
+     
             <DataTemplate DataType="{x:Type viewmodels:FacultyEditViewModel}">
                 <views:TableView/>
             </DataTemplate>
@@ -70,8 +71,8 @@
             </DataTemplate>
 
 
-            <DataTemplate DataType="{x:Type viewmodels:SubjectCreateViewModel}">
-                <views:SubjectCreateView/>
+            <DataTemplate DataType="{x:Type viewmodels:FacultyCreateViewModel}">
+                <views:FacultyCreateView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:SubjectDeleteViewModel}">
                 <views:SubjectDeleteView/>

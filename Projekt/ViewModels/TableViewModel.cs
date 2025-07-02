@@ -1,5 +1,7 @@
 ﻿using Projekt.Miscellaneous;
 using System.Data;
+using System.Data.OleDb;
+using System.IO.Packaging;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -17,6 +19,7 @@ namespace Projekt.ViewModels
         }
 
 
+      
 
         public DataGridCellInfo SelectedCell
         {
@@ -24,7 +27,7 @@ namespace Projekt.ViewModels
             set
             {
 
-                HandleNewCellSelection(value);
+                        HandleNewCellSelection(value);
                 OnPropertyChanged(nameof(SelectedCell));
 
             }
@@ -41,13 +44,6 @@ namespace Projekt.ViewModels
                 _selectedCellValue = value;
                 OnPropertyChanged(nameof(SelectedCellValue));
             }
-        }
-
-        private string? _previousCellValue;
-        public string? PreviousCellValue
-        {
-            get => _previousCellValue;
-            set => _previousCellValue = value;
         }
 
         private string? _selectedColumnName;
@@ -87,6 +83,7 @@ namespace Projekt.ViewModels
             }
         }
 
+     
 
         private ICommand? _tableUndoCommand;
         public ICommand TableUndoCommand
@@ -110,8 +107,7 @@ namespace Projekt.ViewModels
             {
                 string? oldKey = SelectedRowKey;
                 string? oldColumn = SelectedColumnName;
-                DataRowView? oldRow = SelectedRow;
-
+                 DataRowView? oldRow = SelectedRow;
                 string? oldValue = SelectedCellValue;
 
                 _selectedCell = value;
@@ -120,19 +116,33 @@ namespace Projekt.ViewModels
                 SelectedRowKey = SelectedRow?[RowKey].ToString();
                 SelectedCellValue = (SelectedColumnName == null || SelectedRow == null) ? null : SelectedRow[SelectedColumnName].ToString();
 
+                if (oldRow == null || String.IsNullOrEmpty(oldKey) || String.IsNullOrEmpty(oldValue) || String.IsNullOrEmpty(oldColumn))
+                    return;
 
-                if (
-                    oldRow != null &&
-                    oldColumn != null &&
-                   oldKey != null &&
-                    oldRow[oldColumn].ToString() != oldValue &&
-                    oldRow[RowKey].ToString() == oldKey
+       
+                    if ((string ?) oldRow[oldColumn] != oldValue && CompareRows(oldRow, oldRow, oldColumn))
+                    
 
-                    )
                     CreateTransactionCommand(oldColumn, oldRow[RowKey].ToString(), oldValue, oldRow[oldColumn].ToString());
 
 
             }
+        }
+
+        private bool CompareRows(DataRowView? a, DataRowView? b, string? columnToExclude)
+        {
+            if (a == null || b == null)
+                return false;
+            if (columnToExclude == null) return a == b;
+            foreach (DataColumn column in a.DataView.Table.Columns)
+            {
+                string columnName = column.ColumnName;
+                if (columnName == columnToExclude)
+                    continue;
+                if (!a[columnName].Equals(b[columnName])) 
+                    return false;
+            }
+            return true;
         }
 
 
@@ -146,7 +156,9 @@ namespace Projekt.ViewModels
         public abstract bool ConfirmExit();
 
         public abstract ICommand TableSaveCommand { get; }
-        public abstract ICommand TableDeleteCommand { get; }
+
+        //public abstract ICommand TableDeleteCommand { get; }
+        // tymaczasowo: Usuwanie odbędzie się przez usunięcie komórki zawierającej PK
         public abstract ICommand TableCancelCommand { get; }
         public abstract ICommand TableCreateCommand { get; }
 

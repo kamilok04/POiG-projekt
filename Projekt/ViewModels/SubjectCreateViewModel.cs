@@ -31,8 +31,8 @@ namespace Projekt.ViewModels
         private LoginWrapper _loginWrapper;
         private SubjectCreateModel? _subjectCreateModel;
 
-        private string? _errorString;
-        private string? _successString;
+        private string _errorString = "";
+        private string _successString = "";
         #endregion
 
         #region Public Properties/Commands
@@ -131,30 +131,22 @@ namespace Projekt.ViewModels
 
         public string? ErrorString
         {
-            get => _errorString;
-            set
+            get => _errorString; set
             {
-                if (_errorString != value)
-                {
-                    _errorString = value;
-                    OnPropertyChanged(nameof(ErrorString));
-                }
+                _errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
             }
         }
-        public string? SuccessString
+        public string SuccessString
         {
-            get => _successString;
-            set
+            get => _successString; set
             {
-                if (_successString != value)
-                {
-                    _successString = value;
-                    OnPropertyChanged(nameof(SuccessString));
-                }
+                _successString = value;
+                OnPropertyChanged(nameof(SuccessString));
             }
         }
 
-        public SubjectCreateModel? SubjectCreateModel { get => _subjectCreateModel; set => _subjectCreateModel = value; }
+        public SubjectCreateModel SubjectCreateModel { get => _subjectCreateModel; init => _subjectCreateModel = value; }
 
         public SubjectCreateViewModel(LoginWrapper loginWrapper)
         {
@@ -220,6 +212,7 @@ namespace Projekt.ViewModels
         private async Task<bool> AddSubject()
         {
             if (!AreAllFieldsFilled() || SubjectCreateModel == null) return false;
+
             bool success = await SubjectCreateModel.AddSubject();
 
             if (!success)

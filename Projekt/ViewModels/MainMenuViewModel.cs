@@ -265,7 +265,7 @@ namespace Projekt.ViewModels
                            PermissionHelper.CanSeeOtherProfiles))
                             return;
                         int groupId = 0;
-                        CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper, groupId);
+                    //    CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper, groupId);
                         break;
                     case "GroupDeleteViewModel":
                         if (!await Authenticate(
@@ -273,7 +273,7 @@ namespace Projekt.ViewModels
                            PermissionHelper.CanSeeOtherProfiles))
                             return;
                         groupId = 0;
-                        CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper, groupId);
+                 //       CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper, groupId);
                         break;
                     case "PlacesViewTableViewModel":
                         CurrentPageViewModel = new PlaceViewTableViewModel(_model.LoginWrapper);
@@ -314,7 +314,11 @@ namespace Projekt.ViewModels
                     case "CurrentProfileViewModel":
                         CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
                         break;
-
+                    case "FacultyCreateViewModel":
+                        if (!await Authenticate(PermissionHelper.CanModifyData))
+                            return;
+                        CurrentPageViewModel = new FacultyCreateViewModel(_model.LoginWrapper);
+                        break;
                     case "FacultyEditViewModel":
                         if (!await Authenticate(PermissionHelper.CanModifyData))
                             return;

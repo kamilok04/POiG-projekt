@@ -10,6 +10,7 @@ namespace Projekt.ViewModels
     public class MainWindowViewModel : ConditionalContentControlViewModel
     {
         private LoginWrapper? _loginWrapper;
+        private MainMenuViewModel mainmenu;
         public LoginWrapper? LoginWrapper
         {
             get => _loginWrapper;
@@ -35,13 +36,15 @@ namespace Projekt.ViewModels
 
         public MainWindowViewModel() {
             NewLogin();
+
         }
 
         private void LoginViewModel_Authenticated()
         {
             if(LoginWrapper != null)
             {
-                MainMenuViewModel mainmenu = new(LoginWrapper);
+                mainmenu = new(LoginWrapper);
+
                 ChangeViewModel(mainmenu);
             }
         }
@@ -58,6 +61,13 @@ namespace Projekt.ViewModels
                 LoginViewModel_Authenticated();
             };
             ChangeViewModel(loginViewModel);
+        }
+
+        public void SetMainMenuItem(IPageViewModel pageViewModel)
+        {
+            if (pageViewModel == null)
+                throw new ArgumentNullException(nameof(pageViewModel));
+            mainmenu.ChangeViewModel(pageViewModel);
         }
     }
 }
