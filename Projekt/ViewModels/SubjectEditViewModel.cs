@@ -27,10 +27,6 @@ namespace Projekt.ViewModels
             }
         }
 
-        
-
-        public Dictionary<string, object>? DefaultParameters => throw new NotImplementedException();
-
         public SubjectEditViewModel(LoginWrapper loginWrapper)
         {
 
