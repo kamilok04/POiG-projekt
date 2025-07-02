@@ -166,7 +166,7 @@ namespace Projekt.ViewModels
 
                 var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
 
-                Groups.Clear();
+                Subjects.Clear();
                 if (result != null)
                 {
                     foreach (var row in result)
@@ -200,7 +200,7 @@ namespace Projekt.ViewModels
 
                 var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
 
-                Groups.Clear();
+                Places.Clear();
                 if (result != null)
                 {
                     foreach (var row in result)
