@@ -7,8 +7,8 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Projekt.ViewModels
 {
@@ -26,7 +26,10 @@ namespace Projekt.ViewModels
         private string? _description;
         private string? _passingCriteria;
         private string? _literature;
-        private SubjectCreateModel _subjectCreateModel;
+        private List<string>? _faculties;
+        private string? _currentFaculty;
+        private LoginWrapper _loginWrapper;
+        private SubjectCreateModel? _subjectCreateModel;
 
         private string _errorString = "";
         private string _successString = "";
@@ -41,6 +44,7 @@ namespace Projekt.ViewModels
                 if (_name != value)
                 {
                     _name = value;
+                    _subjectCreateModel._name = value;
                     OnPropertyChanged(nameof(Name));
                 }
             }
@@ -53,6 +57,7 @@ namespace Projekt.ViewModels
                 if (_ectsPoints != value)
                 {
                     _ectsPoints = value;
+                    _subjectCreateModel._points = value;
                     OnPropertyChanged(nameof(EctsPoints));
                 }
             }
@@ -65,6 +70,7 @@ namespace Projekt.ViewModels
                 if (_code != value)
                 {
                     _code = value;
+                    _subjectCreateModel._code = value;
                     OnPropertyChanged(nameof(Code));
                 }
             }
@@ -77,6 +83,7 @@ namespace Projekt.ViewModels
                 if (_description != value)
                 {
                     _description = value;
+                    _subjectCreateModel._description = value;
                     OnPropertyChanged(nameof(Description));
                 }
             }
@@ -89,6 +96,7 @@ namespace Projekt.ViewModels
                 if (_passingCriteria != value)
                 {
                     _passingCriteria = value;
+                    _subjectCreateModel._passingCriteria = value;
                     OnPropertyChanged(nameof(PassingCriteria));
                 }
             }
@@ -101,12 +109,27 @@ namespace Projekt.ViewModels
                 if (_literature != value)
                 {
                     _literature = value;
+                    _subjectCreateModel._literature = value;
                     OnPropertyChanged(nameof(Literature));
                 }
             }
         }
 
-        public string ErrorString
+        public List<string> Faculties { get; set; } = new();
+
+        public string? CurrentFaculty
+        {
+            get => _currentFaculty;
+            set
+            {
+                _currentFaculty = value;
+                _subjectCreateModel._currentFaculty = value;
+                OnPropertyChanged(nameof(CurrentFaculty));
+                _ = LoadFacultiesAsync();
+            }
+        }
+
+        public string? ErrorString
         {
             get => _errorString; set
             {
@@ -127,7 +150,10 @@ namespace Projekt.ViewModels
 
         public SubjectCreateViewModel(LoginWrapper loginWrapper)
         {
-            SubjectCreateModel = new(loginWrapper);
+            _loginWrapper = loginWrapper;
+            SubjectCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+
+            _ = LoadFacultiesAsync();
         }
 
         private ICommand? _saveCommand;
@@ -142,6 +168,7 @@ namespace Projekt.ViewModels
         }
 
         private ICommand? _cancelCommand;
+
         public ICommand CancelCommand
         {
             get
@@ -175,7 +202,8 @@ namespace Projekt.ViewModels
                 EctsPoints == 0 ||
                 String.IsNullOrEmpty(PassingCriteria) ||
                 String.IsNullOrEmpty(Literature) ||
-                String.IsNullOrEmpty(Description)
+                String.IsNullOrEmpty(Description) ||
+                String.IsNullOrEmpty(CurrentFaculty)
                 );
 
             return valid;
@@ -183,22 +211,50 @@ namespace Projekt.ViewModels
 
         private async Task<bool> AddSubject()
         {
-            // TODO: jakieś ErrorText ni
-            if (!AreAllFieldsFilled()) return false;
+            if (!AreAllFieldsFilled() || SubjectCreateModel == null) return false;
+
             bool success = await SubjectCreateModel.AddSubject();
 
             if (!success)
             {
-                ErrorString = "Dodawanie nieudane! Sprbuj ponownie";
+                ErrorString = "Dodawanie nieudane! Spróbuj ponownie";
                 SuccessString = "";
+                MessageBox.Show(ErrorString);
 
             }
             else
             {
                 ErrorString = "";
                 SuccessString = "Dodano pomyślnie!";
+                MessageBox.Show(SuccessString);
             }
+            Cancel();
             return success;
+        }
+
+        private async Task LoadFacultiesAsync()
+        {
+            try
+            {
+                var query = "SELECT nazwa_krotka FROM wydzial ORDER BY nazwa_krotka";
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                Faculties.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        if (row.ContainsKey("nazwa_krotka"))
+                        {
+                            Faculties.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading faculties: {ex.Message}");
+            }
         }
         #endregion
 
