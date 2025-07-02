@@ -119,9 +119,10 @@ namespace Projekt.ViewModels
                 if (oldRow == null || String.IsNullOrEmpty(oldKey) || String.IsNullOrEmpty(oldValue) || String.IsNullOrEmpty(oldColumn))
                     return;
 
-       
-                    if ((string ?) oldRow[oldColumn] != oldValue && CompareRows(oldRow, oldRow, oldColumn))
-                    
+
+
+                    if (oldRow[oldColumn]?.ToString() != oldValue && CompareRows(oldRow, oldRow, oldColumn))
+
 
                     CreateTransactionCommand(oldColumn, oldRow[RowKey].ToString(), oldValue, oldRow[oldColumn].ToString());
 
