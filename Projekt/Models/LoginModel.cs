@@ -21,19 +21,20 @@ namespace Projekt.Models
         public const int LoginInvalidCredentials = 1;
         public const int LoginSessionExpired = 2;
         public const int LoginError = 3;
+        public const int LoginAccountBlocked = 4;
 
-        public const int LoginAccountBlocked = -1;
+        public const int LoginUndefined = -1;
 
         private string? _username;
         private string? _password;
-        private bool _invalidLogin = false;
-        private bool _authenticated = false;
+       
+        private int _authenticated = LoginUndefined;
         private string? _sessionToken;
 
 
         public string? UserName { get => _username; set => _username = value; }
         public string? Password { get => _password; set => _password = value; }
-        public bool Authenticated { get => _authenticated; }
+        public int Authenticated { get => _authenticated; }
         public string? SessionToken
         {
             get => _sessionToken;
@@ -53,39 +54,29 @@ namespace Projekt.Models
 
         }
 
-        public bool InvalidLogin
-        {
-            get => _invalidLogin;
-            set
-            {
-                _invalidLogin = value;
-                OnPropertyChanged(nameof(InvalidLogin));
-            }
-        }
-
+     
         public LoginModel()
         {
         }
 
 
-        public async Task<bool> GetAuthenticatedAsync()
+        public async Task<int> GetAuthenticatedAsync()
         {
-            bool previous = Authenticated;
-     
-            if (await Authenticate() != previous)
-                OnPropertyChanged(nameof(Authenticated));
+            int previous = Authenticated;
+            int LoginResult = await Authenticate();
+           
+            OnPropertyChanged(nameof(Authenticated));
+            
+            
             return Authenticated;
         }
 
         private async Task<int> Authenticate()
         {
-
             string queryString = "SELECT salt, haslo FROM uzytkownik WHERE login = @username";
-            int loginState = LoginOK;
             await DBHandler.ExecuteQueryAsync(queryString, new Dictionary<string, object>
-
                   {
-                      { "@username", UserName ?? string.Empty}
+                      { "@username", UserName ?? string.Empty }
                   }).ContinueWith(async task =>
                   {
                       if (task.IsCompletedSuccessfully && task.Result.Count == 1)
@@ -97,41 +88,28 @@ namespace Projekt.Models
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
-                                  if (await CreateSession() == LoginAccountBlocked)
+                                  int sessionResult = CreateSession().Result;
+
+                                  if (sessionResult == LoginAccountBlocked)
                                   {
-                                      _authenticated = false;
-                                      InvalidLogin = true;
-                                      loginState = LoginAccountBlocked;
+                                      _authenticated = LoginAccountBlocked;
                                       return;
                                   }
-                                  ;
                                   CreateWrapper(); // Wrapper wymaga ID sesji
-                                  _authenticated = true;
-                                  InvalidLogin = false;
+                                  _authenticated = LoginOK;
                                   return;
-                                  
                               }
-
-                              _authenticated = false;
-                              InvalidLogin = true;
-
-                              loginState = LoginInvalidCredentials;
+                              _authenticated = LoginInvalidCredentials;
                               return;
                           }
-
                       }
                       else
                       {
-                          _authenticated = false;
-                          InvalidLogin = true;
-
-                          loginState = LoginError;
-
+                          _authenticated = LoginError;
                       }
                   });
 
-            return loginState;
-                
+            return _authenticated;
         }
 
 
@@ -145,8 +123,29 @@ namespace Projekt.Models
 
         private async Task<int> CreateSession()
         {
+            if (UserName == null) return LoginError;
+
+            // Wyproś zablokowanych użytkowników
+
+            int permissions = await DBHandler.ExecuteQueryAsync("SELECT uprawnienia FROM uzytkownik WHERE login = @username;", new() { { "@username", UserName } })
+             .ContinueWith(task =>
+             {
+                 if (task.IsCompletedSuccessfully && task.Result.Count == 1)
+                 {
+                     return (int)task.Result[0]["uprawnienia"];
+                 }
+                 return 0; // Brak uprawnień, nie powinno się zdarzyć
+             });
+
+            if (permissions == 0)
+            {
+                _authenticated = LoginAccountBlocked;
+                Console.WriteLine("Brak uprawnień do zalogowania się.");
+                return LoginAccountBlocked;
+            }
+
+
             // Jeśli użytkownik jest zalogowany, kontynuuj jego sesję
-            // TODO: nie zezwalaj na przedawnione tokeny
             Dictionary<string, object> param = new() { { "@username", UserName ?? string.Empty } };
 
             await DBHandler.ExecuteQueryAsync("SELECT * FROM sesje WHERE login = @username AND data_waznosci > NOW();", param)
@@ -172,44 +171,27 @@ namespace Projekt.Models
             SessionToken ??= Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
 
-            int permissions = await DBHandler.ExecuteQueryAsync("SELECT uprawnienia FROM uzytkownik WHERE login = @username", new() { { "@username", UserName} })
-                .ContinueWith(task =>
-                {
-                    if (task.IsCompletedSuccessfully && task.Result.Count == 1)
-                    {
-                        return (int)task.Result[0]["uprawnienia"];
-                    }
-                    return 0; // Brak uprawnień, nie powinno się zdarzyć
-                });
-
-            if(permissions == 0)
-            {
-                _authenticated = false;
-                InvalidLogin = true;
-                Console.WriteLine("Brak uprawnień do zalogowania się.");
-                return LoginAccountBlocked;
-            }
-
+         
             // Corner case: token przedawni się w trakcie logowania
             // Wtedy błąd "niepoprawne logowanie", a druga próba działa, bo usuwa już-starego tokena
 
-            int loginState = LoginOK;
+            int loginState = LoginUndefined;
 
             await DBHandler.ExecuteNonQueryAsync(
-                "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, (SELECT uprawnienia FROM uzytkownik WHERE login = @username));"
+                "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, @permissions);"
                 , new Dictionary<string, object>
             {
                 { "@username", UserName ?? string.Empty },
-                { "@token", SessionToken }
+                { "@token", SessionToken },
+                    {"@permissions", permissions }
             }).ContinueWith(task =>
             {
                 if (!(task.IsCompletedSuccessfully && task.Result > 0))
                 {
                     // Podwójnego ID sesji nigdy nie będzie, bo login to PK.
-                    _authenticated = false;
-                    InvalidLogin = true;
+                    _authenticated = LoginError;
                     Console.WriteLine("Problem z sesją!");
-                    loginState = LoginError
+                    loginState = LoginError;
                    
                 }
                

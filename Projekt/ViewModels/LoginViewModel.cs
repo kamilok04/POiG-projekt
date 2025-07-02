@@ -20,6 +20,7 @@ namespace Projekt.ViewModels
         private string _password = "";
         private string _errorString = "";
         private ICommand _loginCommand;
+        private bool _loginInProgress = false;
         private readonly LoginModel? _model;
         public event Action? Authenticated;
         #endregion
@@ -34,19 +35,30 @@ namespace Projekt.ViewModels
             {
                 if (e.PropertyName == nameof(LoginModel.Authenticated))
                 {
-                    if (_model.Authenticated)
+                    if (_model.Authenticated == LoginModel.LoginOK)
                     {
                         Authenticated?.Invoke();
                     }
-                }
-                if (e.PropertyName == nameof(LoginModel.InvalidLogin))
-                {
-                    if (_model.InvalidLogin) {
-                        // Handle invalid login, e.g., show a message to the user
-                        // This could be a property that the view binds to for displaying an error message
-                        ErrorString = "Niepoprawne dane logowania. Spróbuj ponownie.";
+                    switch (_model.Authenticated)
+                    {
+                        case LoginModel.LoginInvalidCredentials:
+                            ErrorString = "Niepoprawne dane logowania. Spróbuj ponownie.";
+                            break;
+                        case LoginModel.LoginSessionExpired:
+                            ErrorString = "Sesja wygasła. Proszę zalogować się ponownie.";
+                            break;
+                        case LoginModel.LoginAccountBlocked:
+                            ErrorString = "Konto zostało zablokowane. Skontaktuj się z administratorem.";
+                            break;
+                        case LoginModel.LoginError:
+                            ErrorString = "Wystąpił błąd podczas logowania. Spróbuj ponownie później.";
+                            break;
+                        default:
+                            ErrorString = "Wystąpił nieznany błąd podczas logowania.";
+                            break;
                     }
                 }
+             
             };
         }
 
@@ -56,6 +68,16 @@ namespace Projekt.ViewModels
        
 
         #region Public Properties/Commands
+
+        public bool LoginInProgress
+        {
+            get => _loginInProgress;
+            set
+            {
+                _loginInProgress = value;
+                OnPropertyChanged(nameof(LoginInProgress));
+            }
+        }
         public string Username
         {
             get => _username;
@@ -94,7 +116,8 @@ namespace Projekt.ViewModels
                 if (_loginCommand == null)
                 {
                     _loginCommand = new RelayCommand(
-                        async param => await ValidateLogin());
+                        async param => await ValidateLogin(),
+                        param => ValidateLoginForm());
                 }
                 return _loginCommand;
             }
@@ -121,6 +144,8 @@ namespace Projekt.ViewModels
 
         private async Task<bool> ValidateLogin()
         {
+
+            LoginInProgress = true;
             
             if (_model == null || String.IsNullOrEmpty(Username) || Password == null)
                 return false;
@@ -129,20 +154,25 @@ namespace Projekt.ViewModels
             _model.Password = Password;
 
              ErrorString = "Logowanie w trakcie, proszę czekać...";
-            bool validLogin = await _model.GetAuthenticatedAsync();
+            int LoginCode = await _model.GetAuthenticatedAsync();
 
+            LoginInProgress = false;
 
-
-            if (validLogin)
-            {
-            
-                return true;
-
-            }
+            if (LoginCode == LoginModel.LoginOK) return true;
+    
             return false; 
 
         }
 
+
+        private bool ValidateLoginForm()
+        {
+            return !(
+                string.IsNullOrWhiteSpace(Username) ||
+                string.IsNullOrWhiteSpace(Password) ||
+                LoginInProgress
+                );
+        }
 
         #endregion
 
