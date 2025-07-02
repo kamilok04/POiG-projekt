@@ -1,4 +1,5 @@
 ﻿
+using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Cmp;
 using Projekt.Miscellaneous;
 using System;
@@ -22,6 +23,7 @@ namespace Projekt.Models
         public const int LoginSessionExpired = 2;
         public const int LoginError = 3;
         public const int LoginAccountBlocked = 4;
+        public const int LoginOffline = 5;
 
         public const int LoginUndefined = -1;
 
@@ -105,7 +107,16 @@ namespace Projekt.Models
                       }
                       else
                       {
-                          _authenticated = LoginError;
+                          Exception? ex = task.Exception;
+                          if (ex == null) return;
+                          ex = ex.InnerException;
+                          if (ex == null) return;
+                          var data = ex.Data;
+                          if (data == null) return;
+                          if ((MySqlErrorCode?) data["Server Error Code"] == MySql.Data.MySqlClient.MySqlErrorCode.UnableToConnectToHost)
+                              _authenticated = LoginOffline;
+                          else 
+                              _authenticated = LoginError;
                       }
                   });
 

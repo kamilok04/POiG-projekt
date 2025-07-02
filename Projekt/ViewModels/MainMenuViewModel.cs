@@ -229,7 +229,10 @@ namespace Projekt.ViewModels
                             PermissionHelper.CanSeeOtherSchedules,
                             PermissionHelper.CanEditOtherSchedules))
                             return;
-                        CurrentPageViewModel = new LessonsCreateViewModel(_model.LoginWrapper);
+                        var model = new LessonsCreateViewModel(_model.LoginWrapper);
+                        await model.LoadAll();
+                        CurrentPageViewModel = model;
+
                         break;
                     case "LessonsEditViewModel":
                         if (!await Authenticate(

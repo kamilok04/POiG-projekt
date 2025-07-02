@@ -96,7 +96,7 @@ namespace Projekt.ViewModels
             try
             {
                 await _loginWrapper.Authenticate(PermissionHelper.CanSeeOwnProfile);
-                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync("SELECT imie, nazwisko, data_urodzenia, email, indeks, tytul FROM dane_uzytkownika WHERE login = @username",
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync("SELECT Login, Imię, Nazwisko, 'Data Urodzenia', 'Adres e-mail', Uprawnienia, 'Nr indeksu', 'Tytuł naukowy' FROM dane_uzytkownika WHERE login = @username",
                     new Dictionary<string, object>() {
                     { "@username", _loginWrapper.Username ?? string.Empty }
                     });
@@ -105,16 +105,16 @@ namespace Projekt.ViewModels
                     return;
                 }
                 var row = result[0];
-                Name = (string)row["imie"];
-                Surname = (string)row["nazwisko"];
-                BirthDate = ((DateTime)row["data_urodzenia"]).ToShortDateString();
-                EMail = (string)row["email"];
-                int? tempID = (int?)row["indeks"];
+                Name = (string)row["Imię"];
+                Surname = (string)row["Nazwisko"];
+                BirthDate = ((DateTime)row["Data Urodzenia"]).ToShortDateString();
+                EMail = (string)row["Adres e-mail"];
+                int? tempID = (int?)row["Nr indeksu"];
                 if (tempID.HasValue)
                 {
                     StudentID = tempID.Value.ToString();
                 }
-                Title = (string)row["tytul"];
+                Title = (string)row["Tytuł naukowy"];
 
                 if (!String.IsNullOrEmpty(StudentID))
                 {

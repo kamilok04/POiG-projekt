@@ -3,41 +3,84 @@ using Projekt.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Printing;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Projekt.ViewModels
 {
-    public class LessonsCreateViewModel : ObservableObject, IPageViewModel
+    public class LessonsCreateViewModel :
+           ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => "LessonsCreate";
-        // for designer only
-        public LessonsCreateViewModel() { }
+        // for designer only  
 
-        #region Fields
+        #region Fields  
 
-        //private ObservableCollection<Group>? _groups;
-        //private Group? _selectedGroup;
-        //private ObservableCollection<Subject>? _subjects;
-        //private Subject? _selectedSubject; 
+        public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
+        private GroupEditModel? _selectedGroup;
+        public ObservableCollection<SubjectModel> Subjects { get; set; } = new();
+        private SubjectModel? _selectedSubject;
         private List<string> _types = new List<string> { "Wykład", "Ćwiczenia", "Laboratoria", "Seminarium" };
         private string? _selectedType;
-        //private ObservableCollection<Place>? _places;
-        //private Place? _selectedTeacher;
+        public ObservableCollection<PlaceModel> Places { get; set; } = new();
+        private PlaceModel? _selectedPlace;
         private List<string> _daysOfWeek = new List<string> { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
         private string? _selectedDayOfWeek;
-        private string? _startTime;
-        private string? _endTime;
-        private LessonsCreateModel? _lessonsCreateModel;
+  
+        private TimeOnly? _startTime;
+        private TimeOnly? _endTime;
+        private string? _successString = "";
+
+        private string? _errorString= "";
+      
+
+        private LessonsCreateModel Model { get; init; }
+        private LoginWrapper wrapper;
+
+        #endregion
+
+        #region Constructor  
+
+        public LessonsCreateViewModel(LoginWrapper loginWrapper)
+        {
+            wrapper = loginWrapper;
+            Model = new LessonsCreateModel(loginWrapper);
+
+
+        }
+
+
 
         #endregion
 
         #region Public Properties/Commands
+        public string SuccessString
+        {
+            get => _successString ?? "";
+            set
+            {
+                _successString = value;
+                OnPropertyChanged(nameof(SuccessString));
+            }
+        }
 
+        public string ErrorString
+        {
+            get => _errorString ?? "";
+            set
+            {
+                _errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
+            }
+        }
 
         public List<string> Types { get => _types; }
         public string? SelectedType
@@ -52,6 +95,39 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        public GroupEditModel? SelectedGroup
+        {
+            get => _selectedGroup;
+            set
+            {
+                _selectedGroup = value;
+                OnPropertyChanged(nameof(SelectedGroup));
+            }
+        }
+
+        public PlaceModel? SelectedPlace
+        {
+            get => _selectedPlace;
+            set
+            {
+                _selectedPlace = value;
+                OnPropertyChanged(nameof(SelectedPlace));
+            }
+
+
+        }
+
+        public SubjectModel? SelectedSubject
+        {
+            get => _selectedSubject;
+            set
+            {
+                _selectedSubject = value;
+                OnPropertyChanged(nameof(SelectedSubject));
+            }
+        }
+
         public List<string> DaysOfWeek { get => _daysOfWeek; }
 
         public string? SelectedDayOfWeek
@@ -67,7 +143,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? StartTime
+        public TimeOnly? StartTime
         {
             get => _startTime;
             set
@@ -80,7 +156,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? EndTime
+        public TimeOnly? EndTime
         {
             get => _endTime;
             set
@@ -93,23 +169,105 @@ namespace Projekt.ViewModels
             }
         }
 
-        public LessonsCreateModel? LessonsCreateModel { get => _lessonsCreateModel; set => _lessonsCreateModel = value; }
-
-        public LessonsCreateViewModel(LoginWrapper loginWrapper)
+        private ICommand _saveCommand;
+        public ICommand SaveCommand
         {
-            LessonsCreateModel = new (loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+            get => _saveCommand ??= new RelayCommand(
+                async param => await SaveAsync(),
+                param => IsFormValid()
+                );
+        }
+
+        private ICommand _cancelCommand;
+        public ICommand CancelCommand
+        {
+            get => _cancelCommand ??= new RelayCommand(
+                param => Cancel());
         }
 
         #endregion
 
-        #region Private Methods
+        #region Private Methods  
 
-        private bool IsValidTimeFormat(string time)
+
+        private async Task SaveAsync()
         {
-            // Regex to match HH:MM format
+            bool success = await Model.SaveAsync(SelectedGroup, SelectedSubject, SelectedPlace, SelectedType, SelectedDayOfWeek, StartTime, EndTime);
+            if (success)
+            {
+                SuccessString = "Dodano pomyślnie!";
+                ErrorString = "";
+            }
+            else
+            {
+                SuccessString = "";
+                ErrorString = "Błąd podczas dodawania!";
+
+            }
+        }
+
+
+        private bool IsFormValid()
+        {
+            return !(
+                SelectedDayOfWeek == null ||
+                SelectedGroup == null ||
+                SelectedPlace == null ||
+                SelectedSubject == null ||
+                SelectedType == null ||
+                StartTime == null ||
+                EndTime == null ||
+                EndTime <= StartTime
+
+                );
+
+
+        }
+
+        private void Cancel()
+        {
+            SelectedGroup = null;
+            SelectedDayOfWeek = null;
+            SelectedPlace = null;
+            SelectedSubject = null;
+            SelectedType = null;
+            StartTime = null;
+            EndTime = null;
+            ErrorString = "";
+            SuccessString = "";
+        }
+
+
+
+
+        private bool IsValidTimeFormat(string? time)
+        {
+            if (time == null) return false;
+            // Regex to match HH:MM format  
             return Regex.IsMatch(time, @"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
         }
 
+
+
+
+
+        private async Task LoadAsync<T>(ObservableCollection<T> TList) where T : class
+        {
+            List<T>? Ts = await Model.GetAllAsync<T>();
+            if (Ts == null) return;
+
+            TList.Clear();
+            foreach (T t in Ts) TList.Add(t);
+
+        }
+
+        public async Task LoadAll()
+        {
+            await LoadAsync<SubjectModel>(Subjects);
+            await LoadAsync<PlaceModel>(Places);
+            await LoadAsync<GroupEditModel>(Groups);
+
+        }
         #endregion
     }
 

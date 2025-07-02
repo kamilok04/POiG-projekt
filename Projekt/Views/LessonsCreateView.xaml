@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -27,7 +28,7 @@
 
         <Label>Grupa:</Label>
         <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding Groups}"/>
-        
+
         <Label Grid.Row="1">Przedmiot:</Label>
         <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Subjects}"/>
 
@@ -36,7 +37,7 @@
 
         <Label Grid.Row="3">Miejsce:</Label>
         <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedPlace, Mode=TwoWay}" ItemsSource="{Binding Places}"/>
-        
+
         <Label Grid.Row="4">Dzień tygodnia:</Label>
         <ComboBox Grid.Row="4" Grid.Column="1" SelectedItem="{Binding SelectedDayOfWeek, Mode=TwoWay}" ItemsSource="{Binding DaysOfWeek}"/>
 
@@ -45,14 +46,17 @@
 
         <Label Grid.Row="6">Godzina zakończenia (hh:mm):</Label>
         <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged}"/>
-        
+
         <Grid Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right"/>
-            <Button Grid.Column="1" Content="Anuluj" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/>
+            <Button Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" Height="24" HorizontalAlignment="Right"/>
+            <Button Grid.Column="1" Content="Anuluj" Command="{Binding CancelCommand}" Width="100" Height="24" HorizontalAlignment="Right"/>
         </Grid>
+        <Label Grid.Row="8" Grid.ColumnSpan="2" Foreground="Green" Content="{Binding SuccessString,Mode=OneWay,FallbackValue='Dodano pomyślnie!'}" Margin="0,30,0,0" FontSize="24"></Label>
+        <Label Grid.Row="8" Grid.ColumnSpan="2" Foreground="Red" Content="{Binding ErrorString, Mode=OneWay,FallbackValue='Błąd dodawania!'}" Margin="0,30,0,0" FontSize="24"></Label>
     </Grid>
+
 </UserControl>

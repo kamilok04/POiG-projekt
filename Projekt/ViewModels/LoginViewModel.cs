@@ -53,6 +53,9 @@ namespace Projekt.ViewModels
                         case LoginModel.LoginError:
                             ErrorString = "Wystąpił błąd podczas logowania. Spróbuj ponownie później.";
                             break;
+                        case LoginModel.LoginOffline:
+                            ErrorString = "Łączność z bazą danych wymaga dostępu do internetu.\nPołącz się z internetem i spróbuj ponownie.";
+                            break;
                         default:
                             ErrorString = "Wystąpił nieznany błąd podczas logowania.";
                             break;

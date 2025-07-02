@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Projekt.Models
 {
@@ -30,6 +31,11 @@ namespace Projekt.Models
             { "@currentDegree", CurrentDegree ?? string.Empty },
             { "@currentSemester", CurrentSemester ?? string.Empty },
         };
+
+        public override string ToString()
+        {
+            return $"{CurrentFaculty}>{CurrentDegree}>{CurrentSemester}/{GroupNumber}";
+        }
 
         private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
 

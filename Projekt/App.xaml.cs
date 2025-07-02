@@ -10,7 +10,7 @@ namespace Projekt
     public partial class App : Application
     {
         protected override void OnStartup(StartupEventArgs e)
-        {
+       {
             base.OnStartup(e);
 
             Projekt.Views.MainWindowView app = new();
