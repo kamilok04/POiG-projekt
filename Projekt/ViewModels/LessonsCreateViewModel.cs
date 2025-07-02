@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Projekt.ViewModels
 {
@@ -20,8 +21,8 @@ namespace Projekt.ViewModels
 
         #region Fields
 
-        //private ObservableCollection<Group>? _groups;
-        //private Group? _selectedGroup;
+        private List<string>? _groups = new();
+        private string? _selectedGroup;
         //private ObservableCollection<Subject>? _subjects;
         //private Subject? _selectedSubject; 
         private List<string> _types = new List<string> { "Wykład", "Ćwiczenia", "Laboratoria", "Seminarium" };
@@ -33,11 +34,13 @@ namespace Projekt.ViewModels
         private string? _startTime;
         private string? _endTime;
         private LessonsCreateModel? _lessonsCreateModel;
+        private LoginWrapper? _loginWrapper;
 
         #endregion
 
         #region Public Properties/Commands
 
+        public List<string> Groups { get; set; } = new();
 
         public List<string> Types { get => _types; }
         public string? SelectedType
@@ -97,7 +100,10 @@ namespace Projekt.ViewModels
 
         public LessonsCreateViewModel(LoginWrapper loginWrapper)
         {
+            _loginWrapper = loginWrapper;
             LessonsCreateModel = new (loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+
+            _ = LoadGroupsAsync();
         }
 
         #endregion
@@ -108,6 +114,44 @@ namespace Projekt.ViewModels
         {
             // Regex to match HH:MM format
             return Regex.IsMatch(time, @"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
+        }
+
+        private async Task LoadGroupsAsync()
+        {
+            try
+            {
+                var query = @"
+                SELECT 
+                    grupa.numer, 
+                    rocznik.semestr, 
+                    dane_kierunku.nazwa, 
+                    wydzial.nazwa_krotka
+                FROM 
+                    grupa
+                JOIN 
+                    rocznik ON grupa.id_rocznika = rocznik.id
+                JOIN 
+                    kierunek ON rocznik.id_kierunku = kierunek.id
+                JOIN 
+                    dane_kierunku ON kierunek.id_danych_kierunku = dane_kierunku.id
+                JOIN 
+                    wydzial ON kierunek.id_wydzialu = wydzial.nazwa_krotka;";
+
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                Groups.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        Groups.Add($"nr: {row["numer"]?.ToString()}, sem: {row["semestr"]?.ToString()}, kierunek: {row["nazwa"]?.ToString()}, wydział: {row["nazwa_krotka"]} " ?? string.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading faculties: {ex.Message}");
+            }
         }
 
         #endregion
