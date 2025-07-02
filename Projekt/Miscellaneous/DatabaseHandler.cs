@@ -156,7 +156,7 @@ namespace Projekt.Miscellaneous
                 new Dictionary<string, object> { { "@username", username } }
 
             );
-            if (_conn != null)
+            if (_conn != null && _conn.State == ConnectionState.Open)
             {
                 _conn.Close();
                 _conn.Dispose();

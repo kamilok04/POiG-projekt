@@ -1,7 +1,9 @@
 ﻿
+using Org.BouncyCastle.Asn1.Cmp;
 using Projekt.Miscellaneous;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security;
@@ -15,6 +17,13 @@ namespace Projekt.Models
 {
     public class LoginModel : ObservableObject
     {
+        public const int LoginOK = 0;
+        public const int LoginInvalidCredentials = 1;
+        public const int LoginSessionExpired = 2;
+        public const int LoginError = 3;
+
+        public const int LoginAccountBlocked = -1;
+
         private string? _username;
         private string? _password;
         private bool _invalidLogin = false;
@@ -68,14 +77,16 @@ namespace Projekt.Models
             return Authenticated;
         }
 
-        private async Task<bool> Authenticate()
+        private async Task<int> Authenticate()
         {
 
             string queryString = "SELECT salt, haslo FROM uzytkownik WHERE login = @username";
+            int loginState = LoginOK;
             await DBHandler.ExecuteQueryAsync(queryString, new Dictionary<string, object>
+
                   {
                       { "@username", UserName ?? string.Empty}
-                  }).ContinueWith(task =>
+                  }).ContinueWith(async task =>
                   {
                       if (task.IsCompletedSuccessfully && task.Result.Count == 1)
                       {
@@ -86,25 +97,40 @@ namespace Projekt.Models
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
-                                  CreateSession().Wait();
+                                  if (await CreateSession() == LoginAccountBlocked)
+                                  {
+                                      _authenticated = false;
+                                      InvalidLogin = true;
+                                      loginState = LoginAccountBlocked;
+                                      return;
+                                  }
+                                  ;
                                   CreateWrapper(); // Wrapper wymaga ID sesji
                                   _authenticated = true;
                                   InvalidLogin = false;
                                   return;
+                                  
                               }
 
                               _authenticated = false;
                               InvalidLogin = true;
+
+                              loginState = LoginInvalidCredentials;
+                              return;
                           }
+
                       }
                       else
                       {
                           _authenticated = false;
                           InvalidLogin = true;
+
+                          loginState = LoginError;
+
                       }
                   });
 
-            return _authenticated;
+            return loginState;
                 
         }
 
@@ -117,7 +143,7 @@ namespace Projekt.Models
             return;
         }
 
-        private async Task CreateSession()
+        private async Task<int> CreateSession()
         {
             // Jeśli użytkownik jest zalogowany, kontynuuj jego sesję
             // TODO: nie zezwalaj na przedawnione tokeny
@@ -146,8 +172,28 @@ namespace Projekt.Models
             SessionToken ??= Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
 
+            int permissions = await DBHandler.ExecuteQueryAsync("SELECT uprawnienia FROM uzytkownik WHERE login = @username", new() { { "@username", UserName} })
+                .ContinueWith(task =>
+                {
+                    if (task.IsCompletedSuccessfully && task.Result.Count == 1)
+                    {
+                        return (int)task.Result[0]["uprawnienia"];
+                    }
+                    return 0; // Brak uprawnień, nie powinno się zdarzyć
+                });
+
+            if(permissions == 0)
+            {
+                _authenticated = false;
+                InvalidLogin = true;
+                Console.WriteLine("Brak uprawnień do zalogowania się.");
+                return LoginAccountBlocked;
+            }
+
             // Corner case: token przedawni się w trakcie logowania
             // Wtedy błąd "niepoprawne logowanie", a druga próba działa, bo usuwa już-starego tokena
+
+            int loginState = LoginOK;
 
             await DBHandler.ExecuteNonQueryAsync(
                 "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, (SELECT uprawnienia FROM uzytkownik WHERE login = @username));"
@@ -163,11 +209,14 @@ namespace Projekt.Models
                     _authenticated = false;
                     InvalidLogin = true;
                     Console.WriteLine("Problem z sesją!");
-
+                    loginState = LoginError
+                   
                 }
                
             });
+            return loginState;
         }
+
     }
 
 }
