@@ -21,10 +21,8 @@ namespace Projekt.ViewModels
 
         #region Fields
 
-        private List<string>? _groups = new();
         private string? _selectedGroup;
-        //private ObservableCollection<Subject>? _subjects;
-        //private Subject? _selectedSubject; 
+        private string? _selectedSubject; 
         private List<string> _types = new List<string> { "Wykład", "Ćwiczenia", "Laboratoria", "Seminarium" };
         private string? _selectedType;
         //private ObservableCollection<Place>? _places;
@@ -41,6 +39,8 @@ namespace Projekt.ViewModels
         #region Public Properties/Commands
 
         public List<string> Groups { get; set; } = new();
+        public List<string> Subjects { get; set; } = new();
+        public List<string> Places { get; set; } = new();
 
         public List<string> Types { get => _types; }
         public string? SelectedType
@@ -104,6 +104,8 @@ namespace Projekt.ViewModels
             LessonsCreateModel = new (loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
 
             _ = LoadGroupsAsync();
+            _ = LoadSubjectsAsync();
+            _ = LoadPlacesAsync();
         }
 
         #endregion
@@ -151,6 +153,65 @@ namespace Projekt.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading faculties: {ex.Message}");
+            }
+        }
+
+        private async Task LoadSubjectsAsync()
+        {
+            try
+            {
+                var query = @"
+                    SELECT DISTINCT kod, nazwa
+                    FROM dane_przedmiotu;";
+
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                Groups.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        Subjects.Add($"{row["kod"]?.ToString()}, {row["nazwa"]?.ToString()}" ?? string.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading subjects: {ex.Message}");
+            }
+        }
+
+        private async Task LoadPlacesAsync()
+        {
+            try
+            {
+                var query = @"
+                    SELECT 
+                        m.id_wydzialu AS wydzial, 
+                        a.adres, 
+                        m.numer, 
+                        m.pojemnosc 
+                    FROM 
+                        miejsce m 
+                    JOIN 
+                        adres a 
+                    ON 
+                        m.id_adresu=a.id;";
+
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                Groups.Clear();
+                if (result != null)
+                {
+                    foreach (var row in result)
+                    {
+                        Places.Add($"Wydział: {row["wydzial"]?.ToString()}, \nAdres: {row["adres"]?.ToString()} \nNr sali: {row["numer"]?.ToString()}\nPojemność: {row["pojemnosc"]?.ToString()}" ?? string.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading subjects: {ex.Message}");
             }
         }
 
