@@ -18,9 +18,11 @@ namespace Projekt.Models
 
         List<MySqlCommand> Commands = new List<MySqlCommand>();
 
+       
 
         private string DetermineTableName(string columnName)
         {
+            
             switch (columnName)
             {
                 case "indeks": return "student";
@@ -44,9 +46,24 @@ namespace Projekt.Models
                 command = ConsiderDelete(properColumnName, RowKey);
                 if (command != null) Commands.Add(command);
             }
+            if(properColumnName == String.Empty) return; // nie ma takiej kolumny, nie robimy nic
+            if(properColumnName == "data_urodzenia")
+            {
+                // przetłumacz stringa na SQLową datę
+                if (DateTime.TryParse(newValue, out DateTime dateValue))
+                {
+                    newValue = dateValue.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    // Jeśli nie udało się sparsować daty, nie wykonujemy aktualizacji
+                    return;
+                }
+            }
             command = DatabaseHandler.CreateCommand($"UPDATE {DetermineTableName(properColumnName)} SET {properColumnName} = @value WHERE login = @login;",
                 new() { { "@value", newValue }, { "@login", RowKey } });
             // nie ma mowy o SQL Injection, użytkownik nie ma dostępu do nazw kolumn
+            // a nawet, jeśli ma, to kolumna o nietypowej nazwie zostanie wyczyszczona
             Commands.Add(command);
             return;
 
@@ -56,6 +73,8 @@ namespace Projekt.Models
         {
             switch (col)
             {
+
+              
                 case "indeks":
                     return DatabaseHandler.CreateCommand("INSERT INTO student (login, indeks) VALUES (@login, @indeks)",
                         new() { { "@login", key }, { "@indeks", value } });
@@ -70,6 +89,9 @@ namespace Projekt.Models
         {
             switch (col)
             {
+                case "login":
+                    return DatabaseHandler.CreateCommand("DELETE FROM uzytkownik WHERE login = @login;",
+                        new() { { "@login", key } });
                 case "indeks":
                     return DatabaseHandler.CreateCommand("DELETE FROM student WHERE login = @login;",
                         new() { { "@login", key } });
@@ -82,7 +104,9 @@ namespace Projekt.Models
 
         public async Task<bool> CommitTransaction()
         {
-            return await DBHandler.ExecuteInTransactionAsync([.. Commands]);
+            bool result = await DBHandler.ExecuteInTransactionAsync([.. Commands]);
+            Commands.Clear();
+            return result;
         }
 
         public string TranslateColumnName(string columnName)

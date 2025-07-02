@@ -10,12 +10,9 @@ using Projekt.Models;
 
 namespace Projekt.ViewModels
 {
-    public class SubjectEditViewModel : ObservableObject, IPageViewModel, ITable
+    public class SubjectEditViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => nameof(SubjectEditViewModel);
-        public string TableName => "dane_przedmiotu";
-
-        public string? DefaultQuery => "SELECT * FROM dane_przedmiotu";
 
         private SubjectViewTableModel Model { get; init; }
 
@@ -45,7 +42,7 @@ namespace Projekt.ViewModels
 
         private async Task GetDataAsync()
         {
-            Subjects = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(((ITable)this).DefaultQuery);
+            Subjects = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(Model.DefaultQuery);
         }
     }
 }

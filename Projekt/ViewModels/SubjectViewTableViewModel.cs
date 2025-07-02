@@ -41,7 +41,7 @@ namespace Projekt.ViewModels
         {
             if (Model?.LoginWrapper != null)
             {
-                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM .....");
+                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(Model.DefaultQuery);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Tls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,5 +26,34 @@ namespace Projekt.Views
             InitializeComponent();
         }
 
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            
+            DataGrid dg = (DataGrid)sender;
+
+            
+
+            // Get the edited cell and its binding
+            var editedElement = e.EditingElement as FrameworkElement;
+            
+            if (editedElement != null)
+            {
+                var binding = editedElement.GetBindingExpression(TextBox.TextProperty);
+                if (binding != null)
+                {
+                    // Update the binding source with the new value
+                    binding.UpdateSource();
+                }
+            }
+
+            // Optionally, set the DataGrid's SelectedCell to the edited cell
+            if (dg.SelectedCells.Count > 0)
+            {
+                dg.SelectedCells.Clear();
+            }
+            dg.SelectedCells.Add(new DataGridCellInfo(e.Row.Item, e.Column));
+        }
+
+    
     }
 }

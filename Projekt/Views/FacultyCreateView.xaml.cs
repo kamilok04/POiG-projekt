@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Projekt.Views
 {
     /// <summary>
-    /// Interaction logic for FacultyView.xaml
+    /// Logika interakcji dla klasy FacultyCreateView.xaml
     /// </summary>
-    public partial class FacultyEditView : UserControl
+    public partial class FacultyCreateView : UserControl
     {
-        public FacultyEditView()
+        public FacultyCreateView()
         {
             InitializeComponent();
         }

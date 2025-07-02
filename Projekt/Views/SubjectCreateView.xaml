@@ -45,7 +45,9 @@
         <TextBox Grid.Row="5" Grid.Column="1" TextWrapping="Wrap" Text="{Binding Literature, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Row="6">Wydział:</Label>
-        <ComboBox Grid.Row="6" Grid.Column="6" />
+        <ComboBox Grid.Row="6" Grid.Column="6"
+                  SelectedItem="{Binding CurrentFaculty, Mode=TwoWay}" 
+                    ItemsSource="{Binding Faculties, Mode=OneWay}"/>
 
         <Grid Grid.Row="7" Grid.Column="1" Margin="0,10,0,0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
