@@ -267,16 +267,14 @@ namespace Projekt.ViewModels
                            PermissionHelper.CanManageGroups,
                            PermissionHelper.CanSeeOtherProfiles))
                             return;
-                        int groupId = 0;
-                    //    CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper, groupId);
+                        CurrentPageViewModel = new GroupEditViewModel(_model.LoginWrapper);
                         break;
                     case "GroupDeleteViewModel":
                         if (!await Authenticate(
                            PermissionHelper.CanManageGroups,
                            PermissionHelper.CanSeeOtherProfiles))
                             return;
-                        groupId = 0;
-                 //       CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper, groupId);
+                        CurrentPageViewModel = new GroupDeleteViewModel(_model.LoginWrapper);
                         break;
                     case "PlacesViewTableViewModel":
                         CurrentPageViewModel = new PlaceViewTableViewModel(_model.LoginWrapper);

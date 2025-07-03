@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,17 +18,17 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => nameof(PlaceViewTableViewModel);
      
-        private UsersEditModel? Model { get; init; }
+        private PlaceViewTableModel? Model { get; init; }
 
-        private DataTable? _data;
+        private DataTable? _places;
 
-        public DataTable? Data
+        public DataTable? Places
         {
-            get => _data;
+            get => _places;
             private set
             {
-                _data = value;
-                OnPropertyChanged(nameof(Data));
+                _places = value;
+                OnPropertyChanged(nameof(Places));
             }
         }
 
@@ -43,7 +44,7 @@ namespace Projekt.ViewModels
         {
             if(Model?.LoginWrapper != null)
             {
-                Data = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync("SELECT * FROM users_view");
+                Places = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(Model.DefaultQuery);
             }
         }
     }
