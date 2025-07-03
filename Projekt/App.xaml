@@ -87,9 +87,6 @@
                 <views:SubjectTableView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewmodels:GroupSubjectCoordinatorViewModel}">
-                <views:GroupSubjectCoordinatorView/>
-            </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:CurrentProfileViewModel}">
                 <views:CurrentProfileView/>
@@ -97,13 +94,7 @@
             <DataTemplate DataType="{x:Type viewmodels:ConditionalContentControlViewModel}">
                 <views:ConditionalContentControl/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:TimeTableViewModel}">
-                <views:TimeTableView/>
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type viewmodels:TwoListBoxesViewModel}">
-                <views:TwoListBoxesView/>
-            </DataTemplate>
+           
        </ResourceDictionary>  
    </Application.Resources>  
 </Application>
