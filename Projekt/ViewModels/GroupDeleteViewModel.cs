@@ -3,6 +3,7 @@ using Projekt.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,216 +12,247 @@ namespace Projekt.ViewModels
 {
     public class GroupDeleteViewModel : ObservableObject, IPageViewModel
     {
-        private readonly GroupDeleteModel _model;
-        private readonly LoginWrapper _loginWrapper;
-        private readonly int _groupId;
+        string IPageViewModel.Name => nameof(GroupDeleteViewModel);
 
-        private string? _groupNumber;
-        private string? _faculty;
-        private string? _degree;
-        private string? _semester;
-        private int _studentCount;
-        private bool _isLoading;
-        private bool _canDelete;
-        private string? _warningMessage;
-
-        public string Name => "Usuwanie grupy";
-
-        public string? GroupNumber
+        private GroupViewTableModel? Model { get; init; }
+        private DataTable? _groups;
+        public DataTable? Groups
         {
-            get => _groupNumber;
-            set
+            get => _groups;
+            private set
             {
-                _groupNumber = value;
-                OnPropertyChanged();
+                _groups = value;
+                OnPropertyChanged(nameof(Groups));
             }
         }
 
-        public string? Faculty
+        public GroupDeleteViewModel(LoginWrapper loginWrapper)
         {
-            get => _faculty;
-            set
+            Model = new(loginWrapper);
+            GetDataAsync().ConfigureAwait(false);
+        }
+
+        public GroupDeleteViewModel() { } //for designer only
+
+        private async Task GetDataAsync()
+        {
+            if (Model?.LoginWrapper != null && Model?.DefaultQuery != null)
             {
-                _faculty = value;
-                OnPropertyChanged();
+                Groups = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(Model.DefaultQuery);
             }
         }
 
-        public string? Degree
-        {
-            get => _degree;
-            set
-            {
-                _degree = value;
-                OnPropertyChanged();
-            }
-        }
 
-        public string? Semester
-        {
-            get => _semester;
-            set
-            {
-                _semester = value;
-                OnPropertyChanged();
-            }
-        }
+        //private readonly GroupDeleteModel _model;
+        //private readonly LoginWrapper _loginWrapper;
+        //private readonly int _groupId;
 
-        public int StudentCount
-        {
-            get => _studentCount;
-            set
-            {
-                _studentCount = value;
-                OnPropertyChanged();
-                UpdateWarningMessage();
-            }
-        }
+        //private string? _groupNumber;
+        //private string? _faculty;
+        //private string? _degree;
+        //private string? _semester;
+        //private int _studentCount;
+        //private bool _isLoading;
+        //private bool _canDelete;
+        //private string? _warningMessage;
 
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        //public string Name => "Usuwanie grupy";
 
-        public bool CanDelete
-        {
-            get => _canDelete;
-            set
-            {
-                _canDelete = value;
-                OnPropertyChanged();
-            }
-        }
+        //public string? GroupNumber
+        //{
+        //    get => _groupNumber;
+        //    set
+        //    {
+        //        _groupNumber = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        public string? WarningMessage
-        {
-            get => _warningMessage;
-            set
-            {
-                _warningMessage = value;
-                OnPropertyChanged();
-            }
-        }
+        //public string? Faculty
+        //{
+        //    get => _faculty;
+        //    set
+        //    {
+        //        _faculty = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        public string GroupInfo => $"Grupa: {GroupNumber} - {Faculty}, {Degree}, Semestr {Semester}";
+        //public string? Degree
+        //{
+        //    get => _degree;
+        //    set
+        //    {
+        //        _degree = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        public ICommand DeleteCommand { get; }
-        public ICommand CancelCommand { get; }
+        //public string? Semester
+        //{
+        //    get => _semester;
+        //    set
+        //    {
+        //        _semester = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        public event Action? OnDeleted;
-        public event Action? OnCancelled;
+        //public int StudentCount
+        //{
+        //    get => _studentCount;
+        //    set
+        //    {
+        //        _studentCount = value;
+        //        OnPropertyChanged();
+        //        UpdateWarningMessage();
+        //    }
+        //}
 
-        internal RelayCommand RefreshCommand { get; private set; }
+        //public bool IsLoading
+        //{
+        //    get => _isLoading;
+        //    set
+        //    {
+        //        _isLoading = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        public GroupDeleteViewModel(LoginWrapper loginWrapper, int groupId)
-        {
-            _loginWrapper = loginWrapper;
-            _groupId = groupId;
-            _model = new GroupDeleteModel(loginWrapper);
+        //public bool CanDelete
+        //{
+        //    get => _canDelete;
+        //    set
+        //    {
+        //        _canDelete = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-            DeleteCommand = new RelayCommand(async (parameter) => await DeleteAsync(), (parameter) => CanDelete && !IsLoading);
-            CancelCommand = new RelayCommand((parameter) => OnCancelled?.Invoke());
-            RefreshCommand = new RelayCommand(async _ => await LoadGroupsAsync());
+        //public string? WarningMessage
+        //{
+        //    get => _warningMessage;
+        //    set
+        //    {
+        //        _warningMessage = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-            _ = LoadGroupsAsync();
-            _ = LoadDataAsync();
-        }
+        //public string GroupInfo => $"Grupa: {GroupNumber} - {Faculty}, {Degree}, Semestr {Semester}";
 
-        public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
+        //public ICommand DeleteCommand { get; }
+        //public ICommand CancelCommand { get; }
 
-        public async Task LoadGroupsAsync()
-        {
-            var model = new GroupEditModel(_loginWrapper);
-            var groups = await model.GetAllGroupsAsync();
+        //public event Action? OnDeleted;
+        //public event Action? OnCancelled;
 
-            Groups.Clear();
-            foreach (var group in groups)
-            {
-                Groups.Add(group);
-            }
-        }
+        //internal RelayCommand RefreshCommand { get; private set; }
 
-        private async Task LoadDataAsync()
-        {
-            try
-            {
-                IsLoading = true;
+        //public GroupDeleteViewModel(LoginWrapper loginWrapper, int groupId)
+        //{
+        //    _loginWrapper = loginWrapper;
+        //    _groupId = groupId;
+        //    _model = new GroupDeleteModel(loginWrapper);
 
-                var success = await _model.LoadGroupData(_groupId);
-                if (success)
-                {
-                    GroupNumber = _model.GroupNumber;
-                    Faculty = _model.Faculty;
-                    Degree = _model.Degree;
-                    Semester = _model.Semester;
-                    StudentCount = _model.StudentCount;
+        //    DeleteCommand = new RelayCommand(async (parameter) => await DeleteAsync(), (parameter) => CanDelete && !IsLoading);
+        //    CancelCommand = new RelayCommand((parameter) => OnCancelled?.Invoke());
+        //    RefreshCommand = new RelayCommand(async _ => await LoadGroupsAsync());
 
-                    CanDelete = await _model.CanDeleteGroup();
-                    UpdateWarningMessage();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading group data: {ex.Message}");
-                WarningMessage = "Błąd podczas ładowania danych grupy.";
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
+        //    _ = LoadGroupsAsync();
+        //    _ = LoadDataAsync();
+        //}
 
-        private void UpdateWarningMessage()
-        {
-            if (StudentCount > 0)
-            {
-                WarningMessage = $"UWAGA: Grupa zawiera {StudentCount} studentów. Nie można usunąć grupy z przypisanymi studentami.";
-                CanDelete = false;
-            }
-            else
-            {
-                WarningMessage = "Czy na pewno chcesz usunąć tę grupę? Ta operacja jest nieodwracalna.";
-                CanDelete = true;
-            }
-        }
+        //public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
 
-        private async Task DeleteAsync()
-        {
-            try
-            {
-                IsLoading = true;
+        //public async Task LoadGroupsAsync()
+        //{
+        //    var model = new GroupEditModel(_loginWrapper);
+        //    var groups = await model.GetAllGroupsAsync();
 
-                var success = await _model.DeleteGroup();
-                if (success)
-                {
-                    OnDeleted?.Invoke();
-                }
-                else
-                {
-                    WarningMessage = "Błąd podczas usuwania grupy.";
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error deleting group: {ex.Message}");
-                WarningMessage = "Błąd podczas usuwania grupy.";
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
+        //    Groups.Clear();
+        //    foreach (var group in groups)
+        //    {
+        //        Groups.Add(group);
+        //    }
+        //}
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        //private async Task LoadDataAsync()
+        //{
+        //    try
+        //    {
+        //        IsLoading = true;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //        var success = await _model.LoadGroupData(_groupId);
+        //        if (success)
+        //        {
+        //            GroupNumber = _model.GroupNumber;
+        //            Faculty = _model.Faculty;
+        //            Degree = _model.Degree;
+        //            Semester = _model.Semester;
+        //            StudentCount = _model.StudentCount;
+
+        //            CanDelete = await _model.CanDeleteGroup();
+        //            UpdateWarningMessage();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error loading group data: {ex.Message}");
+        //        WarningMessage = "Błąd podczas ładowania danych grupy.";
+        //    }
+        //    finally
+        //    {
+        //        IsLoading = false;
+        //    }
+        //}
+
+        //private void UpdateWarningMessage()
+        //{
+        //    if (StudentCount > 0)
+        //    {
+        //        WarningMessage = $"UWAGA: Grupa zawiera {StudentCount} studentów. Nie można usunąć grupy z przypisanymi studentami.";
+        //        CanDelete = false;
+        //    }
+        //    else
+        //    {
+        //        WarningMessage = "Czy na pewno chcesz usunąć tę grupę? Ta operacja jest nieodwracalna.";
+        //        CanDelete = true;
+        //    }
+        //}
+
+        //private async Task DeleteAsync()
+        //{
+        //    try
+        //    {
+        //        IsLoading = true;
+
+        //        var success = await _model.DeleteGroup();
+        //        if (success)
+        //        {
+        //            OnDeleted?.Invoke();
+        //        }
+        //        else
+        //        {
+        //            WarningMessage = "Błąd podczas usuwania grupy.";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error deleting group: {ex.Message}");
+        //        WarningMessage = "Błąd podczas usuwania grupy.";
+        //    }
+        //    finally
+        //    {
+        //        IsLoading = false;
+        //    }
+        //}
+
+        //public event PropertyChangedEventHandler? PropertyChanged;
+
+        //protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Projekt.Miscellaneous;
+using Projekt.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Projekt.Miscellaneous;
-using Projekt.Models;
 
 namespace Projekt.ViewModels
 {
@@ -17,11 +18,13 @@ namespace Projekt.ViewModels
 
         #region Fields
         private string? _buildingCode;
-        private List<string> _faculties = new List<string> { "MS", "MT", "AEI", "Ch"};
+        private List<string> _places = new List<string> { "MS", "MT", "AEI", "Ch"};
+        private List<string> _faculties = new List<string> { "MS", "MT", "AEI", "Ch" };
         private int _classNumber;
         private string? _address;
         private string? _capacity;
         private string? _currentFaculty;
+        private LoginWrapper? _loginWrapper;
         private PlaceCreateModel? _placeCreateModel;
         #endregion
 
@@ -37,9 +40,14 @@ namespace Projekt.ViewModels
                 if (_buildingCode != value)
                 {
                     _buildingCode = value;
-                    OnPropertyChanged(nameof(_buildingCode));
+                    OnPropertyChanged(nameof(BuildingCode));
                 }
             }
+        }
+
+        public List<string> Places
+        {
+            get => _places;
         }
 
         public List<string> Faculties
@@ -55,7 +63,7 @@ namespace Projekt.ViewModels
                 if (_classNumber != value)
                 {
                     _classNumber = value;
-                    OnPropertyChanged(nameof(_classNumber));
+                    OnPropertyChanged(nameof(ClassNumber));
                 }
             }
         }
@@ -68,7 +76,7 @@ namespace Projekt.ViewModels
                 if (_address != value)
                 {
                     _address = value;
-                    OnPropertyChanged(nameof(_address));
+                    OnPropertyChanged(nameof(Address));
                 }
             }
         }
@@ -81,7 +89,7 @@ namespace Projekt.ViewModels
                 if (_capacity != value)
                 {
                     _capacity = value;
-                    OnPropertyChanged(nameof(_capacity));
+                    OnPropertyChanged(nameof(Capacity));
                 }
             }
         }
@@ -137,7 +145,10 @@ namespace Projekt.ViewModels
 
         public PlaceCreateViewModel(LoginWrapper loginWrapper)
         {
+            _loginWrapper = loginWrapper;
             PlaceCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+
+            _ = LoadFacultiesAsync();
         }
 
         private ICommand? _saveCommand;
@@ -208,6 +219,35 @@ namespace Projekt.ViewModels
                 ErrorString = "Dodawanie nieudane! Spróbuj ponownie.";
             }
             return success;
+        }
+
+        private async Task LoadFacultiesAsync()
+        {
+            try
+            {
+                var query = "SELECT nazwa_krotka FROM wydzial ORDER BY nazwa_krotka";
+
+                if (_loginWrapper != null)
+                {
+                    var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
+
+                    Places.Clear();
+                    if (result != null)
+                    {
+                        foreach (var row in result)
+                        {
+                            if (row.ContainsKey("nazwa_krotka"))
+                            {
+                                Places.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading faculties: {ex.Message}");
+            }
         }
         #endregion
     }

@@ -12,8 +12,21 @@ namespace Projekt.Models
 {
     public class PlaceViewTableModel (LoginWrapper loginWrapper) : BaseTableModel(loginWrapper), ITable
     {
-        string ITable.TableName => "miejsce";
-        string ITable.DefaultQuery => "SELECT * FROM miejsce";
+        public string TableName => String.Empty;
+        public string DefaultQuery => """
+            SELECT 
+                p.id AS "ID miejsca",
+                w.nazwa AS "Wydział",
+                a.adres AS "Numer pokoju",
+                p.numer AS "Numer sali",
+                p.pojemnosc AS "Pojemność"
+            FROM 
+                miejsce p
+            JOIN wydzial w 
+                ON p.id_wydzialu = w.nazwa_krotka
+            JOIN adres a
+                ON p.id_adresu = a.id;
+            """;
         Dictionary<string, object>? ITable.DefaultParameters => null;
     }
 }

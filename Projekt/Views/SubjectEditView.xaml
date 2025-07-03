@@ -22,7 +22,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DataGrid Grid.ColumnSpan="6" ItemsSource="{Binding Subjects}"/>
-        <Button Grid.Row="1" Grid.Column="5" Command="{Binding DeleteSelectedCommand}" Margin="10">Usuń</Button>
-        <Button Grid.Row="1" Grid.Column="4" Command="{Binding UpdateSelectedCommand}" Margin="10">Edytuj</Button>
+        <Button Grid.Row="1" Grid.Column="5" Command="{Binding UpdateSelectedCommand}" Margin="10">Edytuj</Button>
     </Grid>
 </UserControl>
