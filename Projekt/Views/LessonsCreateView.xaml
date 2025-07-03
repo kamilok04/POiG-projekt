@@ -31,9 +31,6 @@
         <Label Grid.Row="1">Przedmiot:</Label>
         <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Subjects}"/>
 
-        <Label Grid.Row="2">Typ:</Label>
-        <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding SelectedType, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
-
         <Label Grid.Row="3">Miejsce:</Label>
         <ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding SelectedPlace, Mode=TwoWay}" ItemsSource="{Binding Places}"/>
         
@@ -51,7 +48,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right"/>
+            <Button Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" IsEnabled="True"/>
             <Button Grid.Column="1" Content="Anuluj" Command="{Binding CancelCommand}" Width="100" HorizontalAlignment="Right"/>
         </Grid>
     </Grid>
