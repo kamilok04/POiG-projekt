@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Projekt.Models
 {
-    public class BaseTableModel 
+    public class BaseTableModel  : ObservableObject
     {
         private LoginWrapper? _loginWrapper;
         public LoginWrapper? LoginWrapper

@@ -9,31 +9,6 @@ using System.Threading.Tasks;
 
 namespace Projekt.Models
 {
-    public readonly struct SubjectData
-    {
-        public int Id { get; init; }
-        public string Code { get; init; }
-        public string Name { get; init; }
-        public int? DescriptionId { get; init; }
-        public int? LiteratureId { get; init; }
-        public int? PassConditionsId { get; init; }
-        public int Credits { get; init; }
-        public string FacultyId { get; init; }
-
-        public SubjectData(Dictionary<string, object> attributes)
-        {
-            Id = (int)attributes["id"];
-            Code = (string)attributes["kod"];
-            Name = (string)attributes["nazwa"];
-            DescriptionId = (int)attributes["id_opisu"];
-            LiteratureId = (int)attributes["id_literatury"];
-            PassConditionsId = (int)attributes["id_warunkow"];
-            Credits = (int)attributes["punkty"];
-            FacultyId = (string)attributes["wydzial_org"];
-
-
-        }
-    }
 
     public class SubjectModel
     {
@@ -47,7 +22,6 @@ namespace Projekt.Models
         public string FacultyId { get; init; }
         public int? DataId { get; init; }
 
-        public SubjectData? SubjectData { get; set; }
 
    
         public SubjectModel(Dictionary<string, object> data)

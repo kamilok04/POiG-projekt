@@ -29,6 +29,8 @@ namespace Projekt
             Capacity = (int)data["pojemnosc"];
         }
 
+      
+
         public override string ToString()
         {
             return $"{FacultyId}-{Number} ({Capacity} miejsc)";
