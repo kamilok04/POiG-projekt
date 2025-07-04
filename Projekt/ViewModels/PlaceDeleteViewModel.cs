@@ -14,7 +14,7 @@ namespace Projekt.ViewModels
 {
     public class PlaceDeleteViewModel : ObservableObject, IPageViewModel
     {
-        string IPageViewModel.Name => nameof(PlaceEditViewModel);
+        string IPageViewModel.Name => nameof(PlaceDeleteViewModel);
 
         private PlaceViewTableModel Model { get; init; }
 
@@ -29,11 +29,27 @@ namespace Projekt.ViewModels
             }
         }
 
+        private DataRowView? _selectedPlace;
+        public DataRowView? SelectedPlace
+        {
+            get => _selectedPlace;
+            set
+            {
+                _selectedPlace = value;
+                OnPropertyChanged(nameof(SelectedPlace));
+                // Załaduj dane wybranego miejsca do usunięcia
+                if (_selectedPlace != null)
+                {
+                    LoadSelectedPlace();
+                }
+            }
+        }
+
         public PlaceDeleteViewModel(LoginWrapper loginWrapper)
         {
-
             Model = new(loginWrapper);
-            GetDataAsync().ConfigureAwait(false); ;
+            PlaceDeleteModel = new PlaceDeleteModel(loginWrapper);
+            GetDataAsync().ConfigureAwait(false);
         }
 
         public PlaceDeleteViewModel() { } //for designer only
@@ -46,244 +62,184 @@ namespace Projekt.ViewModels
             }
         }
 
+        #region Fields
+        private int _placeId;
+        private string? _faculty;
+        private string? _address;
+        private int _classNumber;
+        private string? _capacity;
+        private PlaceDeleteModel? _placeDeleteModel;
+        #endregion
 
-        //string IPageViewModel.Name => "DeletePlace";
+        private string? _errorString;
+        private string? _successString;
 
-        //public PlaceDeleteViewModel() { }
+        #region Public Properties/Commands
+        public int PlaceId
+        {
+            get => _placeId;
+            set
+            {
+                if (_placeId != value)
+                {
+                    _placeId = value;
+                    OnPropertyChanged(nameof(PlaceId));
+                }
+            }
+        }
 
-        //#region Fields
-        //private int _placeId;
-        //private string? _buildingCode;
-        //private List<string> _faculties = new List<string> { "MS", "MT", "AEI", "Ch" };
-        //private int _classNumber;
-        //private string? _address;
-        //private string? _capacity;
-        //private string? _currentFaculty;
-        //private PlaceDeleteModel? _placeDeleteModel;
-        //#endregion
+        public string Faculty
+        {
+            get => _faculty ?? string.Empty;
+            set
+            {
+                if (_faculty != value)
+                {
+                    _faculty = value;
+                    OnPropertyChanged(nameof(Faculty));
+                }
+            }
+        }
 
-        //private string? _errorString;
-        //private string? _successString;
+        public string Address
+        {
+            get => _address ?? string.Empty;
+            set
+            {
+                if (_address != value)
+                {
+                    _address = value;
+                    OnPropertyChanged(nameof(Address));
+                }
+            }
+        }
 
-        //#region Public Properties/Commands
-        //public int PlaceId
-        //{
-        //    get => _placeId;
-        //    set
-        //    {
-        //        if (_placeId != value)
-        //        {
-        //            _placeId = value;
-        //            OnPropertyChanged(nameof(PlaceId));
-        //        }
-        //    }
-        //}
+        public int ClassNumber
+        {
+            get => _classNumber;
+            set
+            {
+                if (_classNumber != value)
+                {
+                    _classNumber = value;
+                    OnPropertyChanged(nameof(ClassNumber));
+                }
+            }
+        }
 
-        //public string BuildingCode
-        //{
-        //    get => _buildingCode ?? string.Empty;
-        //    set
-        //    {
-        //        if (_buildingCode != value)
-        //        {
-        //            _buildingCode = value;
-        //            OnPropertyChanged(nameof(BuildingCode));
-        //        }
-        //    }
-        //}
+        public string Capacity
+        {
+            get => _capacity ?? string.Empty;
+            set
+            {
+                if (_capacity != value)
+                {
+                    _capacity = value;
+                    OnPropertyChanged(nameof(Capacity));
+                }
+            }
+        }
 
-        //public List<string> Faculties
-        //{
-        //    get => _faculties;
-        //}
+        public string? ErrorString
+        {
+            get => _errorString;
+            set
+            {
+                if (_errorString != value)
+                {
+                    _errorString = value;
+                    OnPropertyChanged(nameof(ErrorString));
+                }
+            }
+        }
 
-        //public int ClassNumber
-        //{
-        //    get => _classNumber;
-        //    set
-        //    {
-        //        if (_classNumber != value)
-        //        {
-        //            _classNumber = value;
-        //            OnPropertyChanged(nameof(ClassNumber));
-        //        }
-        //    }
-        //}
+        public string? SuccessString
+        {
+            get => _successString;
+            set
+            {
+                if (_successString != value)
+                {
+                    _successString = value;
+                    OnPropertyChanged(nameof(SuccessString));
+                }
+            }
+        }
 
-        //public string Address
-        //{
-        //    get => _address ?? string.Empty;
-        //    set
-        //    {
-        //        if (_address != value)
-        //        {
-        //            _address = value;
-        //            OnPropertyChanged(nameof(Address));
-        //        }
-        //    }
-        //}
+        public PlaceDeleteModel? PlaceDeleteModel { get => _placeDeleteModel; set => _placeDeleteModel = value; }
 
-        //public string Capacity
-        //{
-        //    get => _capacity ?? string.Empty;
-        //    set
-        //    {
-        //        if (_capacity != value)
-        //        {
-        //            _capacity = value;
-        //            OnPropertyChanged(nameof(Capacity));
-        //        }
-        //    }
-        //}
+        private ICommand? _deleteSelectedCommand;
+        public ICommand DeleteSelectedCommand
+        {
+            get
+            {
+                return _deleteSelectedCommand ??= new RelayCommand(
+                    async param => await DeletePlace(),
+                    param => SelectedPlace != null);
+            }
+        }
 
-        //public string CurrentFaculty
-        //{
-        //    get => _currentFaculty ?? string.Empty;
-        //    set
-        //    {
-        //        if (_currentFaculty != value)
-        //        {
-        //            _currentFaculty = value;
-        //            OnPropertyChanged(nameof(CurrentFaculty));
-        //            OnPropertyChanged(nameof(IsMS));
-        //            OnPropertyChanged(nameof(IsMT));
-        //            OnPropertyChanged(nameof(IsCh));
-        //            OnPropertyChanged(nameof(IsAEI));
-        //        }
-        //    }
-        //}
+        #endregion
 
-        //public string? ErrorString
-        //{
-        //    get => _errorString;
-        //    set
-        //    {
-        //        if (_errorString != value)
-        //        {
-        //            _errorString = value;
-        //            OnPropertyChanged(nameof(ErrorString));
-        //        }
-        //    }
-        //}
+        #region Private Methods
 
-        //public string? SuccessString
-        //{
-        //    get => _successString;
-        //    set
-        //    {
-        //        if (_successString != value)
-        //        {
-        //            _successString = value;
-        //            OnPropertyChanged(nameof(SuccessString));
-        //        }
-        //    }
-        //}
+        private void LoadSelectedPlace()
+        {
+            if (SelectedPlace != null)
+            {
+                PlaceId = Convert.ToInt32(SelectedPlace["ID miejsca"]);
+                Faculty = SelectedPlace["Wydział"]?.ToString() ?? string.Empty;
+                Address = SelectedPlace["Adres"]?.ToString() ?? string.Empty;
+                ClassNumber = Convert.ToInt32(SelectedPlace["Numer sali"]);
+                Capacity = SelectedPlace["Pojemność"]?.ToString() ?? string.Empty;
+            }
+        }
 
-        //public bool IsMS => _currentFaculty == "MS";
-        //public bool IsMT => _currentFaculty == "MT";
-        //public bool IsCh => _currentFaculty == "Ch";
-        //public bool IsAEI => _currentFaculty == "AEI";
+        private void ClearFields()
+        {
+            ClassNumber = 0;
+            Faculty = string.Empty;
+            Address = string.Empty;
+            Capacity = string.Empty;
+            PlaceId = 0;
+            SelectedPlace = null;
+        }
 
-        //public PlaceDeleteModel? PlaceDeleteModel { get => _placeDeleteModel; set => _placeDeleteModel = value; }
-        //private readonly LoginWrapper _loginWrapper;
-        //internal RelayCommand RefreshCommand { get; private set; }
-        //public ObservableCollection<PlaceDeleteModel> Places { get; set; } = new();
+        private void ClearEndStrings()
+        {
+            ErrorString = null;
+            SuccessString = null;
+        }
 
-        //public PlaceDeleteViewModel(LoginWrapper loginWrapper)
-        //{
-        //    _loginWrapper = loginWrapper;
-        //    PlaceDeleteModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
-        //    RefreshCommand = new RelayCommand(async _ => await LoadPlacesAsync());
-        //    _ = LoadPlacesAsync();
-        //}
+        private async Task<bool> DeletePlace()
+        {
+            if (PlaceDeleteModel == null)
+                throw new InvalidOperationException("PlaceDeleteModel is not initialized.");
 
-        //private ICommand? _saveCommand;
-        //public ICommand SaveCommand
-        //{
-        //    get
-        //    {
-        //        return _saveCommand ??= new RelayCommand(
-        //            async param => await DeletePlace(),
-        //            param => PlaceId > 0);
-        //    }
-        //}
+            ClearEndStrings();
 
-        //private ICommand? _cancelCommand;
-        //public ICommand CancelCommand
-        //{
-        //    get
-        //    {
-        //        _cancelCommand ??= new RelayCommand(
-        //            p => Cancel(),
-        //            p => true);
-        //        return _cancelCommand;
-        //    }
-        //}
+            PlaceDeleteModel.PlaceId = PlaceId;
+            PlaceDeleteModel.Faculty = Faculty;
+            PlaceDeleteModel.ClassNumber = ClassNumber;
+            PlaceDeleteModel.Address = Address;
+            PlaceDeleteModel.Capacity = Capacity;
 
-        //#endregion
+            bool success = await PlaceDeleteModel.DeletePlace();
+            if (success)
+            {
+                ErrorString = null;
+                SuccessString = "Miejsce usunięto z powodzeniem!";
 
-        //#region Private Methods
-
-        //private void Cancel()
-        //{
-        //    BuildingCode = string.Empty;
-        //    ClassNumber = 0;
-        //    Address = string.Empty;
-        //    Capacity = string.Empty;
-        //    CurrentFaculty = string.Empty;
-        //    PlaceId = 0;
-        //    PlaceDeleteModel = null;
-        //}
-
-        //private async Task LoadPlacesAsync()
-        //{
-        //    var placeModel = new PlaceDeleteModel(_loginWrapper);
-        //    var places = await placeModel.GetAllPlacesAsync();
-        //    Places.Clear();
-        //    foreach (var place in places)
-        //    {
-        //        Places.Add(place);
-        //    }
-        //}
-
-        //private async Task<bool> DeletePlace()
-        //{
-        //    if (PlaceDeleteModel == null)
-        //        throw new InvalidOperationException("PlaceDeleteModel is not initialized.");
-
-        //    PlaceDeleteModel.PlaceId = PlaceId;
-
-        //    bool success = await PlaceDeleteModel.DeletePlace();
-        //    if (success)
-        //    {
-        //        ErrorString = null;
-        //        SuccessString = "Miejsce usunięto z powodzeniem!";
-        //        Cancel();
-        //    }
-        //    else
-        //    {
-        //        SuccessString = null;
-        //        ErrorString = "Usuwanie nieudane! Spróbuj ponownie.";
-        //    }
-        //    return success;
-        //}
-
-        //public async Task LoadPlace(int placeId)
-        //{
-        //    if (PlaceDeleteModel == null)
-        //        throw new InvalidOperationException("PlaceDeleteModel is not initialized.");
-
-        //    var placeData = await PlaceDeleteModel.GetPlaceById(placeId);
-        //    if (placeData != null)
-        //    {
-        //        PlaceId = placeId;
-        //        BuildingCode = placeData.ContainsKey("buildingCode") ? placeData["buildingCode"]?.ToString() ?? string.Empty : string.Empty;
-        //        ClassNumber = placeData.ContainsKey("numer") ? Convert.ToInt32(placeData["numer"]) : 0;
-        //        Address = placeData.ContainsKey("adres") ? placeData["adres"]?.ToString() ?? string.Empty : string.Empty;
-        //        Capacity = placeData.ContainsKey("pojemnosc") ? placeData["pojemnosc"]?.ToString() ?? string.Empty : string.Empty;
-        //        CurrentFaculty = placeData.ContainsKey("id_wydzialu") ? placeData["id_wydzialu"]?.ToString() ?? string.Empty : string.Empty;
-        //    }
-        //}
-        //#endregion
+                await GetDataAsync();
+                ClearFields();
+            }
+            else
+            {
+                SuccessString = null;
+                ErrorString = "Usunięcie nieudane! Spróbuj ponownie.";
+            }
+            return success;
+        }
+        #endregion
     }
 }

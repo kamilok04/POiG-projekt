@@ -18,8 +18,7 @@ namespace Projekt.ViewModels
 
         #region Fields
         private string? _buildingCode;
-        private List<string> _places = new List<string> { "MS", "MT", "AEI", "Ch"};
-        private List<string> _faculties = new List<string> { "MS", "MT", "AEI", "Ch" };
+        private List<string> _faculties = new List<string> { };
         private int _classNumber;
         private string? _address;
         private string? _capacity;
@@ -45,14 +44,18 @@ namespace Projekt.ViewModels
             }
         }
 
-        public List<string> Places
-        {
-            get => _places;
-        }
-
         public List<string> Faculties
         {
             get => _faculties;
+
+            set
+            {
+                if (_faculties != value)
+                {
+                    _faculties = value;
+                    OnPropertyChanged(nameof(Faculties));
+                }
+            }
         }
 
         public int ClassNumber
@@ -231,14 +234,14 @@ namespace Projekt.ViewModels
                 {
                     var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
 
-                    Places.Clear();
+                    Faculties.Clear();
                     if (result != null)
                     {
                         foreach (var row in result)
                         {
                             if (row.ContainsKey("nazwa_krotka"))
                             {
-                                Places.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
+                                Faculties.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
                             }
                         }
                     }

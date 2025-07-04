@@ -11,53 +11,81 @@ namespace Projekt.Models
     public class PlaceEditModel(LoginWrapper loginWrapper) : BaseTableModel(loginWrapper), ITable
     {
         public int PlaceId { get; set; }
-        public string? BuildingCode { get; set; }
-        public List<string> Faculties = new List<string> { "MS", "MT", "AEI", "Ch" };
+        public string? Faculty { get; set; }
         public int ClassNumber { get; set; }
         public string? Address { get; set; }
         public string? Capacity { get; set; }
-        public string? CurrentFaculty { get; set; }
 
         private DatabaseHandler DatabaseHandler => LoginWrapper.DBHandler;
 
-        public string TableName => "Places";
+        public string TableName => "miejsce";
 
-        public string? DefaultQuery => BuildDefaultQuery();
+        public string? DefaultQuery => null; // Nie używamy domyślnego zapytania dla edycji
 
-        public Dictionary<string, object>? DefaultParameters => new()
-        {
-            { "@placeId", PlaceId },
-            { "@buildingCode", BuildingCode ?? string.Empty },
-            { "@classNumber", ClassNumber },
-            { "@address", Address ?? string.Empty },
-            { "@capacity", Capacity ?? string.Empty },
-            { "@currentFaculty", CurrentFaculty ?? string.Empty }
-        };
-        // Additional methods for deletion can be added here if needed
+        public Dictionary<string, object>? DefaultParameters => null;
 
         public async Task<bool> UpdatePlace()
         {
             try
             {
-                // Najpierw aktualizuj adres
+                var facultyIdQuery = @"
+                    SELECT nazwa_krotka 
+                    FROM wydzial 
+                    WHERE nazwa = @facultyName";
+
+                var facultyParams = new Dictionary<string, object>
+                {
+                    { "@facultyName", Faculty ?? string.Empty }
+                };
+
+                var facultyResult = await DatabaseHandler.ExecuteQueryAsync(facultyIdQuery, facultyParams);
+                if (facultyResult == null || !facultyResult.Any())
+                {
+                    return false;
+                }
+
+                var facultyId = facultyResult.First()["nazwa_krotka"]?.ToString();
+
+
+
+                var addressIdQuery = @"
+                    SELECT id_adresu 
+                    FROM miejsce 
+                    WHERE id = @placeId";
+
+                var addressIdParams = new Dictionary<string, object>
+                {
+                    { "@placeId", PlaceId }
+                };
+
+                var addressIdResult = await DatabaseHandler.ExecuteQueryAsync(addressIdQuery, addressIdParams);
+                if (addressIdResult == null || !addressIdResult.Any())
+                {
+                    return false;
+                }
+
+                var addressId = Convert.ToInt32(addressIdResult.First()["id_adresu"]);
+
+
+
                 var updateAddressQuery = @"
-                    UPDATE adres a 
-                    JOIN miejsce m ON a.id = m.id_adresu 
-                    SET a.adres = @address 
-                    WHERE m.id = @placeId";
+                    UPDATE adres 
+                    SET adres = @address 
+                    WHERE id = @addressId";
 
                 var updateAddressParams = new Dictionary<string, object>
                 {
-                    { "@placeId", PlaceId },
+                    { "@addressId", addressId },
                     { "@address", Address ?? string.Empty }
                 };
 
                 var updateAddressCommand = DatabaseHandler.CreateCommand(updateAddressQuery, updateAddressParams);
 
-                // Następnie aktualizuj miejsce
+
+
                 var updatePlaceQuery = @"
                     UPDATE miejsce 
-                    SET id_wydzialu = @currentFaculty, 
+                    SET id_wydzialu = @facultyId, 
                         numer = @classNumber, 
                         pojemnosc = @capacity 
                     WHERE id = @placeId";
@@ -65,87 +93,20 @@ namespace Projekt.Models
                 var updatePlaceParams = new Dictionary<string, object>
                 {
                     { "@placeId", PlaceId },
-                    { "@currentFaculty", CurrentFaculty ?? string.Empty },
+                    { "@facultyId", facultyId ?? string.Empty },
                     { "@classNumber", ClassNumber },
                     { "@capacity", int.TryParse(Capacity, out int cap) ? cap : 0 }
                 };
 
                 var updatePlaceCommand = DatabaseHandler.CreateCommand(updatePlaceQuery, updatePlaceParams);
 
-                // 2 zapytania w jednym poleceniu
+
                 return await DatabaseHandler.ExecuteInTransactionAsync(updateAddressCommand, updatePlaceCommand);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Query failed to execute. Please check the parameters and connection.");
+                return false;
             }
-        }
-
-        public async Task<Dictionary<string, object>?> GetPlaceById(int placeId)
-        {
-            try
-            {
-                var query = @"
-                    SELECT m.id, m.id_wydzialu, m.numer, m.pojemnosc, a.adres, w.nazwa_krotka as buildingCode
-                    FROM miejsce m
-                    JOIN adres a ON m.id_adresu = a.id
-                    JOIN wydzial w ON m.id_wydzialu = w.nazwa_krotka
-                    WHERE m.id = @placeId";
-
-                var parameters = new Dictionary<string, object>
-                {
-                    { "@placeId", placeId }
-                };
-
-                var results = await DatabaseHandler.ExecuteQueryAsync(query, parameters);
-                return results?.FirstOrDefault();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public async Task<List<PlaceEditModel>> GetAllPlacesAsync()
-        {
-            var query = @"
-        SELECT m.id AS PlaceId, 
-               m.id_wydzialu AS CurrentFaculty, 
-               m.numer AS ClassNumber, 
-               m.pojemnosc AS Capacity, 
-               a.adres AS Address, 
-               w.nazwa_krotka AS BuildingCode
-        FROM miejsce m
-        JOIN adres a ON m.id_adresu = a.id
-        JOIN wydzial w ON m.id_wydzialu = w.nazwa_krotka";
-
-            var results = await DatabaseHandler.ExecuteQueryAsync(query);
-
-            return results?.Select(r => new PlaceEditModel(LoginWrapper)
-            {
-                PlaceId = Convert.ToInt32(r["PlaceId"]),
-                CurrentFaculty = r["CurrentFaculty"].ToString(),
-                ClassNumber = Convert.ToInt32(r["ClassNumber"]),
-                Capacity = r["Capacity"].ToString(),
-                Address = r["Address"].ToString(),
-                BuildingCode = r["BuildingCode"].ToString()
-            }).ToList() ?? new List<PlaceEditModel>();
-        }
-
-        public string BuildDefaultQuery()
-        {
-            if (PlaceId <= 0)
-            {
-                throw new InvalidOperationException("PlaceId must be greater than zero.");
-            }
-            return "UPDATE Places SET " +
-                   "building_code = @buildingCode, " +
-                   "class_number = @classNumber, " +
-                   "address = @address, " +
-                   "capacity = @capacity, " +
-                   "current_faculty = @currentFaculty " +
-                   "WHERE id = @placeId;";
         }
     }
-
 }

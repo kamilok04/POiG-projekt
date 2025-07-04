@@ -15,9 +15,9 @@ namespace Projekt.Models
         public string TableName => String.Empty;
         public string DefaultQuery => """
             SELECT 
-                p.id AS "ID miejsca",
+                p.id AS "ID Miejsca",
                 w.nazwa AS "Wydział",
-                a.adres AS "Numer pokoju",
+                a.adres AS "Adres",
                 p.numer AS "Numer sali",
                 p.pojemnosc AS "Pojemność"
             FROM 
