@@ -11,7 +11,7 @@ namespace Projekt.Models
     public class PlaceCreateModel : BaseTableModel, ITable
     {
         public string? BuildingCode { get; set; }
-        public List<string> Faculties = new List<string> { "MS", "MT", "AEI", "Ch" };
+        public List<string> Faculties { get; set; } = new List<string>();
         public int ClassNumber { get; set; }
         public string? Address { get; set; }
         public string? Capacity { get; set; }
@@ -34,6 +34,20 @@ namespace Projekt.Models
 
         public PlaceCreateModel(LoginWrapper loginWrapper) : base(loginWrapper)
         {
+            InitializeFaculties();
+        }
+
+        private async void InitializeFaculties()
+        {
+            try
+            {
+                var results = await DatabaseHandler.ExecuteQueryAsync("SELECT wydzial.nazwa_krotka FROM wydzial");
+                Faculties = results.Select(row => row["nazwa_krotka"]?.ToString() ?? string.Empty).ToList();
+            }
+            catch (Exception ex)
+            {
+                Faculties = new List<string>();
+            }
         }
 
         public async Task<bool> AddPlace()
