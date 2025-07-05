@@ -2,13 +2,14 @@
 using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
+using System.ServiceModel.Security;
 
 namespace Projekt.Miscellaneous
 {
     public class DatabaseHandler
     {
         private readonly MySqlConnectionStringBuilder _sb;
-        private MySqlConnection? _conn;
 
         public DatabaseHandler()
         {
@@ -29,9 +30,9 @@ namespace Projekt.Miscellaneous
 
         public async Task<MySqlConnection> GetConnectionAsync()
         {
-            _conn = new MySqlConnection(_sb.ConnectionString);
-            _conn.Open();
-            return _conn;
+            var conn = new MySqlConnection(_sb.ConnectionString);
+            await conn.OpenAsync();
+            return conn;
         }
 
         public async Task<bool> TestConnectionAsync()
@@ -134,6 +135,7 @@ namespace Projekt.Miscellaneous
 
         public async Task<int> AuthenticateAsync(LoginWrapper wrapper)
         {
+            int sessionPermissions, remotePermissions = 0;
             // TODO: nie zezwalaj na przedawnione tokeny
             string query = "SELECT uprawnienia FROM sesje WHERE login = @username AND token = @token AND data_waznosci > NOW();";
             var parameters = new Dictionary<string, object>
@@ -144,9 +146,22 @@ namespace Projekt.Miscellaneous
             var result = await ExecuteQueryAsync(query, parameters).ConfigureAwait(false);
             if (result.Count == 1) // Jeśli są mnogie tokeny, to zablokuj wszystkie
             {
-                return (int)result[0]["uprawnienia"];
+                sessionPermissions = (int)result[0]["uprawnienia"];
             }
+            else return 0;
+
+            result = await ExecuteQueryAsync("SELECT uprawnienia FROM uzytkownik WHERE login = @username",
+                new() { { "@username", wrapper.Username ?? string.Empty } });
+           
+            if (result.Count == 1) // W razie wątpliwości odmów
+            {
+                remotePermissions = (int)result[0]["uprawnienia"];
+            }
+            else return 0;
+
+            if (sessionPermissions == remotePermissions) return remotePermissions;
             return 0;
+
         }
 
         public async Task DestroySession(string username)
@@ -156,12 +171,7 @@ namespace Projekt.Miscellaneous
                 new Dictionary<string, object> { { "@username", username } }
 
             );
-            if (_conn != null && _conn.State == ConnectionState.Open)
-            {
-                _conn.Close();
-                _conn.Dispose();
-                _conn = null;
-            }
+          
         }
         /// <summary>
         /// Executes a set of database operations within a transaction. Rolls back if an exception occurs.

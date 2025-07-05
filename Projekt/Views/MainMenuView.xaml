@@ -1,18 +1,14 @@
 ﻿<UserControl x:Class="Projekt.Views.MainMenuView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Projekt.Views"
-             xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
-             xmlns:misc="clr-namespace:Projekt.Miscellaneous"
-             
-              xmlns:Fluent="urn:fluent-ribbon"
-
-             mc:Ignorable="d" 
-             
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:MainMenuViewModel}, IsDesignTimeCreatable=True}">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Projekt.Views"
+    xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
+    xmlns:misc="clr-namespace:Projekt.Miscellaneous"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:Fluent="urn:fluent-ribbon" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type={x:Type viewmodels:MainMenuViewModel}, IsDesignTimeCreatable=True}">
+  
     
     <Grid>
         <Grid.RowDefinitions>
@@ -30,118 +26,62 @@
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Administracja">
-                <Fluent:RibbonGroupBox Header="Wydziały">
-                    <Fluent:Button Header="Zarządzaj" 
-                        Icon="/Resources/edit-256.png"
-                        LargeIcon="/Resources/edit-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyEditViewModel"/>
-                    <Fluent:Button Header="Dodaj" 
-          Icon="/Resources/plus-256.png"
-          LargeIcon="/Resources/plus-256.png"
-          Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyCreateViewModel"/>
+                <Fluent:RibbonGroupBox Header="Wydziały" MinWidth="68">
+                    <Fluent:Button Header="Zarządzaj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyEditViewModel" Visibility="{Binding Path='[FacultyEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="FacultyCreateViewModel" Visibility="{Binding Path='[FacultyCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Kierunki">
-                    <Fluent:Button Header="Zarządzaj" 
-         Icon="/Resources/edit-256.png"
-         LargeIcon="/Resources/edit-256.png"
-                                   
-         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="MajorManagementViewModel"/>
+                <Fluent:RibbonGroupBox Header="Kierunki" MinWidth="68">
+                    <Fluent:Button Header="Zarządzaj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="MajorManagementViewModel" Visibility="{Binding Path='[MajorManagementViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
-                
+
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Użytkownicy">
-                <Fluent:RibbonGroupBox Header="Użytkownicy">
-                    <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/plus-256.png"
-                           LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom"
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersCreateViewModel"/>
-                    <Fluent:Button Header="Edytuj" 
-                            Icon="/Resources/edit-256.png"
-                            LargeIcon="/Resources/edit-256.png"
-                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersEditViewModel"/>
-                    <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png" 
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersDeleteViewModel"/>
+                <Fluent:RibbonGroupBox Header="Użytkownicy" MinWidth="80">
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersCreateViewModel" Visibility="{Binding Path='[UsersCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersEditViewModel" Visibility="{Binding Path='[UsersEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersDeleteViewModel" Visibility="{Binding Path='[UsersDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <Fluent:RibbonTabItem Header="Zajęcia"  >
-                <Fluent:RibbonGroupBox Header="Zajęcia">
-                    <Fluent:Button Header="Dodaj"
-                           Icon="/Resources/plus-256.png"
-                           LargeIcon="/Resources/plus-256.png" 
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsCreateViewModel"/>
-                    <Fluent:Button Header="Edytuj" 
-                            Icon="/Resources/edit-256.png"
-                            LargeIcon="/Resources/edit-256.png"
-                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsEditViewModel"/>       
-                    <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png" 
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsDeleteViewModel"/>
+            <Fluent:RibbonTabItem Header="Zajęcia">
+                <Fluent:RibbonGroupBox Header="Zajęcia" MinWidth="68">
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsCreateViewModel" Visibility="{Binding Path='[LessonsCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsEditViewModel" Visibility="{Binding Path='[LessonsEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsDeleteViewModel" Visibility="{Binding Path='[LessonsDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Zarządzanie prowadzącymi">
-                    <Fluent:Button Header="Przypisz prowadzących do grup przedmiotowych"
-                                   Command="{Binding ChangeCurrentPageViewCommand}"
-                                   CommandParameter="GroupSubjectCoordinatorViewModel"></Fluent:Button>
+                <Fluent:RibbonGroupBox Header="Zarządzanie prowadzącymi" MinWidth="200">
+                    <Fluent:Button Header="Przypisz prowadzących do grup przedmiotowych" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupSubjectCoordinatorViewModel" Visibility="{Binding Path='[GroupSubjectCoordinatorViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}"/>
+
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Przedmioty">
-                        <Fluent:RibbonGroupBox Header="Przedmioty">
-                            <Fluent:Button Header="Dodaj"
-                            Icon="/Resources/plus-256.png"
-                            LargeIcon="/Resources/plus-256.png" 
-                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel"/>
-                        <Fluent:Button Header="Edytuj" 
-                            Icon="/Resources/edit-256.png"
-                            LargeIcon="/Resources/edit-256.png"
-                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectEditViewModel"/> 
-                        <Fluent:Button Header="Usuń" 
-                           Icon="/Resources/minus-256.png"
-                           LargeIcon="/Resources/minus-256.png"
-                           Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectDeleteViewModel"/>
-                        </Fluent:RibbonGroupBox>
-                    </Fluent:RibbonTabItem>
+                <Fluent:RibbonGroupBox Header="Przedmioty" MinWidth="68">
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel" Visibility="{Binding Path='[SubjectCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectEditViewModel" Visibility="{Binding Path='[SubjectEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectDeleteViewModel" Visibility="{Binding Path='[SubjectDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Grupy">
-                <Fluent:RibbonGroupBox Header="Grupy">
-                    <Fluent:Button Header="Dodaj"
-                        Icon="/Resources/plus-256.png"
-                        LargeIcon="/Resources/plus-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupCreateViewModel"/>
-                    <Fluent:Button Header="Edytuj" 
-                        Icon="/Resources/edit-256.png"
-                        LargeIcon="/Resources/edit-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/>
-                    <Fluent:Button Header="Usuń" 
-                        Icon="/Resources/minus-256.png"
-                        LargeIcon="/Resources/minus-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel"/> 
+                <Fluent:RibbonGroupBox Header="Grupy" MinWidth="68">
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupCreateViewModel" Visibility="{Binding Path='[GroupCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel" Visibility="{Binding Path='[GroupEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel" Visibility="{Binding Path='[GroupEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Miejsca" >
-                <Fluent:RibbonGroupBox Header="Miejsca" >
-                    <Fluent:Button Header="Dodaj"
-                        Icon="/Resources/plus-256.png"
-                        LargeIcon="/Resources/plus-256.png" 
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceCreateViewModel"/>
-                    <Fluent:Button Header="Edytuj" 
-                         Icon="/Resources/edit-256.png"
-                         LargeIcon="/Resources/edit-256.png"
-                         Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceEditViewModel"/>
-                    <Fluent:Button Header="Usuń" 
-                        Icon="/Resources/minus-256.png"
-                        LargeIcon="/Resources/minus-256.png"
-                        Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceDeleteViewModel"/>
+                <Fluent:RibbonGroupBox Header="Miejsca" MinWidth="68">
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceCreateViewModel" Visibility="{Binding Path='[PlaceCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceEditViewModel" Visibility="{Binding Path='[PlaceEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceDeleteViewModel" Visibility="{Binding Path='[PlaceDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
-       
+
         <local:ConditionalContentControl Grid.Row="1" Content="{Binding CurrentPageViewModel}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
-        <Label  Content="{Binding LoginWrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
-        <Button Command="{Binding LogoutCommand}" >Wyloguj</Button>
+            <Label Content="{Binding Wrapper.Username, FallbackValue='Anonim'}" ContentStringFormat="{}Zalogowany jako: {0}"/>
+            <Button Command="{Binding LogoutCommand}">Wyloguj</Button>
         </StackPanel>
     </Grid>
 </UserControl>

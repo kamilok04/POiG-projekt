@@ -3,14 +3,16 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
             xmlns:local="clr-namespace:Projekt"  
             xmlns:views="clr-namespace:Projekt.Views"  
-            xmlns:viewmodels="clr-namespace:Projekt.ViewModels">  
+            xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
+             xmlns:converters="clr-namespace:Projekt.Miscellaneous.Converters">  
    <Application.Resources>  
        <ResourceDictionary>  
            <ResourceDictionary.MergedDictionaries>  
                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />  
-           </ResourceDictionary.MergedDictionaries>  
-           
-           <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">  
+           </ResourceDictionary.MergedDictionaries>
+            <converters:AllCollapsedToCollapsedConverter x:Key="AllCollapsedToCollapsedConverter"/>
+
+            <DataTemplate x:Name="LoginViewModel" DataType="{x:Type viewmodels:LoginViewModel}">  
                <views:LoginView />  
            </DataTemplate>  
            <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">  

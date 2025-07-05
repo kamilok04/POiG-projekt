@@ -1,16 +1,13 @@
-﻿using Mysqlx.Session;
-using Projekt.Miscellaneous;
+﻿using Projekt.Miscellaneous;
 using Projekt.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
+    public record PermissionLoading(NotifyTaskCompletion<bool> complete);
     public class MainMenuViewModel : ConditionalContentControlViewModel, IPageViewModel
     {
         #region Fields
@@ -20,134 +17,24 @@ namespace Projekt.ViewModels
         private ICommand? _changePageView;
         private ConditionalContentControlViewModel? _subView { get; init; }
 
-        public LoginWrapper? LoginWrapper
-        {
-            get => _model?.LoginWrapper;
-        }
+        public LoginWrapper Wrapper { get; set; }
+        
 
-        #endregion
 
-        #region Constructors
         public MainMenuViewModel(LoginWrapper loginWrapper)
         {
-            _model = new(loginWrapper);
-            CurrentPageViewModel = new CurrentProfileViewModel(_model.LoginWrapper);
+            Wrapper = loginWrapper;
+            _model = new(Wrapper);
+            CurrentPageViewModel = new CurrentProfileViewModel(Wrapper);
 
+          
         }
-        public MainMenuViewModel() { }
+  
 
+       
         #endregion
 
         #region Public Properties/Commands
-
-        private bool _currentProfileIsSelected;
-        private bool _usersIsSelected;
-        private bool _groupIsSelected;
-        private bool _lessonsIsSelected;
-        private bool _placeIsSelected;
-        private bool _subjectIsSelected;
-
-        public bool UsersIsSelected
-        {
-            get => _usersIsSelected;
-            set
-            {
-                if (_usersIsSelected != value)
-                {
-                    _usersIsSelected = value;
-                    OnPropertyChanged(nameof(UsersIsSelected));
-                    if (_usersIsSelected)
-                    {
-                        _ = ChangePageView("UsersViewTableViewModel");
-                    }
-                }
-            }
-        }
-
-        public bool LessonsIsSelected
-        {
-            get => _lessonsIsSelected;
-            set
-            {
-                if (_lessonsIsSelected != value)
-                {
-                    _lessonsIsSelected = value;
-                    OnPropertyChanged(nameof(LessonsIsSelected));
-                    if (_lessonsIsSelected)
-                    {
-                        _ = ChangePageView("LessonsViewTableViewModel");
-                    }
-                }
-            }
-        }
-
-        public bool GroupIsSelected
-        {
-            get => _groupIsSelected;
-            set
-            {
-                if (_groupIsSelected != value)
-                {
-                    _groupIsSelected = value;
-                    OnPropertyChanged(nameof(GroupIsSelected));
-                    if (_groupIsSelected)
-                    {
-                        _ = ChangePageView("GroupViewTableViewModel");
-                    }
-                }
-            }
-        }
-
-        public bool PlaceIsSelected
-        {
-            get => _placeIsSelected;
-            set
-            {
-                if (_placeIsSelected != value)
-                {
-                    _placeIsSelected = value;
-                    OnPropertyChanged(nameof(PlaceIsSelected));
-                    if (_placeIsSelected)
-                    {
-                        _ = ChangePageView("PlaceViewTableViewModel");
-                    }
-                }
-            }
-        }
-
-        public bool SubjectIsSelected
-        {
-            get => _subjectIsSelected;
-            set
-            {
-                if (_subjectIsSelected != value)
-                {
-                    _subjectIsSelected = value;
-                    OnPropertyChanged(nameof(SubjectIsSelected));
-                    if (_subjectIsSelected)
-                    {
-                        _ = ChangePageView("SubjectViewTableViewModel");
-                    }
-                }
-            }
-        }
-
-        public bool CurrentProfileIsSelected
-        {
-            get => _currentProfileIsSelected;
-            set
-            {
-                if (_currentProfileIsSelected != value)
-                {
-                    _currentProfileIsSelected = value;
-                    OnPropertyChanged(nameof(CurrentProfileIsSelected));
-                    if (_currentProfileIsSelected)
-                    {
-                        _ = ChangePageView("CurrentProfileViewModel");
-                    }
-                }
-            }
-        }
 
         public ICommand ChangeCurrentPageViewCommand
         {
@@ -171,80 +58,83 @@ namespace Projekt.ViewModels
                     });
             }
         }
+
+        public PermissionLoading this[string index]
+        {
+            get=> new(new(CheckPageModelPermissions(index)));
+        }
+
         #endregion
 
         #region Private Helpers
         private void Logout()
         {
-            _model?.LoginWrapper?.Logout();
+            Wrapper.Logout();
 
         }
 
-        private async Task<bool> CheckPageModelPermissions(object? param)
+       
+        
+
+        private async Task<bool> CheckPageModelPermissions(string name)
         {
 
-            if (param is not string pageViewModelName || _model?.LoginWrapper == null) return false;
-
-            switch (pageViewModelName)
+            
+            return name switch
             {
-
-                case "UsersCreateViewModel": return await Authenticate(PermissionHelper.CanManageUsers);
-                case "UsersEditViewModel": return await Authenticate(PermissionHelper.CanManageUsers);
-                case "UsersDeleteViewModel": return await Authenticate(PermissionHelper.CanManageUsers);
-                case "LessonsViewTableViewModel": return await Authenticate(PermissionHelper.CanSeeOwnSchedule);
-                case "LessonsCreateViewModel":
-                    return await Authenticate(
-                        PermissionHelper.CanSeeOwnSchedule,
-                        PermissionHelper.CanEditOwnSchedule,
-                        PermissionHelper.CanSeeOtherSchedules,
-                        PermissionHelper.CanEditOtherSchedules);
-                case "LessonsEditViewModel":
-                    return await Authenticate(
-                       PermissionHelper.CanSeeOwnSchedule,
-                       PermissionHelper.CanEditOwnSchedule,
-                       PermissionHelper.CanSeeOtherSchedules,
-                       PermissionHelper.CanEditOtherSchedules);
-                case "LessonsDeleteViewModel":
-                    return await Authenticate(
-                       PermissionHelper.CanSeeOwnSchedule,
-                       PermissionHelper.CanEditOwnSchedule,
-                       PermissionHelper.CanSeeOtherSchedules,
-                       PermissionHelper.CanEditOtherSchedules);
-                case "GroupsViewTableViewModel":
-                    return await Authenticate(
-                        PermissionHelper.CanManageGroups,
-                        PermissionHelper.CanManageUsers);
-                case "GroupCreateViewModel":
-                    return await Authenticate(
-                        PermissionHelper.CanManageGroups,
-                        PermissionHelper.CanSeeOtherProfiles);
-                case "GroupEditViewModel":
-                    return await Authenticate(
-                       PermissionHelper.CanManageGroups,
-                       PermissionHelper.CanSeeOtherProfiles);
-                case "GroupDeleteViewModel":
-                    return await Authenticate(
-                       PermissionHelper.CanManageGroups,
-                       PermissionHelper.CanSeeOtherProfiles);
-                case "GroupSubjectCoordinatorViewModel":
-                    return await Authenticate(
-                        PermissionHelper.CanEditOtherSchedules,
-                        PermissionHelper.CanEditOwnSchedule);
-                case "PlacesViewTableViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "PlaceCreateViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "PlaceEditViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "PlaceDeleteViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "SubjectViewTableViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "SubjectCreateViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "SubjectEditViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "SubjectDeleteViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "CurrentProfileViewModel": return await Authenticate(PermissionHelper.CanSeeOwnProfile);
-                case "FacultyCreateViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "FacultyEditViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                case "MajorManagementViewModel": return await Authenticate(PermissionHelper.CanModifyData);
-                default: return false;
-            }
+                
+                "UsersCreateViewModel" => await Authenticate(PermissionHelper.CanManageUsers),
+                "UsersEditViewModel" => await Authenticate(PermissionHelper.CanManageUsers),
+                "UsersDeleteViewModel" => await Authenticate(PermissionHelper.CanManageUsers),
+                "LessonsViewTableViewModel" => await Authenticate(PermissionHelper.CanSeeOwnSchedule),
+                "LessonsCreateViewModel" => await Authenticate(
+                                        PermissionHelper.CanSeeOwnSchedule,
+                                        PermissionHelper.CanEditOwnSchedule,
+                                        PermissionHelper.CanSeeOtherSchedules,
+                                        PermissionHelper.CanEditOtherSchedules),
+                "LessonsEditViewModel" => await Authenticate(
+                                       PermissionHelper.CanSeeOwnSchedule,
+                                       PermissionHelper.CanEditOwnSchedule,
+                                       PermissionHelper.CanSeeOtherSchedules,
+                                       PermissionHelper.CanEditOtherSchedules),
+                "LessonsDeleteViewModel" => await Authenticate(
+                                       PermissionHelper.CanSeeOwnSchedule,
+                                       PermissionHelper.CanEditOwnSchedule,
+                                       PermissionHelper.CanSeeOtherSchedules,
+                                       PermissionHelper.CanEditOtherSchedules),
+                "GroupsViewTableViewModel" => await Authenticate(
+                                        PermissionHelper.CanManageGroups,
+                                        PermissionHelper.CanManageUsers),
+                "GroupCreateViewModel" => await Authenticate(
+                                        PermissionHelper.CanManageGroups,
+                                        PermissionHelper.CanSeeOtherProfiles),
+                "GroupEditViewModel" => await Authenticate(
+                                       PermissionHelper.CanManageGroups,
+                                       PermissionHelper.CanSeeOtherProfiles),
+                "GroupDeleteViewModel" => await Authenticate(
+                                       PermissionHelper.CanManageGroups,
+                                       PermissionHelper.CanSeeOtherProfiles),
+                "GroupSubjectCoordinatorViewModel" => await Authenticate(
+                                        PermissionHelper.CanEditOtherSchedules,
+                                        PermissionHelper.CanEditOwnSchedule),
+                "PlacesViewTableViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "PlaceCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "PlaceEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "PlaceDeleteViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "SubjectViewTableViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "SubjectCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "SubjectEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "SubjectDeleteViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "CurrentProfileViewModel" => await Authenticate(PermissionHelper.CanSeeOwnProfile),
+                "FacultyCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "FacultyEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "MajorManagementViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                _ => false,
+            };
         }
+
+       
+        
 
 
         private async Task ChangePageView(object? param)
@@ -254,15 +144,15 @@ namespace Projekt.ViewModels
                 if (!table.ConfirmExit()) return;
             }
 
-            if (!await CheckPageModelPermissions(param)) return;
+            if (param is not string pageViewModelName || Wrapper == null) return;
+            if (!await CheckPageModelPermissions(pageViewModelName)) return;
 
-            if (param is not string pageViewModelName || _model?.LoginWrapper == null) return;
 
          
             Type? viewModelType = Type.GetType($"Projekt.ViewModels.{pageViewModelName}");
             if (viewModelType == null) return;
 
-            CurrentPageViewModel = Activator.CreateInstance(viewModelType, _model.LoginWrapper) as IPageViewModel;
+            CurrentPageViewModel = Activator.CreateInstance(viewModelType, Wrapper) as IPageViewModel;
 
 
             // przypadki szczególne - gdzie samo zbudowanie ViewModela nie wystarczy
@@ -287,8 +177,11 @@ namespace Projekt.ViewModels
 
         private async Task<bool> Authenticate(params int[] requiredPermissions)
         {
-            return _model?.LoginWrapper != null && await _model.LoginWrapper.Authenticate();
+            return Wrapper != null && await Wrapper.Authenticate(requiredPermissions);
         }
         #endregion
+         
     }
+
+
 }
