@@ -283,7 +283,6 @@ namespace Projekt.ViewModels
                             PermissionHelper.CanEditOwnSchedule))
                             return;
                         CurrentPageViewModel = new GroupSubjectCoordinatorViewModel(_model.LoginWrapper);
-                        await ((GroupSubjectCoordinatorViewModel)CurrentPageViewModel).LoadDataAsync();
                         break;
                     case "PlacesViewTableViewModel":
                         CurrentPageViewModel = new PlaceViewTableViewModel(_model.LoginWrapper);

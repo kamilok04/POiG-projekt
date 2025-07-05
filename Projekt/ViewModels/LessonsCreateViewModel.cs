@@ -253,7 +253,7 @@ namespace Projekt.ViewModels
 
         private async Task LoadAsync<T>(ObservableCollection<T> TList) where T : class
         {
-            List<T>? Ts = await RetrieveService.GetAllAsync<T>(wrapper);
+            List<T>? Ts = await Model.GetAllAsync<T>();
             if (Ts == null) return;
 
             TList.Clear();
