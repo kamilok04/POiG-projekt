@@ -155,6 +155,8 @@ namespace Projekt.Models
                 return LoginAccountBlocked;
             }
 
+            int loginState = LoginUndefined;
+
 
             // Jeśli użytkownik jest zalogowany, kontynuuj jego sesję
             Dictionary<string, object> param = new() { { "@username", UserName ?? string.Empty } };
@@ -166,6 +168,7 @@ namespace Projekt.Models
                     {
                         var result = task.Result[0];
                         SessionToken = (string)result["token"];
+                        loginState = LoginOK;
                     }
                     else
                     {
@@ -179,6 +182,9 @@ namespace Projekt.Models
                     }
 
                 });
+
+            if (loginState == LoginOK) return LoginOK; // kontynuuj aktywną sesję
+
             SessionToken ??= Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
 
@@ -186,7 +192,6 @@ namespace Projekt.Models
             // Corner case: token przedawni się w trakcie logowania
             // Wtedy błąd "niepoprawne logowanie", a druga próba działa, bo usuwa już-starego tokena
 
-            int loginState = LoginUndefined;
 
             await DBHandler.ExecuteNonQueryAsync(
                 "INSERT INTO sesje (login, token, uprawnienia) VALUES (@username, @token, @permissions);"
