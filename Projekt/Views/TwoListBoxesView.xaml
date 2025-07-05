@@ -19,14 +19,14 @@
 
         <Label  Content="{Binding LeftPaneHeader,FallbackValue='Left Pane'}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label  Grid.Column="2" Content="{Binding RightPaneHeader,FallbackValue='Right Pane'}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <ListBox  Name="LeftPane" Grid.Row="1" ItemsSource="{Binding LeftPaneItems}" SelectedItem="{Binding SelectedLeftPaneItem}"></ListBox>
-        <ListBox Name="RightPane" Grid.Row="1" ItemsSource="{Binding RightPaneItems}" SelectedItem="{Binding SelectedRightPaneItem}" Grid.Column="2"></ListBox>
+        <ListBox  Name="LeftPane" Grid.Row="1" ItemsSource="{Binding LeftPaneItems}" SelectedItem="{Binding LeftPaneSelectedItem}"></ListBox>
+        <ListBox Name="RightPane" Grid.Row="1" ItemsSource="{Binding RightPaneItems}" SelectedItem="{Binding RightPaneSelectedItem}" Grid.Column="2"></ListBox>
 
         <DockPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding Move}" CommandParameter="{Binding LeftPaneItems}" Content="&lt;"/>
-            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding Move}" CommandParameter="{Binding RightPaneItems}" Content="&gt;"/>
-            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAll}" CommandParameter="{Binding LeftPaneItems}" Content="&lt;&lt;"/>
-            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAll}" CommandParameter="{Binding RightPaneItems}" Content="&gt;&gt;"/>
+            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveCommand}" CommandParameter="{Binding LeftPaneItems}" Content="&lt;"/>
+            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveCommand}" CommandParameter="{Binding RightPaneItems}" Content="&gt;"/>
+            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAllCommand}" CommandParameter="{Binding LeftPaneItems}" Content="&lt;&lt;"/>
+            <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAllCommand}" CommandParameter="{Binding RightPaneItems}" Content="&gt;&gt;"/>
         </DockPanel>
     </Grid>
 </UserControl>

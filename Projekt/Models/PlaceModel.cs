@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Projekt
+namespace Projekt.Models
 {
     public class PlaceModel
     {

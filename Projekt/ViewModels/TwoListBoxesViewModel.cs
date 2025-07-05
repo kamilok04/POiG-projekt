@@ -7,17 +7,41 @@ using System.Linq;
 using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public abstract class TwoListBoxesViewModel : ObservableObject
+    public  class TwoListBoxesViewModel : ObservableObject
     {
-        public ObservableCollection<object> LeftPaneItems = new();
+
+        public string LeftPaneHeader { get; set; } = "Left Pane";
+        public string RightPaneHeader { get; set; } = "Right Pane";
+
+        private ObservableCollection<object> _leftPaneItems = new();
         private object? _leftPaneSelectedItem;
 
-        public ObservableCollection<object> RightPaneItems = new();
+        private ObservableCollection<object> _rightPaneItems = new();
         private object? _rightPaneSelectedItem;
 
+
+        public ObservableCollection<object> LeftPaneItems
+        {
+            get => _leftPaneItems;
+            set
+            {
+                _leftPaneItems = value;
+                OnPropertyChanged(nameof(LeftPaneItems));
+            }
+        }
+        public ObservableCollection<object> RightPaneItems
+        {
+            get => _rightPaneItems;
+            set
+            {
+                _rightPaneItems = value;
+                OnPropertyChanged(nameof(RightPaneItems));
+            }
+        }
         public object? LeftPaneSelectedItem
         {
             get => _leftPaneSelectedItem;
@@ -41,17 +65,37 @@ namespace Projekt.ViewModels
         private object? GetSelectedItem(ObservableCollection<object> source)
             => source == LeftPaneItems ? LeftPaneSelectedItem : RightPaneSelectedItem;
 
-        private object? SetSelectedItem(ObservableCollection<object> source, object? value)
-        => source == LeftPaneItems ? LeftPaneSelectedItem = value : RightPaneSelectedItem = value; 
+        public object? SetSelectedItem(ObservableCollection<object> source, object? value)
+        => source == LeftPaneItems ? LeftPaneSelectedItem = value : RightPaneSelectedItem = value;
 
-        public abstract void GetData();
+        private ICommand? _moveCommand;
+        public ICommand MoveCommand
+        {
+            get => _moveCommand ??= new RelayCommand(
+                target => Move((dynamic?) target));
+        }
+
+        private ICommand? _moveAllCommand;
+        public ICommand MoveAllCommand
+        {
+            get => _moveAllCommand ??= new RelayCommand(
+                target => MoveAll((dynamic?)target));
+        }
+
+        public Func<Task> GetData;
 
         public TwoListBoxesViewModel()
         {
 
         }
 
-        void Move( ObservableCollection<object> target)
+        public TwoListBoxesViewModel(string LeftHeader, string RightHeader)
+        {
+            LeftPaneHeader = LeftHeader;
+            RightPaneHeader = RightHeader;
+        }
+
+         void Move( ObservableCollection<object> target)
         {
              var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
 
@@ -65,9 +109,19 @@ namespace Projekt.ViewModels
         }
 
         void MoveAll(ObservableCollection<object> target)
-        { foreach (object obj in target) Move(target); }
-        
-        
+        {
+            var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
+
+            foreach (var item in source.ToList()) 
+            {
+                target.Add(item);
+            }
+
+          
+            source.Clear();
+        }
+
+
 
     }
 }

@@ -35,7 +35,7 @@ namespace Projekt.Models
 
             try
             {
-                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(defaultQuery);
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(defaultQuery,((ITable)this).DefaultParameters);
                 return result ?? new List<Dictionary<string, object>>();
             }
             catch (Exception ex)

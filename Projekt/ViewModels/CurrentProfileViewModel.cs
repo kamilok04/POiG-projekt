@@ -96,7 +96,7 @@ namespace Projekt.ViewModels
             try
             {
                 await _loginWrapper.Authenticate(PermissionHelper.CanSeeOwnProfile);
-                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync("SELECT Login, Imię, Nazwisko, 'Data Urodzenia', 'Adres e-mail', Uprawnienia, 'Nr indeksu', 'Tytuł naukowy' FROM dane_uzytkownika WHERE login = @username",
+                var result = await _loginWrapper.DBHandler.ExecuteQueryAsync("SELECT login Login, imie Imię, nazwisko Nazwisko, data_urodzenia 'Data Urodzenia', email 'Adres e-mail',uprawnienia Uprawnienia,indeks 'Nr indeksu',tytul 'Tytuł naukowy' FROM dane_uzytkownika WHERE login = @username",
                     new Dictionary<string, object>() {
                     { "@username", _loginWrapper.Username ?? string.Empty }
                     });
