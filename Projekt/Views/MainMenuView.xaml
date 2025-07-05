@@ -81,11 +81,6 @@
                            LargeIcon="/Resources/minus-256.png" 
                            Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="LessonsDeleteViewModel"/>
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Zarządzanie prowadzącymi">
-                    <Fluent:Button Header="Przypisz prowadzących do grup przedmiotowych"
-                                   Command="{Binding ChangeCurrentPageViewCommand}"
-                                   CommandParameter="GroupSubjectCoordinatorViewModel"></Fluent:Button>
-                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Przedmioty">
                         <Fluent:RibbonGroupBox Header="Przedmioty">
