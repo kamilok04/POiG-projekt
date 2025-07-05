@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -43,5 +44,8 @@
             Width="100" Margin="0,0,10,0"
             HorizontalAlignment="Right"/>
         </Grid>
+        <Label Grid.Row="4" Grid.ColumnSpan="2" Foreground="Green" Content="{Binding SuccessString,Mode=OneWay,FallbackValue='Dodano pomyślnie!'}" FontSize="24"></Label>
+        <Label Grid.Row="4" Grid.ColumnSpan="2" Foreground="Red" Content="{Binding ErrorString, Mode=OneWay,FallbackValue='Błąd dodawania!'}" FontSize="24"></Label>
+
     </Grid>
 </UserControl>

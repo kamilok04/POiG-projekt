@@ -102,8 +102,8 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewmodels:TwoListBoxesViewModel}">
-                <views:TwoListBoxesView/>
-            </DataTemplate>
+               <views:TwoListBoxesView/> 
+            </DataTemplate> 
        </ResourceDictionary>  
    </Application.Resources>  
 </Application>
