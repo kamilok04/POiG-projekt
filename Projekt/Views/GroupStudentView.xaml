@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Projekt.Views"
+             xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+              d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupStudentViewModel}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,11 +25,32 @@
         <Label>Grupa:</Label>
         <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding Groups}"/>
 
-        <Label Grid.Row="1">Przedmiot:</Label>
-        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Subjects}"/>
 
-        <local:TwoListBoxesView  Grid.Row="2" Grid.ColumnSpan="2" />
+        <local:TwoDataGridsView Grid.Row="2" Grid.ColumnSpan="2" />
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label>Filtruj studentów:</Label>
+            <DockPanel Grid.Column="1">
+                <Label>Wydział:</Label>
+                <ComboBox ItemsSource="{Binding LoadFaculties.Result}" SelectedItem="{Binding SelectedFaculty}">
+                </ComboBox>
+            </DockPanel><DockPanel Grid.Column="2">
+                <Label >Kierunek:</Label>
+                <ComboBox ItemsSource="{Binding LoadMajors.Result}" SelectedItem="{Binding SelectedMajor}">
+                </ComboBox>
 
+            </DockPanel><DockPanel Grid.Column="3">
+                <Label >Semestr:</Label>
+                <ComboBox ItemsSource="{Binding Semesters}" SelectedItem="{Binding SelectedSemester}">
+                </ComboBox>
+            </DockPanel>
+
+        </Grid>
         <Grid Grid.Row="3" Grid.Column="1" Margin="0,10,0,10" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -37,7 +60,7 @@
             Command="{Binding SaveCommand}" 
             Width="100" Margin="0,0,10,0" 
             HorizontalAlignment="Right"
-            IsEnabled="{Binding IsLoading}"/>
+            />
             <Button Grid.Column="1"  
             Content="Anuluj" 
             Command="{Binding CancelCommand}" 

@@ -22,6 +22,9 @@ namespace Projekt.Miscellaneous
                 var t when t == typeof(SubjectModel) => await GetSubjectAsync(wrapper, (int)key) as T,
                 var t when t == typeof(GroupEditModel) => await GetGroupAsync(wrapper, (int)key) as T,
                 var t when t == typeof(StudentModel) => await GetStudentAsync(wrapper, (string)key) as T,
+                var t when t == typeof(FacultyModel) => await GetFacultyAsync(wrapper, (string)key) as T,
+                var t when t == typeof(MajorDataModel) => await GetMajorDataAsync(wrapper, (int)key) as T,
+                var t when t == typeof(MajorModel) => await GetMajorAsync(wrapper, (int)key) as T,
                 _ => null
             };
         }
@@ -36,6 +39,8 @@ namespace Projekt.Miscellaneous
                 var t when t == typeof(StudentModel) => await GetAllStudentsAsync(wrapper) as List<T>,
                 var t when t == typeof(UserModel) => await GetAllUsersAsync(wrapper) as List<T>,
                 var t when t == typeof(LessonModel) => await GetAllLessonsAsync(wrapper) as List<T>,
+                var t when t == typeof(FacultyModel) => await GetAllFacultiesAsync(wrapper) as List<T>,
+                var t when t == typeof(MajorModel) => await GetAllMajorsAsync(wrapper) as List<T>,
                 _ => null
             };
         }
@@ -45,7 +50,7 @@ namespace Projekt.Miscellaneous
             var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
                            "SELECT * " +
                            "FROM dane_uzytkownika " +
-                           "WHERE login = (SELECT login FROM prowadzacy WHERE login = @login);", new() { { "@login", login} });
+                           "WHERE login = (SELECT login FROM prowadzacy WHERE login = @login);", new() { { "@login", login } });
             return new CoordinatorModel(result[0]);
         }
         private static async Task<PlaceModel?> GetPlaceAsync(LoginWrapper loginWrapper, int ID)
@@ -53,7 +58,7 @@ namespace Projekt.Miscellaneous
             var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
                           "SELECT id, id_wydzialu, id_adresu, numer, pojemnosc " +
                           "FROM miejsce " +
-                          "WHERE id = @id;", new() { { "@id",ID} });
+                          "WHERE id = @id;", new() { { "@id", ID } });
             return new PlaceModel(result[0]);
         }
         private static async Task<UserModel?> GetUserAsync(LoginWrapper loginWrapper, string login)
@@ -61,7 +66,7 @@ namespace Projekt.Miscellaneous
             var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
                 "SELECT * " +
                 "FROM dane_uzytkownika " +
-                "WHERE login = @login;", new() { { "@login", login} });
+                "WHERE login = @login;", new() { { "@login", login } });
             return new UserModel(result[0]);
         }
         private static async Task<List<UserModel>?> GetAllUsersAsync(LoginWrapper loginWrapper)
@@ -152,6 +157,43 @@ namespace Projekt.Miscellaneous
                 "WHERE login = (SELECT login FROM student WHERE login = @login);", new() { { "@login", login } });
             if (result.Count == 0) return null;
             return new StudentModel(result[0]);
+        }
+
+        private static async Task<FacultyModel?> GetFacultyAsync(LoginWrapper loginWrapper, string facultyId)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT * FROM wydzial WHERE nazwa_krotka = @id;", new() { { "@id", facultyId } });
+            if (result.Count == 0) return null;
+            return new FacultyModel(result[0]);
+        }
+
+        private static async Task<MajorDataModel?> GetMajorDataAsync(LoginWrapper loginWrapper, int majorID)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT nazwa FROM dane_kierunku WHERE id = @id;", new() { { "@id", majorID } });
+            if (result.Count == 0) return null;
+            return new MajorDataModel((string)result[0]["nazwa"]);
+        }
+
+        private static async Task<List<FacultyModel>?> GetAllFacultiesAsync(LoginWrapper loginWrapper)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT * FROM wydzial;");
+            return result.Select(row => new FacultyModel(row)).ToList();
+        }
+        private static async Task<MajorModel?> GetMajorAsync(LoginWrapper loginWrapper, int majorId)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT * FROM kierunek WHERE id = @id;", new() { { "@id", majorId } });
+            if (result.Count == 0) return null;
+            return new MajorModel(result[0], loginWrapper);
+        }
+
+        private static async Task<List<MajorModel>?> GetAllMajorsAsync(LoginWrapper loginWrapper)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT * FROM kierunek;");
+            return result.Select(row => new MajorModel(row, loginWrapper)).ToList();
         }
 
     }

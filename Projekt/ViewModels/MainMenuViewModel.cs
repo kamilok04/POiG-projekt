@@ -15,7 +15,6 @@ namespace Projekt.ViewModels
         private MainMenuModel? _model { get; init; }
 
         private ICommand? _changePageView;
-        private ConditionalContentControlViewModel? _subView { get; init; }
 
         public LoginWrapper Wrapper { get; set; }
         
@@ -117,6 +116,11 @@ namespace Projekt.ViewModels
                 "GroupSubjectCoordinatorViewModel" => await Authenticate(
                                         PermissionHelper.CanEditOtherSchedules,
                                         PermissionHelper.CanEditOwnSchedule),
+                "GroupStudentViewModel" => await Authenticate(
+                                        PermissionHelper.CanEditOwnSchedule,
+                                        PermissionHelper.CanEditOtherSchedules,
+                                        PermissionHelper.CanEditOtherProfiles,
+                                        PermissionHelper.CanEditOwnProfile),
                 "PlacesViewTableViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "PlaceCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "PlaceEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),
@@ -156,6 +160,7 @@ namespace Projekt.ViewModels
 
 
             // przypadki szczególne - gdzie samo zbudowanie ViewModela nie wystarczy
+            // TODO: pozbyć się ich z użyciem NotifyTaskCompletion
             switch (pageViewModelName)
             {
                 case "LessonsCreateViewModel":

@@ -67,6 +67,9 @@
                     <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel" Visibility="{Binding Path='[GroupEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                     <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupEditViewModel" Visibility="{Binding Path='[GroupEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Zarządzanie grupami" MinWidth="160">
+                    <Fluent:Button Header="Przypisz studentów do grup" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupStudentViewModel" Visibility="{Binding Path='[GroupStudentViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}"/>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Miejsca" >
                 <Fluent:RibbonGroupBox Header="Miejsca" MinWidth="68">
@@ -74,6 +77,7 @@
                     <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceEditViewModel" Visibility="{Binding Path='[PlaceEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                     <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="PlaceDeleteViewModel" Visibility="{Binding Path='[PlaceDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
+              
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 
