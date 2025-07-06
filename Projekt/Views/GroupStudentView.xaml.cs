@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Projekt.Views
 {
     /// <summary>
-    /// Logika interakcji dla klasy LessonsTableView.xaml
+    /// Interaction logic for GroupSubjectCoordinatorView.xaml
     /// </summary>
-    public partial class LessonsTableView : UserControl
+    public partial class GroupStudentView : UserControl
     {
-        public LessonsTableView()
+        public GroupStudentView()
         {
             InitializeComponent();
         }

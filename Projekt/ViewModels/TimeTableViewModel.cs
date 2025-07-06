@@ -19,6 +19,7 @@ namespace Projekt.ViewModels
             
             foreach(string day in _daysOfWeek)
             {
+                // weź zajęcia dla danego dnia dla wszystkich grup, do jakich należy użytkownik
 
             }
         }

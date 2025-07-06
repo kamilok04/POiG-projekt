@@ -164,6 +164,7 @@ namespace Projekt.ViewModels
                         await lessonsCreateModel.LoadAll();
                     }
                     break;
+          
                 case "GroupSubjectCoordinatorViewModel":
                     if (CurrentPageViewModel is GroupSubjectCoordinatorViewModel groupSubjectCoordinatorModel)
                     {

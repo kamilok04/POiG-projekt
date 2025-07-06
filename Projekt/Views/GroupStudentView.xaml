@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Projekt.Views.GroupSubjectCoordinatorView"
+﻿<UserControl x:Class="Projekt.Views.GroupStudentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -23,8 +23,8 @@
         <Label>Grupa:</Label>
         <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding Groups}"/>
 
-        <Label Grid.Row="1">Rocznik:</Label>
-        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Yearbooks}"/>
+        <Label Grid.Row="1">Przedmiot:</Label>
+        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Subjects}"/>
 
         <local:TwoListBoxesView  Grid.Row="2" Grid.ColumnSpan="2" />
 

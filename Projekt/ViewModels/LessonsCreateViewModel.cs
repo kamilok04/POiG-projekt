@@ -35,11 +35,12 @@ namespace Projekt.ViewModels
         private List<string> _daysOfWeek = new List<string> { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
         private string? _selectedDayOfWeek;
   
-        private TimeOnly? _startTime;
-        private TimeOnly? _endTime;
+        private TimeOnly _startTime;
+        private TimeOnly _endTime;
         private string? _successString = "";
 
         private string? _errorString= "";
+        private string? _infoString = "";
       
 
         private LessonsCreateModel Model { get; init; }
@@ -68,6 +69,8 @@ namespace Projekt.ViewModels
             set
             {
                 _successString = value;
+                _errorString = "";
+                _infoString = "";
                 OnPropertyChanged(nameof(SuccessString));
             }
         }
@@ -78,6 +81,8 @@ namespace Projekt.ViewModels
             set
             {
                 _errorString = value;
+                _successString = "";
+                _infoString = "";
                 OnPropertyChanged(nameof(ErrorString));
             }
         }
@@ -93,6 +98,16 @@ namespace Projekt.ViewModels
                     _selectedType = value;
                     OnPropertyChanged(nameof(SelectedType));
                 }
+            }
+        }
+
+        public string InfoString
+        {
+            get => _infoString ??= "";
+            set
+            {
+                _infoString = value;
+                OnPropertyChanged(nameof(InfoString));
             }
         }
 
@@ -143,7 +158,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public TimeOnly? StartTime
+        public TimeOnly StartTime
         {
             get => _startTime;
             set
@@ -156,7 +171,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public TimeOnly? EndTime
+        public TimeOnly EndTime
         {
             get => _endTime;
             set
@@ -176,6 +191,7 @@ namespace Projekt.ViewModels
                 async param => await SaveAsync(),
                 param => IsFormValid()
                 );
+            set => _saveCommand = value; // Nadpisz komendę w edytorze
         }
 
         private ICommand _cancelCommand;
@@ -183,6 +199,19 @@ namespace Projekt.ViewModels
         {
             get => _cancelCommand ??= new RelayCommand(
                 param => Cancel());
+        }
+
+        public void LoadLesson(LessonModel model)
+        {
+            Cancel();
+            SelectedGroup = model.Group != null ? Groups.FirstOrDefault(g => g.GroupId == model.Group.GroupId) : null;
+            SelectedPlace = model.Place != null ? Places.FirstOrDefault(p => p.Id == model.Place.Id) : null;
+            SelectedSubject = model.Subject != null ? Subjects.FirstOrDefault(s => s.Id == model.Subject.Id) : null;
+            SelectedDayOfWeek = !string.IsNullOrEmpty(model.DayOfWeek) && DaysOfWeek.Any(d => string.Equals(d, model.DayOfWeek, StringComparison.OrdinalIgnoreCase))
+                ? DaysOfWeek.FirstOrDefault(d => string.Equals(d, model.DayOfWeek, StringComparison.OrdinalIgnoreCase))
+                : null;
+            StartTime = model.TimeStart;
+            EndTime = model.TimeEnd;
         }
 
         #endregion
@@ -196,11 +225,10 @@ namespace Projekt.ViewModels
             if (success)
             {
                 SuccessString = "Dodano pomyślnie!";
-                ErrorString = "";
+               
             }
             else
             {
-                SuccessString = "";
                 ErrorString = "Błąd podczas dodawania!";
 
             }
@@ -215,8 +243,6 @@ namespace Projekt.ViewModels
                 SelectedPlace == null ||
                 SelectedSubject == null ||
                 SelectedType == null ||
-                StartTime == null ||
-                EndTime == null ||
                 EndTime <= StartTime
 
                 );
@@ -224,15 +250,15 @@ namespace Projekt.ViewModels
 
         }
 
-        private void Cancel()
+        public void Cancel()
         {
             SelectedGroup = null;
             SelectedDayOfWeek = null;
             SelectedPlace = null;
             SelectedSubject = null;
             SelectedType = null;
-            StartTime = null;
-            EndTime = null;
+            StartTime = new(0);
+            EndTime = new(0);
             ErrorString = "";
             SuccessString = "";
         }

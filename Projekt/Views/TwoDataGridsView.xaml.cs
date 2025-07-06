@@ -16,15 +16,13 @@ using System.Windows.Shapes;
 namespace Projekt.Views
 {
     /// <summary>
-    /// Interaction logic for LessonsEditView.xaml
+    /// Interaction logic for TwoListBoxesView.xaml
     /// </summary>
-    public partial class LessonsEditView : UserControl
+    public partial class TwoDataGridsView : UserControl
     {
-        public LessonsEditView()
+        public TwoDataGridsView()
         {
             InitializeComponent();
         }
-
-   
     }
 }

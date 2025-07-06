@@ -57,10 +57,7 @@
             <DataTemplate DataType="{x:Type viewmodels:LessonsEditViewModel}">
                 <views:LessonsEditView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:LessonsViewTableViewModel}">
-                <views:LessonsTableView/>
-            </DataTemplate>
-
+       
 
             <DataTemplate DataType="{x:Type viewmodels:PlaceCreateViewModel}">
                 <views:PlaceCreatorView/>
@@ -105,7 +102,10 @@
 
             <DataTemplate DataType="{x:Type viewmodels:TwoListBoxesViewModel}">
                <views:TwoListBoxesView/> 
-            </DataTemplate> 
-       </ResourceDictionary>  
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:TwoDataGridsViewModel}">
+                <views:TwoDataGridsView/>
+            </DataTemplate>
+        </ResourceDictionary>  
    </Application.Resources>  
 </Application>

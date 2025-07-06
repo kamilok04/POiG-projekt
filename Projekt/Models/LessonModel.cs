@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Projekt.Models
 {
-    public class LessonModel : BaseTableModel, ITable
+    public class LessonModel : ObservableObject, ITable
     {
-
         string ITable.TableName => "zajecie";
-        string? ITable.DefaultQuery => "SELECT dzien_tygodnia, godzina_start, godzina_stop, id_przedmiotu, id_grupy, id_miejsca " +
+        string? ITable.DefaultQuery => "SELECT id, dzien_tygodnia, godzina_start, godzina_stop, id_przedmiotu, id_grupy, id_miejsca " +
                 "FROM zajecie " +
                 "WHERE id = @id";
         Dictionary<string, object>? ITable.DefaultParameters => new() { { "@id", _id } };
 
         private int _id { get; set; }
+        private string _dayOfWeek { get; set; } = string.Empty; // Fix for CS8618
         private TimeOnly _timeStart { get; set; }
         private TimeOnly _timeEnd { get; set; }
         private SubjectModel? _subject { get; set; }
@@ -24,13 +24,22 @@ namespace Projekt.Models
         private GroupEditModel? _group { get; set; }
         private List<string>? _coordinators { get; set; }
 
-        public LessonModel(int id, LoginWrapper wrapper)  : base(wrapper)
-        {
-            _id = id;
-    
-           
-        }
+        private int PlaceID { get; set; }
+        private int GroupID { get; set; }
+        private int SubjectID { get; set; }
 
+        
+
+        public LessonModel(Dictionary<string, object> row)
+        {
+            Id = (int)row["id"];
+            TimeStart = TimeOnly.FromTimeSpan((TimeSpan)row["godzina_start"]);
+            TimeEnd = TimeOnly.FromTimeSpan((TimeSpan)row["godzina_stop"]);
+            DayOfWeek = (string)row["dzien_tygodnia"];
+            PlaceID = (int)row["id_miejsca"];
+            SubjectID = (int)row["id_przedmiotu"];
+            GroupID = (int)row["id_grupy"];
+        }
 
         public int Id
         {
@@ -61,7 +70,7 @@ namespace Projekt.Models
             }
         }
 
-        public SubjectModel Subject
+        public SubjectModel? Subject
         {
             get { return _subject; }
             set
@@ -71,7 +80,7 @@ namespace Projekt.Models
             }
         }
 
-        public PlaceModel Place
+        public PlaceModel? Place
         {
             get { return _place; }
             set
@@ -81,7 +90,7 @@ namespace Projekt.Models
             }
         }
 
-        public GroupEditModel Group
+        public GroupEditModel? Group
         {
             get => _group;
             set
@@ -101,37 +110,23 @@ namespace Projekt.Models
             }
         }
 
- 
-
-        public async Task InitializeAsync()
+        public string DayOfWeek
         {
-            var DBHandler = LoginWrapper.DBHandler;
-            var result = await DBHandler.ExecuteQueryAsync(
-                "SELECT dzien_tygodnia, godzina_start, godzina_stop, id_przedmiotu, id_grupy, id_miejsca " +
-                "FROM zajecie " +
-                "WHERE id = @id", new() { { "@id", _id } });
-            if (result == null) return;
-            var row = result[0];
-
-            TimeStart = (TimeOnly)row["godzina_start"];
-            TimeEnd = (TimeOnly)row["godzina_stop"];
-
-            int PlaceID = (int)row["id_miejsca"];
-            int SubjectID = (int)row["id_przedmiotu"];
-            int GroupID = (int)row["id_grupy"];
-
-            Place = new(DBHandler.ExecuteQueryAsync(
-                "SELECT * FROM miejsce WHERE id = @id", new() { { "@id",PlaceID} }).Result[0]);
-            Subject = new(DBHandler.ExecuteQueryAsync(
-                "SELECT * from przedmiot WHERE id = @id;", new() { { "@id", SubjectID } }).Result[0]);
-            Group = new(LoginWrapper);
-            await Group.LoadGroupData(GroupID);
-
-
-
-
+            get { return _dayOfWeek; }
+            set
+            {
+                _dayOfWeek = value;
+                OnPropertyChanged(nameof(DayOfWeek));
+            }
         }
 
+        public async Task LoadDataAsync(LoginWrapper wrapper)
+        {
+            Place = await RetrieveService.GetAsync<PlaceModel>(wrapper, PlaceID);
+            Subject = await RetrieveService.GetAsync<SubjectModel>(wrapper, SubjectID);
+            Group = new(wrapper);
+            await Group.LoadGroupData(GroupID);
+        }
     }
 
 
