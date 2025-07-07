@@ -15,6 +15,9 @@ namespace Projekt.Miscellaneous
         private string? _token;
         private bool? _valid;
 
+        /// <summary>
+        /// Flaga informująca o poprawności sesji.
+        /// </summary>
         public bool Valid
         {
             get => _valid ?? throw new ArgumentNullException(nameof(_valid));
@@ -24,6 +27,10 @@ namespace Projekt.Miscellaneous
                 OnPropertyChanged(nameof(Valid));
             }
         }
+
+        /// <summary>
+        /// Token autoryzacyjny użytkownika.
+        /// </summary>
         public string? Token
         {
             get => _token;
@@ -32,6 +39,10 @@ namespace Projekt.Miscellaneous
                 _token = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
+
+        /// <summary>
+        /// Handler bazy danych powiązany z użytkownikiem.
+        /// </summary>
         public DatabaseHandler DBHandler
         {
             get => _DBHandler ?? throw new ArgumentNullException();
@@ -40,6 +51,10 @@ namespace Projekt.Miscellaneous
                 _DBHandler = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
+
+        /// <summary>
+        /// Nazwa użytkownika.
+        /// </summary>
         public string? Username
         {
             get => _username;
@@ -49,6 +64,12 @@ namespace Projekt.Miscellaneous
             }
         }
 
+        /// <summary>
+        /// Inicjalizuje nową instancję klasy LoginWrapper z podanym handlerem bazy, nazwą użytkownika i tokenem.
+        /// </summary>
+        /// <param name="DBHandler">Handler bazy danych.</param>
+        /// <param name="username">Nazwa użytkownika.</param>
+        /// <param name="token">Token autoryzacyjny.</param>
         public LoginWrapper(DatabaseHandler DBHandler, string username, string token)
         {
             this.DBHandler = DBHandler;
@@ -57,11 +78,10 @@ namespace Projekt.Miscellaneous
         }
 
         /// <summary>
-        /// Porównuje uprawnienia w bazie danych z wymaganymi.
+        /// Sprawdza, czy użytkownik posiada wymagane uprawnienia.
         /// </summary>
-        /// 
         /// <param name="requiredPermissions">Wymagane uprawnienia.</param>
-        /// <returns>Czy użytkownik ma żądane uprawnienia</returns>
+        /// <returns>True, jeśli użytkownik ma żądane uprawnienia.</returns>
         public async Task<bool> Authenticate(params int[] requiredPermissions)
         {
             int currentPermissions = await DBHandler.AuthenticateAsync(this);
@@ -69,7 +89,9 @@ namespace Projekt.Miscellaneous
             return PermissionHelper.CheckPermissions(currentPermissions, requiredPermissions);
         }
 
-
+        /// <summary>
+        /// Wylogowuje użytkownika i zamyka sesję.
+        /// </summary>
         public void Logout()
         {
             _token = null;
@@ -77,6 +99,10 @@ namespace Projekt.Miscellaneous
             _username = null;
         }
 
+        /// <summary>
+        /// Niszczy sesję użytkownika (prywatna metoda asynchroniczna).
+        /// </summary>
+        /// <param name="username">Nazwa użytkownika.</param>
         private async void DestroySession(string? username)
         {
             if (!string.IsNullOrEmpty(username))

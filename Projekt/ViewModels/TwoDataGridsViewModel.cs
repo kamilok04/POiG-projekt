@@ -11,10 +11,19 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
+    /// <summary>
+    /// Abstrakcyjny ViewModel do obsługi dwóch powiązanych DataGridów z funkcjonalnością przenoszenia elementów między nimi.
+    /// </summary>
     public abstract class TwoDataGridsViewModel : ObservableObject
     {
-
+        /// <summary>
+        /// Nagłówek lewego panelu.
+        /// </summary>
         public string LeftPaneHeader { get; set; } = "Left Pane";
+
+        /// <summary>
+        /// Nagłówek prawego panelu.
+        /// </summary>
         public string RightPaneHeader { get; set; } = "Right Pane";
 
         private ObservableCollection<object> _leftPaneItems = new();
@@ -23,7 +32,9 @@ namespace Projekt.ViewModels
         private ObservableCollection<object> _rightPaneItems = new();
         private object? _rightPaneSelectedItem;
 
-
+        /// <summary>
+        /// Elementy w lewym panelu.
+        /// </summary>
         public ObservableCollection<object> LeftPaneItems
         {
             get => _leftPaneItems;
@@ -33,6 +44,10 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(LeftPaneItems));
             }
         }
+
+        /// <summary>
+        /// Elementy w prawym panelu.
+        /// </summary>
         public ObservableCollection<object> RightPaneItems
         {
             get => _rightPaneItems;
@@ -42,6 +57,10 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(RightPaneItems));
             }
         }
+
+        /// <summary>
+        /// Zaznaczony element w lewym panelu.
+        /// </summary>
         public object? LeftPaneSelectedItem
         {
             get => _leftPaneSelectedItem;
@@ -52,6 +71,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Zaznaczony element w prawym panelu.
+        /// </summary>
         public object? RightPaneSelectedItem
         {
             get => _rightPaneSelectedItem;
@@ -62,13 +84,27 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Zwraca zaznaczony element z podanej kolekcji.
+        /// </summary>
+        /// <param name="source">Kolekcja źródłowa.</param>
+        /// <returns>Zaznaczony element.</returns>
         protected object? GetSelectedItem(ObservableCollection<object> source)
             => source == LeftPaneItems ? LeftPaneSelectedItem : RightPaneSelectedItem;
 
+        /// <summary>
+        /// Ustawia zaznaczony element w podanej kolekcji.
+        /// </summary>
+        /// <param name="source">Kolekcja źródłowa.</param>
+        /// <param name="value">Element do zaznaczenia.</param>
+        /// <returns>Nowo ustawiony zaznaczony element.</returns>
         protected object? SetSelectedItem(ObservableCollection<object> source, object? value)
-        => source == LeftPaneItems ? LeftPaneSelectedItem = value : RightPaneSelectedItem = value;
+            => source == LeftPaneItems ? LeftPaneSelectedItem = value : RightPaneSelectedItem = value;
 
         private ICommand? _moveCommand;
+        /// <summary>
+        /// Komenda do przenoszenia pojedynczego elementu.
+        /// </summary>
         public ICommand MoveCommand
         {
             get => _moveCommand ??= new RelayCommand(
@@ -77,6 +113,9 @@ namespace Projekt.ViewModels
         }
 
         private ICommand? _moveAllCommand;
+        /// <summary>
+        /// Komenda do przenoszenia wszystkich elementów.
+        /// </summary>
         public ICommand MoveAllCommand
         {
             get => _moveAllCommand ??= new RelayCommand(
@@ -84,53 +123,45 @@ namespace Projekt.ViewModels
                 pred => CanMove());
         }
 
+        /// <summary>
+        /// Funkcja do pobierania danych (do implementacji w pochodnych).
+        /// </summary>
         public Func<Task> GetData;
 
+        /// <summary>
+        /// Konstruktor domyślny.
+        /// </summary>
         public TwoDataGridsViewModel()
         {
-
         }
 
+        /// <summary>
+        /// Konstruktor z nagłówkami paneli.
+        /// </summary>
+        /// <param name="LeftHeader">Nagłówek lewego panelu.</param>
+        /// <param name="RightHeader">Nagłówek prawego panelu.</param>
         public TwoDataGridsViewModel(string LeftHeader, string RightHeader)
         {
             LeftPaneHeader = LeftHeader;
             RightPaneHeader = RightHeader;
         }
 
-        // void Move( ObservableCollection<object> target)
-        //{
-        //     var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
-
-        //     object? movedObject = GetSelectedItem(source);
-        //    if (movedObject == null) return;
-
-        //    source.Remove(movedObject);
-        //    if(target == RightPaneItems) 
-        //        target.Add(movedObject);
-
-
-        //}
-
+        /// <summary>
+        /// Przenosi zaznaczony element do wybranego panelu.
+        /// </summary>
+        /// <param name="target">Panel docelowy.</param>
         public abstract void Move(ObservableCollection<object> target);
+
+        /// <summary>
+        /// Przenosi wszystkie elementy do wybranego panelu.
+        /// </summary>
+        /// <param name="target">Panel docelowy.</param>
         public abstract void MoveAll(ObservableCollection<object> target);
+
+        /// <summary>
+        /// Sprawdza, czy przenoszenie elementów jest możliwe.
+        /// </summary>
+        /// <returns>True, jeśli przenoszenie jest możliwe.</returns>
         public abstract bool CanMove();
-
-        //void MoveAll(ObservableCollection<object> target)
-        //{
-        //    var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
-
-        //    if (target == RightPaneItems)
-        //    {
-        //        foreach (var item in source.ToList())
-        //        {
-        //            target.Add(item);
-        //        }
-
-        //    }
-        //    source.Clear();
-        //}
-
-
-
     }
 }

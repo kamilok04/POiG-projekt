@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\SubjectEditViewModel.cs" />
     <Compile Remove="ViewModels\TemplateViewModel.cs" />
   </ItemGroup>
 

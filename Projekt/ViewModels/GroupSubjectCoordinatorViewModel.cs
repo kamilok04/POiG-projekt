@@ -1,21 +1,18 @@
-﻿using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Asn1.Mozilla;
-using Projekt.Miscellaneous;
+﻿using Projekt.Miscellaneous;
 using Projekt.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.Pkcs;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class GroupSubjectCoordinatorViewModel: TwoListBoxesViewModel, IPageViewModel
+    /// <summary>
+    /// ViewModel do koordynowania przypisywania prowadzących do grup i przedmiotów.
+    /// </summary>
+    public class GroupSubjectCoordinatorViewModel : TwoListBoxesViewModel, IPageViewModel
     {
+        /// <summary>
+        /// Nazwa widoku strony.
+        /// </summary>
         string IPageViewModel.Name => nameof(GroupSubjectCoordinatorViewModel);
 
         private GroupEditModel? _selectedGroup;
@@ -24,26 +21,32 @@ namespace Projekt.ViewModels
         private string _errorString = "";
         private string _successString = "";
 
-
         private List<GroupEditModel> _groups { get; set; } = new();
         private List<SubjectModel> _subjects { get; set; } = new();
         private LoginWrapper wrapper { get; init; }
 
         private GroupSubjectCoordinatorModel Model { get; init; }
 
+        /// <summary>
+        /// Inicjalizuje nową instancję GroupSubjectCoordinatorViewModel.
+        /// </summary>
+        /// <param name="wrapper">Obiekt logowania.</param>
         public GroupSubjectCoordinatorViewModel(LoginWrapper wrapper)
         {
-           
             this.wrapper = wrapper;
             LeftPaneHeader = "Dostępni prowadzący";
             RightPaneHeader = "Przypisani prowadzący";
-
             Model = new(wrapper);
         }
 
-
-
+        /// <summary>
+        /// Czy trwa ładowanie danych.
+        /// </summary>
         public bool IsLoading { get; set; } = false;
+
+        /// <summary>
+        /// Komunikat o błędzie.
+        /// </summary>
         public string ErrorString
         {
             get => _errorString;
@@ -53,6 +56,10 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(ErrorString));
             }
         }
+
+        /// <summary>
+        /// Komunikat o sukcesie.
+        /// </summary>
         public string SuccessString
         {
             get => _successString;
@@ -63,17 +70,21 @@ namespace Projekt.ViewModels
             }
         }
 
-
         private ICommand? _saveCommand { get; set; }
+        /// <summary>
+        /// Komenda zapisu zmian.
+        /// </summary>
         public ICommand SaveCommand
         {
             get => _saveCommand ??= new RelayCommand(
                 async param => await Save(),
                 param => IsFormValid());
-
         }
 
         private ICommand? _cancelCommand { get; set; }
+        /// <summary>
+        /// Komenda anulowania zmian.
+        /// </summary>
         public ICommand CancelCommand
         {
             get => _cancelCommand ??= new RelayCommand(
@@ -81,14 +92,20 @@ namespace Projekt.ViewModels
             );
         }
 
+        /// <summary>
+        /// Anuluje zmiany i czyści wybory.
+        /// </summary>
         private async Task Cancel()
         {
-            SelectedGroup  = null;
+            SelectedGroup = null;
             SelectedSubject = null;
             await PrepareBoxes();
         }
 
-        private  async Task Save()
+        /// <summary>
+        /// Zapisuje przypisania prowadzących do grupy/przedmiotu.
+        /// </summary>
+        private async Task Save()
         {
             Model.Group = SelectedGroup;
             Model.Subject = SelectedSubject;
@@ -98,7 +115,8 @@ namespace Projekt.ViewModels
             }
             bool success = await Model.ExecuteAssignments();
 
-            if (success) {
+            if (success)
+            {
                 ErrorString = "";
                 SuccessString = "Edycja zakończona pomyślnie!";
             }
@@ -109,8 +127,15 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sprawdza poprawność formularza.
+        /// </summary>
+        /// <returns>True, jeśli formularz jest poprawny.</returns>
         private bool IsFormValid() => !(SelectedGroup == null || SelectedSubject == null);
 
+        /// <summary>
+        /// Lista dostępnych grup.
+        /// </summary>
         public List<GroupEditModel> Groups
         {
             get => _groups;
@@ -121,6 +146,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Lista dostępnych przedmiotów.
+        /// </summary>
         public List<SubjectModel> Subjects
         {
             get => _subjects;
@@ -131,6 +159,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Aktualnie wybrana grupa.
+        /// </summary>
         public GroupEditModel? SelectedGroup
         {
             get => _selectedGroup;
@@ -140,10 +171,12 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(SelectedGroup));
                 Model.Group = value;
                 _ = PrepareBoxes();
-
             }
         }
 
+        /// <summary>
+        /// Aktualnie wybrany przedmiot.
+        /// </summary>
         public SubjectModel? SelectedSubject
         {
             get => _selectedSubject;
@@ -153,21 +186,22 @@ namespace Projekt.ViewModels
                 OnPropertyChanged(nameof(SelectedSubject));
                 Model.Subject = value;
                 _ = PrepareBoxes();
-
             }
         }
 
-
-
+        /// <summary>
+        /// Wczytuje dane grup i przedmiotów oraz przygotowuje listy.
+        /// </summary>
         public async Task LoadDataAsync()
         {
             Groups = await LoadGroups();
             Subjects = await LoadSubjects();
-
             await PrepareBoxes();
         }
 
-     
+        /// <summary>
+        /// Przygotowuje listy prowadzących.
+        /// </summary>
         private async Task PrepareBoxes()
         {
             LeftPaneItems.Clear();
@@ -178,7 +212,6 @@ namespace Projekt.ViewModels
             List<CoordinatorModel>? assignedCoordinators = null;
             if (IsFormValid())
             {
-                // Select already assigned coordinators
                 var result = await Model.GetAssignedCoordinators();
                 if (result != null)
                 {
@@ -204,31 +237,38 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Wczytuje listę prowadzących.
+        /// </summary>
         private async Task<List<CoordinatorModel>> LoadCoordinators()
         {
             IsLoading = true;
             var coordinators = await RetrieveService.GetAllAsync<CoordinatorModel>(wrapper);
             IsLoading = false;
-            return coordinators;
+            return coordinators ?? [];
         }
 
+        /// <summary>
+        /// Wczytuje listę grup.
+        /// </summary>
         private async Task<List<GroupEditModel>> LoadGroups()
         {
             IsLoading = true;
-
             GroupEditModel dummy = new(wrapper);
-            var groups =  await RetrieveService.GetAllAsync<GroupEditModel>(wrapper);
+            var groups = await RetrieveService.GetAllAsync<GroupEditModel>(wrapper);
             IsLoading = false;
-            return groups;
-
+            return groups ?? [];
         }
 
+        /// <summary>
+        /// Wczytuje listę przedmiotów.
+        /// </summary>
         private async Task<List<SubjectModel>> LoadSubjects()
         {
             IsLoading = true;
             var subjects = await RetrieveService.GetAllAsync<SubjectModel>(wrapper);
             IsLoading = false;
-            return subjects;
+            return subjects ?? [];
         }
     }
 }

@@ -11,25 +11,36 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
+    /// <summary>
+    /// ViewModel umożliwiający dynamiczne przełączanie widoków stron w aplikacji.
+    /// </summary>
     public class ConditionalContentControlViewModel : ObservableObject, IPageViewModel
     {
         #region Fields
 
         private ICommand? _changePageCommand;
-
         private IPageViewModel? _currentPageViewModel;
         private List<IPageViewModel>? _pageViewModels;
 
+        /// <summary>
+        /// Nazwa widoku strony.
+        /// </summary>
         string IPageViewModel.Name => "ConditionalContentControl";
 
+        /// <summary>
+        /// Konstruktor domyślny.
+        /// </summary>
         public ConditionalContentControlViewModel()
         {
-         
         }
 
         #endregion
+
         #region Properties / Commands
 
+        /// <summary>
+        /// Komenda do zmiany aktualnego widoku strony.
+        /// </summary>
         public ICommand ChangePageCommand
         {
             get
@@ -42,13 +53,17 @@ namespace Projekt.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Lista dostępnych widoków stron.
+        /// </summary>
         public List<IPageViewModel> PageViewModels
         {
             get => _pageViewModels ??= [];
-
         }
 
+        /// <summary>
+        /// Aktualnie wybrany widok strony.
+        /// </summary>
         public IPageViewModel? CurrentPageViewModel
         {
             get
@@ -69,6 +84,10 @@ namespace Projekt.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Zmienia aktualny widok strony na podany.
+        /// </summary>
+        /// <param name="viewModel">Nowy widok strony.</param>
         public void ChangeViewModel(IPageViewModel viewModel)
         {
             if (!PageViewModels.Contains(viewModel))
