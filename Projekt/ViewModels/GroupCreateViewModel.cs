@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows;
 
 namespace Projekt.ViewModels
 {
@@ -25,7 +26,7 @@ namespace Projekt.ViewModels
         public string Name => "Tworzenie grupy";
 
         public ObservableCollection<string> Faculties { get; set; } = new();
-        public ObservableCollection<string> Degrees { get; set; } = new() { "Matematyka", "Informatyka", "Chemia", "Mechatronika", "Kontrolery"};
+        public ObservableCollection<string> Degrees { get; set; } = new();
         public ObservableCollection<int> Semesters { get; set; } = new() { 1, 2, 3, 4, 5, 6, 7 };
 
         public string? GroupNumber
@@ -83,8 +84,25 @@ namespace Projekt.ViewModels
             }
         }
 
-        public ICommand SaveCommand { get; }
-        public ICommand CancelCommand { get; }
+        private ICommand? _saveCommand;
+        public ICommand? SaveCommand 
+        {
+            get
+            {
+                return _saveCommand ??= new RelayCommand(
+                    async param => await SaveAsync(),
+                    param => CanSave());
+            }
+        }
+
+        private ICommand? _cancelCommand;
+        public ICommand CancelCommand { 
+            get
+            {
+                return _cancelCommand ??= new RelayCommand(
+                    param => Cancel());
+            }
+        }
 
         public event Action? OnSaved;
         public event Action? OnCancelled;
@@ -141,7 +159,7 @@ namespace Projekt.ViewModels
                 var query = @"SELECT DISTINCT dk.nazwa 
                              FROM dane_kierunku dk
                              JOIN kierunek k ON dk.id = k.id_danych_kierunku
-                             JOIN wydzial w ON k.id_wydzialu = w.id
+                             JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka
                              WHERE w.nazwa_krotka = @faculty
                              ORDER BY dk.nazwa";
 
@@ -199,11 +217,14 @@ namespace Projekt.ViewModels
                 if (success)
                 {
                     OnSaved?.Invoke();
+                    MessageBox.Show("Grupa została pomyślnie dodana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Optionally, you can reset the fields after saving
+                    Cancel();
                 }
                 else
                 {
                     // Handle error - you might want to show a message to the user
-                    Console.WriteLine("Failed to create group");
+                    MessageBox.Show("Nie udało się dodać grupy. Spróbuj ponownie.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
@@ -214,6 +235,16 @@ namespace Projekt.ViewModels
             {
                 IsLoading = false;
             }
+        }
+
+        private void Cancel()
+        {
+            OnCancelled?.Invoke();
+            // Optionally, you can reset the fields or perform other actions on cancel
+            GroupNumber = null;
+            CurrentFaculty = null;
+            CurrentDegree = null;
+            CurrentSemester = null;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
