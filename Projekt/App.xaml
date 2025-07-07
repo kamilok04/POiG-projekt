@@ -73,6 +73,11 @@
             <DataTemplate DataType="{x:Type viewmodels:FacultyCreateViewModel}">
                 <views:FacultyCreateView/>
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:DegreeCreateViewModel}">
+                <views:DegreeCreateView/>
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewmodels:SubjectCreateViewModel}">
                 <views:SubjectCreateView/>
             </DataTemplate>

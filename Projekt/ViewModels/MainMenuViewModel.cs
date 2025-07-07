@@ -133,6 +133,7 @@ namespace Projekt.ViewModels
                 "FacultyCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "FacultyEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "MajorManagementViewModel" => await Authenticate(PermissionHelper.CanModifyData),
+                "DegreeCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 _ => false,
             };
         }
