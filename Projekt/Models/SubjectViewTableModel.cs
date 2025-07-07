@@ -12,13 +12,14 @@ namespace Projekt.Models
         public string TableName => String.Empty;
         public string? DefaultQuery => """
             SELECT 
-                dp.kod,
-                dp.nazwa,
-                o.opis,
-                l.literatura,
-                wz.warunki_zaliczenia,
-                dp.punkty,
-                w.nazwa_krotka AS wydział
+                dp.id "ID przedmiotu",
+                dp.kod "Kod",
+                dp.nazwa "Nazwa",
+                o.opis "Opis",
+                l.literatura "Literatura",
+                wz.warunki_zaliczenia "Warunki zaliczenia",
+                dp.punkty "Punkty",
+                w.nazwa_krotka "Wydział"
             FROM 
                 dane_przedmiotu dp
             JOIN 
