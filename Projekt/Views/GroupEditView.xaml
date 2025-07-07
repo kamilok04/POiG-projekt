@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
              d:DataContext="{d:DesignInstance Type={x:Type viewmodels:GroupEditViewModel}}">
-    <Grid Margin="10">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -22,8 +22,51 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" Grid.ColumnSpan="6" ItemsSource="{Binding Groups}"/>
-        <Button Grid.Row="1" Grid.Column="5" Command="{Binding EditGroupRow}">Edytuj</Button>
+        <DataGrid Grid.Row="0" Grid.ColumnSpan="6" 
+          ItemsSource="{Binding Groups}" 
+          SelectedItem="{Binding SelectedGroup}"
+          AutoGenerateColumns="True"
+          SelectionMode="Single"
+          CanUserAddRows="False"
+          CanUserDeleteRows="False"
+          IsReadOnly="True"
+          Margin="0,0,0,10"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="ID grupy:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroupId}" IsReadOnly="True" Margin="5"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Numer grupy:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Number}" Margin="5"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Wydział:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Faculty}" Margin="5"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="2" Text="Semestr:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Semester}" Margin="5"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="Kierunek:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Degree}" Margin="5"/>
+
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="6" 
+           Text="{Binding ErrorString}" 
+           Foreground="Red" 
+           Margin="5"
+           Visibility="{Binding ErrorString}"/>
+
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="6" 
+           Text="{Binding SuccessString}" 
+           Foreground="Green" 
+           Margin="5"
+           Visibility="{Binding SuccessString}"/>
+
+        <Button Grid.Row="6" Grid.Column="5" 
+            Command="{Binding UpdateSelectedCommand}" 
+            Content="Edytuj" 
+            Margin="10"
+            Padding="10,5"/>
     </Grid>
 </UserControl>
