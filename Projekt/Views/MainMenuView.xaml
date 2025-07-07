@@ -32,6 +32,7 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Kierunki" MinWidth="68">
                     <Fluent:Button Header="Zarządzaj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="MajorManagementViewModel" Visibility="{Binding Path='[MajorManagementViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="DegreeCreateViewModel" Visibility="{Binding Path='[DegreeCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
 
             </Fluent:RibbonTabItem>
