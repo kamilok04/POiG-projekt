@@ -23,8 +23,8 @@
         <Label>Grupa:</Label>
         <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding Groups}"/>
 
-        <Label Grid.Row="1">Rocznik:</Label>
-        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Yearbooks}"/>
+        <Label Grid.Row="1">Przedmiot:</Label>
+        <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding SelectedSubject, Mode=TwoWay}" ItemsSource="{Binding Subjects}"/>
 
         <local:TwoListBoxesView  Grid.Row="2" Grid.ColumnSpan="2" />
 

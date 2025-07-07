@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public  class TwoDataGridsViewModel : ObservableObject
+    public abstract class TwoDataGridsViewModel : ObservableObject
     {
 
         public string LeftPaneHeader { get; set; } = "Left Pane";
@@ -62,24 +62,26 @@ namespace Projekt.ViewModels
             }
         }
 
-        private object? GetSelectedItem(ObservableCollection<object> source)
+        protected object? GetSelectedItem(ObservableCollection<object> source)
             => source == LeftPaneItems ? LeftPaneSelectedItem : RightPaneSelectedItem;
 
-        public object? SetSelectedItem(ObservableCollection<object> source, object? value)
+        protected object? SetSelectedItem(ObservableCollection<object> source, object? value)
         => source == LeftPaneItems ? LeftPaneSelectedItem = value : RightPaneSelectedItem = value;
 
         private ICommand? _moveCommand;
         public ICommand MoveCommand
         {
             get => _moveCommand ??= new RelayCommand(
-                target => Move((dynamic?) target));
+                target => Move((dynamic?)target),
+                pred => CanMove());
         }
 
         private ICommand? _moveAllCommand;
         public ICommand MoveAllCommand
         {
             get => _moveAllCommand ??= new RelayCommand(
-                target => MoveAll((dynamic?)target));
+                target => MoveAll((dynamic?)target),
+                pred => CanMove());
         }
 
         public Func<Task> GetData;
@@ -95,34 +97,38 @@ namespace Projekt.ViewModels
             RightPaneHeader = RightHeader;
         }
 
-         void Move( ObservableCollection<object> target)
-        {
-             var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
+        // void Move( ObservableCollection<object> target)
+        //{
+        //     var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
 
-             object? movedObject = GetSelectedItem(source);
-            if (movedObject == null) return;
-           
-            source.Remove(movedObject);
-            if(target == RightPaneItems) 
-                target.Add(movedObject);
-           
+        //     object? movedObject = GetSelectedItem(source);
+        //    if (movedObject == null) return;
 
-        }
+        //    source.Remove(movedObject);
+        //    if(target == RightPaneItems) 
+        //        target.Add(movedObject);
 
-        void MoveAll(ObservableCollection<object> target)
-        {
-            var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
 
-            if (target == RightPaneItems)
-            {
-                foreach (var item in source.ToList())
-                {
-                    target.Add(item);
-                }
+        //}
 
-            }
-            source.Clear();
-        }
+        public abstract void Move(ObservableCollection<object> target);
+        public abstract void MoveAll(ObservableCollection<object> target);
+        public abstract bool CanMove();
+
+        //void MoveAll(ObservableCollection<object> target)
+        //{
+        //    var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
+
+        //    if (target == RightPaneItems)
+        //    {
+        //        foreach (var item in source.ToList())
+        //        {
+        //            target.Add(item);
+        //        }
+
+        //    }
+        //    source.Clear();
+        //}
 
 
 

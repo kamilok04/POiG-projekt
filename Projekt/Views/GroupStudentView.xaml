@@ -23,28 +23,71 @@
         </Grid.ColumnDefinitions>
 
         <Label>Grupa:</Label>
-        <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding Groups}"/>
+        <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" ItemsSource="{Binding LoadGroups.Result}"/>
 
 
-        <local:TwoDataGridsView Grid.Row="2" Grid.ColumnSpan="2" />
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="8*"/>
+            </Grid.RowDefinitions>
+
+            <Label  Content="{Binding LeftPaneHeader,FallbackValue='Left Pane'}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label  Grid.Column="2" Content="{Binding RightPaneHeader,FallbackValue='Right Pane'}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <DataGrid  Name="LeftPane" Grid.Row="1" ItemsSource="{Binding LeftPaneItems}" SelectedItem="{Binding LeftPaneSelectedItem}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nr indeksu" Binding="{Binding StudentID}"/>
+                    <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
+                    <DataGridTextColumn Header="Wydział" Binding="{Binding FacultyName}"/>
+                    <DataGridTextColumn Header="Kierunek" Binding="{Binding MajorName}"/>
+                    <DataGridTextColumn Header="Semestr" Binding="{Binding Semester}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Name="RightPane" Grid.Row="1" ItemsSource="{Binding RightPaneItems}" SelectedItem="{Binding RightPaneSelectedItem}" Grid.Column="2" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nr indeksu" Binding="{Binding StudentID}"/>
+                    <DataGridTextColumn Header="Imię" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"/>
+                    <DataGridTextColumn Header="Wydział" Binding="{Binding FacultyName}"/>
+                    <DataGridTextColumn Header="Kierunek" Binding="{Binding MajorName}"/>
+                    <DataGridTextColumn Header="Semestr" Binding="{Binding Semester}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DockPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveCommand}" CommandParameter="{Binding LeftPaneItems}" Content="-"/>
+                <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveCommand}" CommandParameter="{Binding RightPaneItems}" Content="&gt;"/>
+                <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAllCommand}" CommandParameter="{Binding LeftPaneItems}" Content="--"/>
+                <Button Margin="0,8,0,8" Padding="24,0,24,0" DockPanel.Dock="Top" Command="{Binding MoveAllCommand}" CommandParameter="{Binding RightPaneItems}" Content="&gt;&gt;"/>
+            </DockPanel>
+        </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label>Filtruj studentów:</Label>
-            <DockPanel Grid.Column="1">
+            <Label Grid.Column="1">Filtruj studentów</Label>
+            <Button  Command="{Binding ResetFiltersCommand}">Resetuj</Button>
+            <DockPanel Grid.Column="2">
                 <Label>Wydział:</Label>
                 <ComboBox ItemsSource="{Binding LoadFaculties.Result}" SelectedItem="{Binding SelectedFaculty}">
+                
                 </ComboBox>
-            </DockPanel><DockPanel Grid.Column="2">
+            </DockPanel><DockPanel Grid.Column="3">
                 <Label >Kierunek:</Label>
                 <ComboBox ItemsSource="{Binding LoadMajors.Result}" SelectedItem="{Binding SelectedMajor}">
                 </ComboBox>
 
-            </DockPanel><DockPanel Grid.Column="3">
+            </DockPanel><DockPanel Grid.Column="4">
                 <Label >Semestr:</Label>
                 <ComboBox ItemsSource="{Binding Semesters}" SelectedItem="{Binding SelectedSemester}">
                 </ComboBox>

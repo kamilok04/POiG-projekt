@@ -1,87 +1,116 @@
-﻿using Projekt.Miscellaneous;
+﻿using MySql.Data.MySqlClient;
+using Projekt.Miscellaneous;
 using Projekt.Models;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO.Pipes;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
-    public class GroupStudentViewModel: TwoDataGridsViewModel, ITable, IPageViewModel
+    public class GroupStudentViewModel : TwoDataGridsViewModel, ITable, IPageViewModel
     {
         string IPageViewModel.Name => nameof(GroupStudentViewModel);
-        Dictionary<string, object>? ITable.DefaultParameters => new() { { "@groupID", SelectedGroup.GroupId } };
+
+        Dictionary<string, object>? ITable.DefaultParameters => SelectedGroup != null
+            ? new() { { "@groupID", SelectedGroup.GroupId } }
+            : null;
+
         string? ITable.DefaultQuery => "SELECT * FROM grupa_student WHERE id_grupy = @groupID";
         string ITable.TableName => "grupa_student";
-        // Private fields
-        private ObservableCollection<GroupEditModel> _groups;
-        private GroupEditModel _selectedGroup;
-        private ObservableCollection<FacultyModel> _faculties;
-        private FacultyModel _selectedFaculty;
-        private ObservableCollection<string> _majors;
-        private string _selectedMajor;
-        private ObservableCollection<int> _semesters;
-        private int _selectedSemester;
-        
-        // Private fields
-        private string _errorString;
-        private string _successString;
+
+        private List<GroupEditModel> _groups = [];
+        private GroupEditModel? _selectedGroup;
+        private List<FacultyModel> _faculties = [];
+        private FacultyModel? _selectedFaculty;
+        private List<MajorModel> _majors = [];
+        private MajorModel? _selectedMajor;
+        private List<int> _semesters = [1, 2, 3, 4, 5, 6, 7];
+        private Int16 _selectedSemester;
+        private readonly GroupStudentModel Model;
+
+        private string _errorString = string.Empty;
+        private string _successString = string.Empty;
+        private HashSet<int> _assignedStudentIds = [];
         private LoginWrapper Wrapper { get; init; }
 
+        public NotifyTaskCompletion<List<GroupEditModel>> LoadGroups { get; private set; }
+        public NotifyTaskCompletion<List<FacultyModel>> LoadFaculties { get; private set; }
+        public NotifyTaskCompletion<List<MajorModel>> LoadMajors { get; private set; }
 
-        // Public properties
-        public NotifyTaskCompletion<ObservableCollection<GroupEditModel>> LoadGroups { get; private set; }
-        public NotifyTaskCompletion<ObservableCollection<FacultyModel>> LoadFaculties { get; private set; }
-        public NotifyTaskCompletion<ObservableCollection<MajorModel>> LoadMajors { get; private set; }
 
-        public ObservableCollection<GroupEditModel> Groups
+        public List<GroupEditModel> Groups
         {
             get => _groups;
-            set { _groups = value; OnPropertyChanged(nameof(Groups)); }
+            set { _groups = value ?? []; OnPropertyChanged(nameof(Groups)); }
         }
 
-        public GroupEditModel SelectedGroup
+        public GroupEditModel? SelectedGroup
         {
             get => _selectedGroup;
-            set { _selectedGroup = value; OnPropertyChanged(nameof(SelectedGroup)); }
+            set
+            {
+                if (_selectedGroup != value)
+                {
+                    _selectedGroup = value;
+                    OnPropertyChanged(nameof(SelectedGroup));
+                    _ = OnSelectedGroupChangedAsync();
+                }
+            }
         }
 
-        public ObservableCollection<FacultyModel> Faculties
+        private async Task OnSelectedGroupChangedAsync()
+        {
+            await PrepareBoxes();
+        }
+
+        public List<FacultyModel> Faculties
         {
             get => _faculties;
-            set { _faculties = value; OnPropertyChanged(nameof(Faculties)); }
+            set { _faculties = value ?? []; OnPropertyChanged(nameof(Faculties)); }
         }
 
-        public FacultyModel SelectedFaculty
+        public FacultyModel? SelectedFaculty
         {
             get => _selectedFaculty;
-            set { _selectedFaculty = value; OnPropertyChanged(nameof(SelectedFaculty)); }
+            set
+            {
+                _selectedFaculty = value;
+                if(value != null) _ = OnFilterChanged();
+                OnPropertyChanged(nameof(SelectedFaculty));
+            }
         }
 
-        public ObservableCollection<string> Majors
+        public List<MajorModel> Majors
         {
             get => _majors;
-            set { _majors = value; OnPropertyChanged(nameof(Majors)); }
+            set { _majors = value ?? []; OnPropertyChanged(nameof(Majors)); }
         }
 
-        public string SelectedMajor
+        public MajorModel? SelectedMajor
         {
             get => _selectedMajor;
-            set { _selectedMajor = value; OnPropertyChanged(nameof(SelectedMajor)); }
+            set
+            {
+                _selectedMajor = value;
+                if(value != null) _ = OnFilterChanged();
+                OnPropertyChanged(nameof(SelectedMajor));
+            }
         }
 
-        public ObservableCollection<int> Semesters
+        public List<int> Semesters
         {
             get => _semesters;
-            set { _semesters = value; OnPropertyChanged(nameof(Semesters)); }
+            set { _semesters = value ?? []; OnPropertyChanged(nameof(Semesters)); }
         }
 
-        public int SelectedSemester
+        public Int16 SelectedSemester
         {
             get => _selectedSemester;
-            set { _selectedSemester = value; OnPropertyChanged(nameof(SelectedSemester)); }
+            set
+            {
+                _selectedSemester = value;
+                _ = OnFilterChanged();
+                OnPropertyChanged(nameof(SelectedSemester));
+            }
         }
 
         public string ErrorString
@@ -91,10 +120,8 @@ namespace Projekt.ViewModels
             {
                 if (_errorString != value)
                 {
-                    _errorString = value;
-                    
-                        _successString = string.Empty;
-                    
+                    _errorString = value ?? string.Empty;
+                    _successString = string.Empty;
                     OnPropertyChanged(nameof(ErrorString));
                 }
             }
@@ -106,9 +133,14 @@ namespace Projekt.ViewModels
             get => _saveCommand ??= new RelayCommand(
                 async param => await Save(),
                 param => IsFormValid());
-
         }
 
+        private ICommand? _resetFiltersCommand { get; set; }
+        public ICommand ResetFiltersCommand
+        {
+            get => _resetFiltersCommand ??= new RelayCommand(
+                param => ResetFilters());
+        }
         private ICommand? _cancelCommand { get; set; }
         public ICommand CancelCommand
         {
@@ -117,84 +149,117 @@ namespace Projekt.ViewModels
             );
         }
 
+        /// <summary>
+        /// Anuluje zmiany i przywraca formularz do stanu wyjścia.
+        /// </summary>
+        /// <returns></returns>
         private async Task Cancel()
         {
             SelectedGroup = null;
             SelectedFaculty = null;
             SelectedMajor = null;
             SelectedSemester = 0;
+            RightPaneItems.Clear();
             await PrepareBoxes();
         }
 
+        /// <summary>
+        /// Przygotowuje obie listy (lewa i prawa) z studentami.
+        /// </summary>
+        /// <returns></returns>
         private async Task PrepareBoxes()
         {
-            LeftPaneItems.Clear();
-            RightPaneItems.Clear();
-
-           
-            Dictionary<string, object> parameters = new()
-            {
-                { "@facultyId", SelectedFaculty?.Id ?? "%" },
-                { "@majorName", SelectedMajor ?? "%" },
-                { "@semester", SelectedSemester == 0 ? "%" : SelectedSemester } 
-            };
-
-            string query = "SELECT * FROM dane_studenta " +
-                "WHERE IFNULL(Wydział, 1) LIKE @facultyId " +
-                "AND IFNULL(Kierunek, 1) LIKE @majorName " +
-                "AND IFNULL(Semestr, 1) LIKE @semester";
-           
-
-            var dbHandler = Wrapper.DBHandler;
-            if (dbHandler == null)
-                return;
-
-            var studentRows = await dbHandler.ExecuteQueryAsync(query, parameters);
-            var allStudents = studentRows.Select(row => new ExtendedStudentModel(row)).ToList();
-
-            // Get students already in the selected group
-            List<int> groupStudentIds = new();
-            if (SelectedGroup != null)
-            {
-                var groupParams = new Dictionary<string, object> { { "@groupID", SelectedGroup.GroupId } };
-                var groupQuery = "SELECT id_studenta FROM grupa_student WHERE id_grupy = @groupID";
-                var groupRows = await dbHandler.ExecuteQueryAsync(groupQuery, groupParams);
-                groupStudentIds = groupRows.Select(r => Convert.ToInt32(r["id_studenta"])).ToList();
-            }
-
-            foreach (var student in allStudents)
-            {
-                if (groupStudentIds.Contains(student.StudentID))
-                    RightPaneItems.Add(student);
-                else
-                    LeftPaneItems.Add(student);
-            }
+            await PrepareRightPane();
+            await PrepareLeftPane();
         }
 
+        /// <summary>
+        /// Przygotowuje prawą listę z studentami przypisanymi do grupy.
+        /// </summary>
+        /// <returns></returns>
+        private async Task PrepareRightPane()
+        {
+            if (SelectedGroup == null) return;
+            RightPaneItems = new(await Model.GetCurrentGroupStudents(SelectedGroup.GroupId));
+        }
+
+        /// <summary>
+        /// Reaguje na zmiany filtrów (wydział, kierunek, semestr) i aktualizuje listę kierunków.
+        /// </summary>
+        /// <returns></returns>
+        private async Task OnFilterChanged()
+        {
+            await PrepareLeftPane();
+        }
+
+        /// <summary>
+        /// Przygotowuje lewą listę z dostępnych (spełniających filtry) studentów, którzy nie są przypisani do grupy.
+        /// </summary>
+        /// <returns></returns>
+        private async Task PrepareLeftPane()
+        {
+            var students = await Model.GetFilteredStudents(SelectedFaculty, SelectedSemester, SelectedMajor);
+            _assignedStudentIds = [.. RightPaneItems
+                .OfType<ExtendedStudentModel>()
+                .Select(s => s.StudentID)];
+
+            var filteredStudents = students
+                .Where(s => !_assignedStudentIds.Contains(s.StudentID))
+                .ToList();
+
+            LeftPaneItems = [.. filteredStudents];
+        }
+
+        /// <summary>
+        /// Resetuje filtry (wydział, kierunek, semestr) do wartości domyślnych.
+        /// </summary>
+        private void ResetFilters()
+        {
+            SelectedFaculty = null;
+            SelectedMajor = null;
+            SelectedSemester = 0;
+        }
+
+        /// <summary>
+        /// Próbuje zapisać zmiany w przypisaniach studentów do grupy.
+        /// </summary>
+        /// <returns></returns>
         private async Task Save()
         {
-            //Model.Group = SelectedGroup;
-            //Model.Subject = SelectedSubject;
-            //foreach (CoordinatorModel student in RightPaneItems)
-            //{
-            //    Model.AssingStudent(student);
-            //}
-            //bool success = await Model.ExecuteAssignments();
+            var rightPaneStudentIds = RightPaneItems
+                .OfType<ExtendedStudentModel>()
+                .Select(s => s.StudentID)
+                .ToHashSet();
 
-            //if (success)
-            //{
-            //    ErrorString = "";
-            //    SuccessString = "Edycja zakończona pomyślnie!";
-            //}
-            //else
-            //{
-            //    SuccessString = "";
-            //    ErrorString = "Wystąpił błąd podczas edycji!";
-            //}
+            var toAdd = rightPaneStudentIds.Except(_assignedStudentIds).ToList();
+            var toRemove = _assignedStudentIds.Except(rightPaneStudentIds).ToList();
+
+            // Use null-conditional operator for SelectedGroup
+            var groupId = SelectedGroup?.GroupId ?? 0;
+            var commands = Model.CreateGroupTransactionCommands(toAdd, toRemove, groupId);
+
+            bool success = await Model.ExecuteAssignments(commands);
+
+            if (success)
+            {
+                ErrorString = "";
+                SuccessString = "Edycja zakończona pomyślnie!";
+            }
+            else
+            {
+                SuccessString = "";
+                ErrorString = "Wystąpił błąd podczas edycji!";
+            }
+
+            await PrepareBoxes();
         }
 
-        private bool IsFormValid() => !(SelectedGroup == null);
-
+        /// <summary>
+        /// Sprawdza, czy formularz jest poprawnie wypełniony.
+        /// Wybór grupy to jedyne wymaganie (puste grupy są dozwolone).
+        /// </summary>
+        /// <returns></returns>
+        private bool IsFormValid() => SelectedGroup != null;
 
         public string SuccessString
         {
@@ -203,51 +268,121 @@ namespace Projekt.ViewModels
             {
                 if (_successString != value)
                 {
-                    _successString = value;
-                   _errorString = string.Empty;
-                    
+                    _successString = value ?? string.Empty;
+                    _errorString = string.Empty;
                     OnPropertyChanged(nameof(SuccessString));
                 }
             }
         }
 
-
-  
+        /// <summary>
+        /// Konstruktor
+        /// </summary>
+        /// <param name="wrapper">LoginWrapper</param>
         public GroupStudentViewModel(LoginWrapper wrapper)
         {
-            Groups = new ObservableCollection<GroupEditModel>();
-            Faculties = new ObservableCollection<FacultyModel>();
-            Majors = new ObservableCollection<string>();
-            Semesters = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7 };
+            Groups = [];
+            Faculties = [];
+            Majors = [];
+            Semesters = [1, 2, 3, 4, 5, 6, 7];
             Wrapper = wrapper;
+            Model = new(Wrapper);
 
             LeftPaneHeader = "Dostępni studenci";
             RightPaneHeader = "Wybrani studenci";
 
-            LoadGroups = new NotifyTaskCompletion<ObservableCollection<GroupEditModel>>(LoadGroupsAsync());
-            LoadFaculties = new NotifyTaskCompletion<ObservableCollection<FacultyModel>>(LoadFacultiesAsync());
-            LoadMajors = new NotifyTaskCompletion<ObservableCollection<MajorModel>>(LoadMajorsAsync());
+            LoadGroups = new NotifyTaskCompletion<List<GroupEditModel>>(LoadGroupsAsync());
+            LoadFaculties = new NotifyTaskCompletion<List<FacultyModel>>(LoadFacultiesAsync());
+            LoadMajors = new NotifyTaskCompletion<List<MajorModel>>(LoadMajorsAsync());
 
             _ = PrepareBoxes();
         }
 
-
-        private async Task<ObservableCollection<GroupEditModel>> LoadGroupsAsync()
+        /// <summary>
+        /// Wczytaj grupy z bazy. Funkcja jest prywatna, do binda wystawiamy NotifyTaskCompletion<T>.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<GroupEditModel>> LoadGroupsAsync()
         {
-            return new(await RetrieveService.GetAllAsync<GroupEditModel>(Wrapper));
+            // Return empty list if null
+            return await RetrieveService.GetAllAsync<GroupEditModel>(Wrapper) ?? [];
         }
 
-        private async Task<ObservableCollection<FacultyModel>> LoadFacultiesAsync()
+        /// <summary>
+        /// Wczytaj wydziały z bazy. Funkcja jest prywatna, do binda wystawiamy NotifyTaskCompletion<T>.
+        /// </summary>
+        private async Task<List<FacultyModel>> LoadFacultiesAsync()
         {
-            return new(await RetrieveService.GetAllAsync<FacultyModel>(Wrapper));
+            return await RetrieveService.GetAllAsync<FacultyModel>(Wrapper) ?? [];
         }
 
-        private async Task<ObservableCollection<MajorModel>> LoadMajorsAsync()
+        /// <summary>
+        /// Wczytaj kierunki z bazy. Funkcja jest prywatna, do binda wystawiamy NotifyTaskCompletion<T>.
+        /// </summary>
+        private async Task<List<MajorModel>> LoadMajorsAsync()
         {
-            ObservableCollection<MajorModel> result = new(await RetrieveService.GetAllAsync<MajorModel>(Wrapper));
-            foreach (var model in result) model.LoginWrapper = Wrapper;
+            List<MajorModel> result = await RetrieveService.GetAllAsync<MajorModel>(Wrapper) ?? [];
+            foreach (var model in result)
+                if (model != null)
+                    model.LoginWrapper = Wrapper;
             return result;
         }
 
+
+        /// <summary>
+        /// Próuje przenieść zaznaczony element (tutaj: studenta) z jednej listy do drugiej:
+        /// lewo -> prawo: zawsze się da
+        /// prawo <- lewo: da się tylko, jeśli przenoszony student spełnia warunki filtrów (wydział, kierunek, semestr).
+        /// </summary>
+        /// <param name="target">Lista docelowa (LeftPaneItems albo RightPaneItems)</param>
+        public override void Move(ObservableCollection<object> target)
+        {
+            var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
+
+            if (target == RightPaneItems)
+            {
+                var item = GetSelectedItem(source);
+                if (item is not ExtendedStudentModel student) return;
+                source.Remove(student);
+                int id = student.StudentID;
+                if (!_assignedStudentIds.Contains(id))
+                {
+                    target.Add(student);
+                }
+                return;
+            }
+
+            var leftItem = GetSelectedItem(source);
+            if (leftItem is not ExtendedStudentModel leftStudent) return;
+            source.Remove(leftStudent);
+
+            bool matchesFaculty = SelectedFaculty == null || (leftStudent.FacultyName == SelectedFaculty.Name);
+            bool matchesMajor = SelectedMajor == null || (leftStudent.MajorName == SelectedMajor.Name);
+            bool matchesSemester = SelectedSemester == 0 || (leftStudent.Semester == SelectedSemester);
+
+            if (matchesFaculty && matchesMajor && matchesSemester)
+            {
+                target.Add(leftStudent);
+            }
+        }
+
+        /// <summary>
+        /// Przenosi wszystkie elementy z jednej listy do drugiej.
+        /// </summary>
+        /// <param name="target">Lista docelowa (LeftPaneItems albo RightPaneItems)</param>
+
+        public override void MoveAll(ObservableCollection<object> target)
+        {
+            var source = target == LeftPaneItems ? RightPaneItems : LeftPaneItems;
+            var itemsToMove = source.OfType<object>().ToList();
+            foreach (var item in itemsToMove)
+            {
+                SetSelectedItem(source, item);
+                Move(target);
+            }
+        }
+
+        public override bool CanMove()
+         => SelectedGroup != null;
     }
 }

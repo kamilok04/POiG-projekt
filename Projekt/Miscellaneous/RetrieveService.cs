@@ -1,6 +1,7 @@
 ﻿using Org.BouncyCastle.Asn1.X509.Qualified;
 using Projekt.Models;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace Projekt.Miscellaneous
                 var t when t == typeof(FacultyModel) => await GetFacultyAsync(wrapper, (string)key) as T,
                 var t when t == typeof(MajorDataModel) => await GetMajorDataAsync(wrapper, (int)key) as T,
                 var t when t == typeof(MajorModel) => await GetMajorAsync(wrapper, (int)key) as T,
+                var t when t == typeof(ExtendedStudentModel) => await GetExtendedStudentAsync(wrapper, (int)key) as T,
                 _ => null
             };
         }
@@ -196,5 +198,14 @@ namespace Projekt.Miscellaneous
             return result.Select(row => new MajorModel(row, loginWrapper)).ToList();
         }
 
+        private static async Task<ExtendedStudentModel?> GetExtendedStudentAsync(LoginWrapper loginWrapper, int studentId)
+        {
+            var result = await loginWrapper.DBHandler.ExecuteQueryAsync(
+                "SELECT * FROM dane_studenta " +
+                "WHERE \"Nr indeksu\" = @studentID", new() { { "@studentID", studentId } });
+            return new ExtendedStudentModel(result[0]);
+        }
+
     }
+
 }

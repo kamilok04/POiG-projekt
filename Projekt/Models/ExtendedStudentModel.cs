@@ -58,7 +58,7 @@ namespace Projekt.Models
             _studentID = (int)data["Nr indeksu"];
             _facultyName = (string?)data["Wydział"];
             _majorName = (string?)data["Kierunek"];
-            _semester = (int?)data["Semestr"];
+            _semester = (Int16?)data["Semestr"];
         }
     }
 }
