@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Projekt.ViewModels
@@ -16,7 +17,8 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => nameof(GroupEditViewModel);
 
-        private GroupViewTableModel? Model { get; init; }
+        private GroupViewTableModel Model { get; init; }
+
         private DataTable? _groups;
         public DataTable? Groups
         {
@@ -28,11 +30,27 @@ namespace Projekt.ViewModels
             }
         }
 
+        private DataRowView? _selectedGroup;
+        public DataRowView? SelectedGroup
+        {
+            get => _selectedGroup;
+            set
+            {
+                _selectedGroup = value;
+                OnPropertyChanged(nameof(SelectedGroup));
+                // Załaduj dane wybranej grupy do edycji
+                if (_selectedGroup != null)
+                {
+                    LoadSelectedGroup();
+                }
+            }
+        }
+
         public GroupEditViewModel(LoginWrapper loginWrapper)
         {
-
             Model = new(loginWrapper);
-            GetDataAsync().ConfigureAwait(false); ;
+            GroupEditModel = new GroupEditModel(loginWrapper);
+            GetDataAsync().ConfigureAwait(false);
         }
 
         public GroupEditViewModel() { } //for designer only
@@ -45,259 +63,192 @@ namespace Projekt.ViewModels
             }
         }
 
-        //private readonly GroupEditModel _model;
-        //private readonly LoginWrapper _loginWrapper;
-        //private readonly int _groupId;
+        #region Fields
+        private int _groupId;
+        private string? _number;
+        private string? _faculty;
+        private string? _degree;
+        private string? _semester;
+        private GroupEditModel? _GroupEditModel;
+        #endregion
 
-        //private string? _groupNumber;
-        //private string? _currentFaculty;
-        //private string? _currentDegree;
-        //private string? _currentSemester;
-        //private bool _isLoading;
+        private string? _errorString;
+        private string? _successString;
 
-        //public string Name => "Edycja grupy";
+        #region Public Properties/Commands
+        public int GroupId
+        {
+            get => _groupId;
+            set
+            {
+                if (_groupId != value)
+                {
+                    _groupId = value;
+                    OnPropertyChanged(nameof(GroupId));
+                }
+            }
+        }
 
-        //public ObservableCollection<string> Faculties { get; set; } = new();
-        //public ObservableCollection<string> Degrees { get; set; } = new();
-        //public ObservableCollection<int> Semesters { get; set; } = new() { 1, 2, 3, 4, 5, 6, 7 };
+        public string Number
+        {
+            get => _number ?? string.Empty;
+            set
+            {
+                if (_number != value)
+                {
+                    _number = value;
+                    OnPropertyChanged(nameof(Number));
+                }
+            }
+        }
 
-        //public string? GroupNumber
-        //{
-        //    get => _groupNumber;
-        //    set
-        //    {
-        //        _groupNumber = value;
-        //        _model.GroupNumber = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public string Faculty
+        {
+            get => _faculty ?? string.Empty;
+            set
+            {
+                if (_faculty != value)
+                {
+                    _faculty = value;
+                    OnPropertyChanged(nameof(Faculty));
+                }
+            }
+        }
 
-        //public string? CurrentFaculty
-        //{
-        //    get => _currentFaculty;
-        //    set
-        //    {
-        //        _currentFaculty = value;
-        //        _model.CurrentFaculty = value;
-        //        OnPropertyChanged();
-        //        LoadDegreesAsync();
-        //    }
-        //}
+        public string Degree
+        {
+            get => _degree ?? string.Empty;
+            set
+            {
+                if (_degree != value)
+                {
+                    _degree = value;
+                    OnPropertyChanged(nameof(Degree));
+                }
+            }
+        }
 
-        //public string? CurrentDegree
-        //{
-        //    get => _currentDegree;
-        //    set
-        //    {
-        //        _currentDegree = value;
-        //        _model.CurrentDegree = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public string Semester
+        {
+            get => _semester ?? string.Empty;
+            set
+            {
+                if (_semester != value)
+                {
+                    _semester = value;
+                    OnPropertyChanged(nameof(Semester));
+                }
+            }
+        }
 
-        //public string? CurrentSemester
-        //{
-        //    get => _currentSemester;
-        //    set
-        //    {
-        //        _currentSemester = value;
-        //        _model.CurrentSemester = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public string? ErrorString
+        {
+            get => _errorString;
+            set
+            {
+                if (_errorString != value)
+                {
+                    _errorString = value;
+                    OnPropertyChanged(nameof(ErrorString));
+                }
+            }
+        }
 
-        //public bool IsLoading
-        //{
-        //    get => _isLoading;
-        //    set
-        //    {
-        //        _isLoading = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public string? SuccessString
+        {
+            get => _successString;
+            set
+            {
+                if (_successString != value)
+                {
+                    _successString = value;
+                    OnPropertyChanged(nameof(SuccessString));
+                }
+            }
+        }
 
-        //public ICommand SaveCommand { get; }
-        //public ICommand CancelCommand { get; }
+        public GroupEditModel? GroupEditModel { get => _GroupEditModel; set => _GroupEditModel = value; }
 
-        //public event Action? OnSaved;
-        //public event Action? OnCancelled;
+        private ICommand? _updateSelectedCommand;
+        public ICommand UpdateSelectedCommand
+        {
+            get
+            {
+                return _updateSelectedCommand ??= new RelayCommand(
+                    async param => await UpdateGroup(),
+                    param => AreAllFieldsFilled() && SelectedGroup != null);
+            }
+        }
 
-        //internal RelayCommand RefreshCommand { get; private set; }
+        #endregion
 
-        //public GroupEditViewModel(LoginWrapper loginWrapper, int groupId)
-        //{
-        //    _loginWrapper = loginWrapper;
-        //    _groupId = groupId;
-        //    _model = new GroupEditModel(loginWrapper);
+        #region Private Methods
 
-        //    // Poprawione komendy - dodanie parametru object
-        //    SaveCommand = new RelayCommand(async (parameter) => await SaveAsync(), (parameter) => CanSave());
-        //    CancelCommand = new RelayCommand((parameter) => OnCancelled?.Invoke());
-        //    RefreshCommand = new RelayCommand(async _ => await LoadGroupsAsync());
+        private void LoadSelectedGroup()
+        {
+            if (SelectedGroup != null)
+            {
+                GroupId = Convert.ToInt32(SelectedGroup["ID grupy"]);
+                Number = SelectedGroup["Numer Grupy"]?.ToString() ?? string.Empty;
+                Faculty = SelectedGroup["Wydział"]?.ToString() ?? string.Empty;
+                Degree = SelectedGroup["Kierunek"]?.ToString() ?? string.Empty;
+                Semester = SelectedGroup["Semestr"]?.ToString() ?? string.Empty;
+            }
+        }
 
-        //    _ = LoadGroupsAsync();
-        //    _ = LoadDataAsync();
-        //}
+        private void ClearFields()
+        {
+            Faculty = string.Empty;
+            Degree = string.Empty;
+            Semester = string.Empty;
+            GroupId = 0;
+            SelectedGroup = null;
+        }
 
-        //public ObservableCollection<GroupEditModel> Groups { get; set; } = new();
+        private void ClearEndStrings()
+        {
+            ErrorString = null;
+            SuccessString = null;
+        }
 
-        //public async Task LoadGroupsAsync()
-        //{
-        //    var model = new GroupEditModel(_loginWrapper);
-        //    var groups = await model.GetAllGroupsAsync();
+        private bool AreAllFieldsFilled()
+        {
+            return GroupId > 0 &&
+                   !string.IsNullOrEmpty(Faculty) &&
+                   !string.IsNullOrEmpty(Degree) &&
+                   !string.IsNullOrEmpty(Semester); 
+        }
 
-        //    Groups.Clear();
-        //    foreach (var group in groups)
-        //    {
-        //        Groups.Add(group);
-        //    }
-        //}
+        private async Task<bool> UpdateGroup()
+        {
+            if (GroupEditModel == null)
+                throw new InvalidOperationException("GroupEditModel is not initialized.");
 
-        //private async Task LoadDataAsync()
-        //{
-        //    try
-        //    {
-        //        IsLoading = true;
+            ClearEndStrings();
 
-        //        // Load faculties first
-        //        await LoadFacultiesAsync();
+            GroupEditModel.GroupId = GroupId;
+            GroupEditModel.CurrentFaculty = Faculty;
+            GroupEditModel.GroupNumber = Number;
+            GroupEditModel.CurrentDegree = Degree;
+            GroupEditModel.CurrentSemester = Semester;
 
-        //        // Load group data
-        //        var success = await _model.LoadGroupData(_groupId);
-        //        if (success)
-        //        {
-        //            GroupNumber = _model.GroupNumber;
-        //            CurrentFaculty = _model.CurrentFaculty;
-        //            CurrentSemester = _model.CurrentSemester;
+            bool success = await GroupEditModel.UpdateGroup();
+            if (success)
+            {
+                ErrorString = null;
+                SuccessString = "Grupę zaktualizowano z powodzeniem!";
 
-        //            // Load degrees for the selected faculty
-        //            await LoadDegreesAsync();
-        //            CurrentDegree = _model.CurrentDegree;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error loading data: {ex.Message}");
-        //    }
-        //    finally
-        //    {
-        //        IsLoading = false;
-        //    }
-        //}
+                await GetDataAsync();
+                ClearFields();
+            }
+            else
+            {
+                SuccessString = null;
+                ErrorString = "Aktualizacja nieudana! Podano nieprawidłowe dane! Spróbuj ponownie. Sprawdź czy dany kierunek istnieje dla wydziału.";
+            }
+            return success;
+        }
 
-        //private async Task LoadFacultiesAsync()
-        //{
-        //    try
-        //    {
-        //        var query = "SELECT nazwa_krotka FROM wydzial ORDER BY nazwa_krotka";
-        //        var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query);
-
-        //        Faculties.Clear();
-        //        if (result != null)
-        //        {
-        //            foreach (var row in result)
-        //            {
-        //                if (row.ContainsKey("nazwa_krotka"))
-        //                {
-        //                    Faculties.Add(row["nazwa_krotka"]?.ToString() ?? string.Empty);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error loading faculties: {ex.Message}");
-        //    }
-        //}
-
-        //private async Task LoadDegreesAsync()
-        //{
-        //    if (string.IsNullOrEmpty(CurrentFaculty))
-        //    {
-        //        Degrees.Clear();
-        //        return;
-        //    }
-
-        //    try
-        //    {
-        //        var query = @"SELECT DISTINCT dk.nazwa 
-        //                     FROM dane_kierunku dk
-        //                     JOIN kierunek k ON dk.id = k.id_danych_kierunku
-        //                     JOIN wydzial w ON k.id_wydzialu = w.id
-        //                     WHERE w.nazwa_krotka = @faculty
-        //                     ORDER BY dk.nazwa";
-
-        //        var parameters = new Dictionary<string, object>
-        //        {
-        //            { "@faculty", CurrentFaculty }
-        //        };
-
-        //        var result = await _loginWrapper.DBHandler.ExecuteQueryAsync(query, parameters);
-
-        //        Degrees.Clear();
-        //        if (result != null)
-        //        {
-        //            foreach (var row in result)
-        //            {
-        //                if (row.ContainsKey("nazwa"))
-        //                {
-        //                    Degrees.Add(row["nazwa"]?.ToString() ?? string.Empty);
-        //                }
-        //            }
-        //        }
-
-        //        // Reset current degree if not available in new list
-        //        if (!string.IsNullOrEmpty(CurrentDegree) && !Degrees.Contains(CurrentDegree))
-        //        {
-        //            CurrentDegree = null;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error loading degrees: {ex.Message}");
-        //    }
-        //}
-
-        //private bool CanSave()
-        //{
-        //    return !string.IsNullOrWhiteSpace(GroupNumber) &&
-        //           !string.IsNullOrWhiteSpace(CurrentFaculty) &&
-        //           !string.IsNullOrWhiteSpace(CurrentDegree) &&
-        //           !string.IsNullOrWhiteSpace(CurrentSemester) &&
-        //           !IsLoading;
-        //}
-
-        //private async Task SaveAsync()
-        //{
-        //    try
-        //    {
-        //        IsLoading = true;
-        //        var success = await _model.UpdateGroup();
-
-        //        if (success)
-        //        {
-        //            OnSaved?.Invoke();
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Failed to update group");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error saving group: {ex.Message}");
-        //    }
-        //    finally
-        //    {
-        //        IsLoading = false;
-        //    }
-        //}
-
-        //public event PropertyChangedEventHandler? PropertyChanged;
-
-        //protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
+        #endregion
     }
 }
