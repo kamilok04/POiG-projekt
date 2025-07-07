@@ -1,0 +1,98 @@
+\doxysection{Projekt.\+View\+Models.\+Users\+Edit\+View\+Model Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model}{}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model}\index{Projekt.ViewModels.UsersEditViewModel@{Projekt.ViewModels.UsersEditViewModel}}
+Inheritance diagram for Projekt.\+View\+Models.\+Users\+Edit\+View\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.962963cm]{class_projekt_1_1_view_models_1_1_users_edit_view_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a97ba9535fb93ba670c292e7495bbb090}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a97ba9535fb93ba670c292e7495bbb090} 
+{\bfseries Users\+Edit\+View\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a60c49ec45c3d81b9ae70854c3065bd85}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a60c49ec45c3d81b9ae70854c3065bd85} 
+override async Task {\bfseries Get\+Data\+Async} ()
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a66117aa22a80c53219cda7d3c19dc65f}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a66117aa22a80c53219cda7d3c19dc65f} 
+override void {\bfseries Create\+Transaction\+Command} (string? column\+Name, string? Row\+Key, string? old\+Value, string? new\+Value)
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a19783a1730809f03962dd50ac916b23f}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a19783a1730809f03962dd50ac916b23f} 
+override bool {\bfseries Confirm\+Exit} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_table_view_model}{Projekt.\+View\+Models.\+Table\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+void {\bfseries Create\+Transaction\+Command} (string? column\+Name, string? Row\+Key, string? old\+Value, string? new\+Value)
+\item 
+Task {\bfseries Get\+Data\+Async} ()
+\item 
+bool {\bfseries Confirm\+Exit} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_af83937a4a75d5120ed3c4571b098747e}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_af83937a4a75d5120ed3c4571b098747e} 
+Data\+Table? {\bfseries Table\+Data}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a06bc10f84811e67f97b604515a2a0e35}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a06bc10f84811e67f97b604515a2a0e35} 
+override ICommand {\bfseries Table\+Save\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_abf491ea30caf5e3f1f59e67795e6c295}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_abf491ea30caf5e3f1f59e67795e6c295} 
+override ICommand {\bfseries Table\+Cancel\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_users_edit_view_model_a278bb7bca2c159944a9a0f5dd93542fa}\label{class_projekt_1_1_view_models_1_1_users_edit_view_model_a278bb7bca2c159944a9a0f5dd93542fa} 
+override ICommand {\bfseries Table\+Create\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_table_view_model}{Projekt.\+View\+Models.\+Table\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+string? {\bfseries Row\+Key}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Data\+Grid\+Cell\+Info {\bfseries Selected\+Cell}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string? {\bfseries Selected\+Cell\+Value}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string? {\bfseries Selected\+Column\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Data\+Row\+View? {\bfseries Selected\+Row}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string? {\bfseries Selected\+Row\+Key}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+ICommand {\bfseries Table\+Undo\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+ICommand? {\bfseries Clear\+Selected\+Cell\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+ICommand {\bfseries Table\+Save\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+ICommand {\bfseries Table\+Cancel\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+ICommand {\bfseries Table\+Create\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Users\+Edit\+View\+Model.\+cs\end{DoxyCompactItemize}

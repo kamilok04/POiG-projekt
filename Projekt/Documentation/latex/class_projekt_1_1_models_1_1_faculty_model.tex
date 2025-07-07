@@ -1,0 +1,118 @@
+\doxysection{Projekt.\+Models.\+Faculty\+Model Class Reference}
+\hypertarget{class_projekt_1_1_models_1_1_faculty_model}{}\label{class_projekt_1_1_models_1_1_faculty_model}\index{Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}}
+
+
+Reprezentuje model wydziału, przechowujący identyfikator oraz nazwę wydziału.  
+
+
+Inheritance diagram for Projekt.\+Models.\+Faculty\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_projekt_1_1_models_1_1_faculty_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_ab709cb58bc468fe0869977609b3042af}\label{class_projekt_1_1_models_1_1_faculty_model_ab709cb58bc468fe0869977609b3042af} 
+{\bfseries Faculty\+Model} ()
+\begin{DoxyCompactList}\small\item\em Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model} z pustymi wartościami. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model_a8ad13f24b005894903a3ea2580978c56}{Faculty\+Model}} (string id, string name)
+\begin{DoxyCompactList}\small\item\em Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model} na podstawie identyfikatora i nazwy. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model_a5eeaf57ee00bed2d294e863839338f4f}{Faculty\+Model}} (Dictionary$<$ string, object $>$ data)
+\begin{DoxyCompactList}\small\item\em Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model} na podstawie słownika danych. \end{DoxyCompactList}\item 
+override string \mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model_a22c26e124e41144b04ef2aacaff4968d}{To\+String}} ()
+\begin{DoxyCompactList}\small\item\em Zwraca skróconą reprezentację tekstową wydziału. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_aafa323b458ac80fc803da74d32a66433}\label{class_projekt_1_1_models_1_1_faculty_model_aafa323b458ac80fc803da74d32a66433} 
+string {\bfseries Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Identyfikator wydziału. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_abfa5d0e216720bab354ebabdeaf6bd37}\label{class_projekt_1_1_models_1_1_faculty_model_abfa5d0e216720bab354ebabdeaf6bd37} 
+string {\bfseries Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Nazwa wydziału. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reprezentuje model wydziału, przechowujący identyfikator oraz nazwę wydziału. 
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_a8ad13f24b005894903a3ea2580978c56}\index{Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}!FacultyModel@{FacultyModel}}
+\index{FacultyModel@{FacultyModel}!Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}}
+\doxysubsubsection{\texorpdfstring{FacultyModel()}{FacultyModel()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_faculty_model_a8ad13f24b005894903a3ea2580978c56} 
+Projekt.\+Models.\+Faculty\+Model.\+Faculty\+Model (\begin{DoxyParamCaption}\item[{string}]{id}{, }\item[{string}]{name}{}\end{DoxyParamCaption})}
+
+
+
+Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model} na podstawie identyfikatora i nazwy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Identyfikator wydziału.\\
+\hline
+{\em name} & Nazwa wydziału.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_a5eeaf57ee00bed2d294e863839338f4f}\index{Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}!FacultyModel@{FacultyModel}}
+\index{FacultyModel@{FacultyModel}!Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}}
+\doxysubsubsection{\texorpdfstring{FacultyModel()}{FacultyModel()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_faculty_model_a5eeaf57ee00bed2d294e863839338f4f} 
+Projekt.\+Models.\+Faculty\+Model.\+Faculty\+Model (\begin{DoxyParamCaption}\item[{Dictionary$<$ string, object $>$}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model} na podstawie słownika danych. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Słownik z danymi wydziału.\\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_faculty_model_a22c26e124e41144b04ef2aacaff4968d}\index{Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}!ToString@{ToString}}
+\index{ToString@{ToString}!Projekt.Models.FacultyModel@{Projekt.Models.FacultyModel}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_faculty_model_a22c26e124e41144b04ef2aacaff4968d} 
+override string Projekt.\+Models.\+Faculty\+Model.\+To\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Zwraca skróconą reprezentację tekstową wydziału. 
+
+\begin{DoxyReturn}{Returns}
+Nazwa skrócona i identyfikator wydziału.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Models/Faculty\+Model.\+cs\end{DoxyCompactItemize}

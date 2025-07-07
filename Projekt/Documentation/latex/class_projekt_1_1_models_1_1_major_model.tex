@@ -1,0 +1,171 @@
+\doxysection{Projekt.\+Models.\+Major\+Model Class Reference}
+\hypertarget{class_projekt_1_1_models_1_1_major_model}{}\label{class_projekt_1_1_models_1_1_major_model}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+
+
+Reprezentuje model kierunku studiów, zawierający informacje o nazwie, wydziale oraz powiązaniach z innymi modelami.  
+
+
+Inheritance diagram for Projekt.\+Models.\+Major\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_projekt_1_1_models_1_1_major_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model_aaffac189c379e19a93a60172b739ceb9}{Equals}} (\mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}}? other)
+\begin{DoxyCompactList}\small\item\em Sprawdza równość z innym obiektem \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}. \end{DoxyCompactList}\item 
+override bool \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model_ae9e63b2f592139df3e38aa46628b6fa2}{Equals}} (object? obj)
+\begin{DoxyCompactList}\small\item\em Sprawdza równość z innym obiektem. \end{DoxyCompactList}\item 
+override int \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model_ac0abef4c07912d6a8d7f5ad8851b8cff}{Get\+Hash\+Code}} ()
+\begin{DoxyCompactList}\small\item\em Zwraca kod skrótu dla obiektu. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model_a62fd0faf54b6335354dbb92e8b6fd4a2}{Major\+Model}} (Dictionary$<$ string, object $>$ data, \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} wrapper)
+\begin{DoxyCompactList}\small\item\em Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model} na podstawie słownika danych i wrappera logowania. \end{DoxyCompactList}\item 
+override string \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model_a61a6967b12c9f23c1c5b5c25339ee6b6}{To\+String}} ()
+\begin{DoxyCompactList}\small\item\em Zwraca nazwę kierunku i identyfikator wydziału jako tekst. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a745287449d5e54b61612c17b1c2b29cd}\label{class_projekt_1_1_models_1_1_major_model_a745287449d5e54b61612c17b1c2b29cd} 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}}? {\bfseries Login\+Wrapper}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Wrapper logowania powiązany z modelem. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a0c736953dc2f833a7034882d102e6022}\label{class_projekt_1_1_models_1_1_major_model_a0c736953dc2f833a7034882d102e6022} 
+int {\bfseries Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Identyfikator kierunku. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_ae1aa45714e625a4c4313029f79e949b3}\label{class_projekt_1_1_models_1_1_major_model_ae1aa45714e625a4c4313029f79e949b3} 
+int {\bfseries Name\+Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Identyfikator nazwy kierunku. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a80766389f82b0a1d09e2898de6fb83f1}\label{class_projekt_1_1_models_1_1_major_model_a80766389f82b0a1d09e2898de6fb83f1} 
+string? {\bfseries Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Nazwa kierunku. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_af0ecdc55f8a837f01c6a7ab50bf880ff}\label{class_projekt_1_1_models_1_1_major_model_af0ecdc55f8a837f01c6a7ab50bf880ff} 
+string {\bfseries Faculty\+Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Identyfikator wydziału. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a5bc0e14c50dc76479b0b46d585adcdb2}\label{class_projekt_1_1_models_1_1_major_model_a5bc0e14c50dc76479b0b46d585adcdb2} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model}}? {\bfseries Faculty}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Model wydziału powiązany z kierunkiem. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_aae3d851febdbd8821208fd104c76a286}\label{class_projekt_1_1_models_1_1_major_model_aae3d851febdbd8821208fd104c76a286} 
+Notify\+Task\+Completion$<$ string $>$ {\bfseries Get\+Name\+Async}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Zwraca asynchronicznie nazwę kierunku. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_af9e96a141f0386f67e84f311d984987c}\label{class_projekt_1_1_models_1_1_major_model_af9e96a141f0386f67e84f311d984987c} 
+Notify\+Task\+Completion$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model}} $>$ {\bfseries Get\+Faculty\+Async}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Zwraca asynchronicznie model wydziału. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reprezentuje model kierunku studiów, zawierający informacje o nazwie, wydziale oraz powiązaniach z innymi modelami. 
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a62fd0faf54b6335354dbb92e8b6fd4a2}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}!MajorModel@{MajorModel}}
+\index{MajorModel@{MajorModel}!Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+\doxysubsubsection{\texorpdfstring{MajorModel()}{MajorModel()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_major_model_a62fd0faf54b6335354dbb92e8b6fd4a2} 
+Projekt.\+Models.\+Major\+Model.\+Major\+Model (\begin{DoxyParamCaption}\item[{Dictionary$<$ string, object $>$}]{data}{, }\item[{\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}}}]{wrapper}{}\end{DoxyParamCaption})}
+
+
+
+Tworzy nowy obiekt \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model} na podstawie słownika danych i wrappera logowania. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Słownik z danymi kierunku.\\
+\hline
+{\em wrapper} & Obiekt Login\+Wrapper.\\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_aaffac189c379e19a93a60172b739ceb9}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}!Equals@{Equals}}
+\index{Equals@{Equals}!Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+\doxysubsubsection{\texorpdfstring{Equals()}{Equals()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_major_model_aaffac189c379e19a93a60172b739ceb9} 
+bool Projekt.\+Models.\+Major\+Model.\+Equals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}}?}]{other}{}\end{DoxyParamCaption})}
+
+
+
+Sprawdza równość z innym obiektem \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Obiekt \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model} do porównania.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True, jeśli obiekty są równe; w przeciwnym razie false.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_ae9e63b2f592139df3e38aa46628b6fa2}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}!Equals@{Equals}}
+\index{Equals@{Equals}!Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+\doxysubsubsection{\texorpdfstring{Equals()}{Equals()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_major_model_ae9e63b2f592139df3e38aa46628b6fa2} 
+override bool Projekt.\+Models.\+Major\+Model.\+Equals (\begin{DoxyParamCaption}\item[{object?}]{obj}{}\end{DoxyParamCaption})}
+
+
+
+Sprawdza równość z innym obiektem. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em obj} & Obiekt do porównania.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True, jeśli obiekty są równe; w przeciwnym razie false.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_ac0abef4c07912d6a8d7f5ad8851b8cff}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}!GetHashCode@{GetHashCode}}
+\index{GetHashCode@{GetHashCode}!Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+\doxysubsubsection{\texorpdfstring{GetHashCode()}{GetHashCode()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_major_model_ac0abef4c07912d6a8d7f5ad8851b8cff} 
+override int Projekt.\+Models.\+Major\+Model.\+Get\+Hash\+Code (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Zwraca kod skrótu dla obiektu. 
+
+\begin{DoxyReturn}{Returns}
+Kod skrótu.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_major_model_a61a6967b12c9f23c1c5b5c25339ee6b6}\index{Projekt.Models.MajorModel@{Projekt.Models.MajorModel}!ToString@{ToString}}
+\index{ToString@{ToString}!Projekt.Models.MajorModel@{Projekt.Models.MajorModel}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_major_model_a61a6967b12c9f23c1c5b5c25339ee6b6} 
+override string Projekt.\+Models.\+Major\+Model.\+To\+String (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Zwraca nazwę kierunku i identyfikator wydziału jako tekst. 
+
+\begin{DoxyReturn}{Returns}
+Nazwa kierunku i identyfikator wydziału.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Models/Major\+Model.\+cs\end{DoxyCompactItemize}

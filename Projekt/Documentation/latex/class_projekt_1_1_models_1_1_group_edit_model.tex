@@ -1,0 +1,141 @@
+\doxysection{Projekt.\+Models.\+Group\+Edit\+Model Class Reference}
+\hypertarget{class_projekt_1_1_models_1_1_group_edit_model}{}\label{class_projekt_1_1_models_1_1_group_edit_model}\index{Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}}
+Inheritance diagram for Projekt.\+Models.\+Group\+Edit\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_projekt_1_1_models_1_1_group_edit_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a9c5e4aa2525d14d83e2669c5d08a9362}\label{class_projekt_1_1_models_1_1_group_edit_model_a9c5e4aa2525d14d83e2669c5d08a9362} 
+override string {\bfseries To\+String} ()
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a501cc1c41be2da497200b965d147c290}\label{class_projekt_1_1_models_1_1_group_edit_model_a501cc1c41be2da497200b965d147c290} 
+{\bfseries Group\+Edit\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a12d7c676b3fc4d8904d9f8c8627c5616}\label{class_projekt_1_1_models_1_1_group_edit_model_a12d7c676b3fc4d8904d9f8c8627c5616} 
+async Task$<$ bool $>$ {\bfseries Load\+Group\+Data} (int group\+Id)
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a86f7625e1ce7e24671fdcb570f497bcd}\label{class_projekt_1_1_models_1_1_group_edit_model_a86f7625e1ce7e24671fdcb570f497bcd} 
+async Task$<$ bool $>$ {\bfseries Update\+Group} ()
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a037eebcab14b1ea91872521c4af58d3c}\label{class_projekt_1_1_models_1_1_group_edit_model_a037eebcab14b1ea91872521c4af58d3c} 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}} $>$ $>$ {\bfseries Get\+All\+Groups\+Async} ()
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_ab48131eaa4d3e6e7321c10dd2499d6e7}\label{class_projekt_1_1_models_1_1_group_edit_model_ab48131eaa4d3e6e7321c10dd2499d6e7} 
+string {\bfseries Build\+Default\+Query} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_models_1_1_base_table_model}{Projekt.\+Models.\+Base\+Table\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Base\+Table\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+async Task$<$ List$<$ Dictionary$<$ string, object $>$ $>$ $>$ {\bfseries Retrieve\+Default\+Query} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a16e98c5a6f3f3cc38f509bfb5597c806}\label{class_projekt_1_1_models_1_1_group_edit_model_a16e98c5a6f3f3cc38f509bfb5597c806} 
+List$<$ string $>$? {\bfseries \+\_\+faculties}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_aed2f519cff9c2b9b9919b84abe5b16bf}\label{class_projekt_1_1_models_1_1_group_edit_model_aed2f519cff9c2b9b9919b84abe5b16bf} 
+List$<$ string $>$? {\bfseries \+\_\+degree}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_aab385a208f6ead5f51bb9875a2be051f}\label{class_projekt_1_1_models_1_1_group_edit_model_aab385a208f6ead5f51bb9875a2be051f} 
+List$<$ int $>$? {\bfseries \+\_\+semesters} = \mbox{[}1, 2, 3, 4, 5, 6, 7\mbox{]}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_aaa5c640f8b492b6c343a4cdcd7b55002}\label{class_projekt_1_1_models_1_1_group_edit_model_aaa5c640f8b492b6c343a4cdcd7b55002} 
+string? {\bfseries Current\+Faculty}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a0402d01897061dcb42dd165832527d8a}\label{class_projekt_1_1_models_1_1_group_edit_model_a0402d01897061dcb42dd165832527d8a} 
+string? {\bfseries Current\+Degree}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a44ae2f533df99cf24dec1d12b344fed4}\label{class_projekt_1_1_models_1_1_group_edit_model_a44ae2f533df99cf24dec1d12b344fed4} 
+string? {\bfseries Current\+Semester}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a5e4b9d3dcb2b95ece1d323f7b2485168}\label{class_projekt_1_1_models_1_1_group_edit_model_a5e4b9d3dcb2b95ece1d323f7b2485168} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}}? {\bfseries \+\_\+model}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a2ca4e91847ba5bc3d4c18f8a1e9d530e}\label{class_projekt_1_1_models_1_1_group_edit_model_a2ca4e91847ba5bc3d4c18f8a1e9d530e} 
+int {\bfseries Group\+Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a54fcd529d50a964a2283c2648d5a2873}\label{class_projekt_1_1_models_1_1_group_edit_model_a54fcd529d50a964a2283c2648d5a2873} 
+string? {\bfseries Group\+Number}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model_a3568de1ee3513028a81c97ecf68368d8}{Table\+Name}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+string? \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model_adf2418f400137c987dbdee2efa91720b}{Default\+Query}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+Dictionary$<$ string, object $>$? \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model_a7a42e1b6ca6203d6a1f1312f01920cca}{Default\+Parameters}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_models_1_1_base_table_model}{Projekt.\+Models.\+Base\+Table\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}}? {\bfseries Login\+Wrapper}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-property-members}
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_doc-property-members}
+\doxysubsection{Property Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a7a42e1b6ca6203d6a1f1312f01920cca}\index{Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}!DefaultParameters@{DefaultParameters}}
+\index{DefaultParameters@{DefaultParameters}!Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}}
+\doxysubsubsection{\texorpdfstring{DefaultParameters}{DefaultParameters}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_edit_model_a7a42e1b6ca6203d6a1f1312f01920cca} 
+Dictionary$<$string, object$>$? Projekt.\+Models.\+Group\+Edit\+Model.\+Default\+Parameters\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Implements \mbox{\hyperlink{interface_projekt_1_1_models_1_1_i_table}{Projekt.\+Models.\+ITable}}.
+
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_adf2418f400137c987dbdee2efa91720b}\index{Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}!DefaultQuery@{DefaultQuery}}
+\index{DefaultQuery@{DefaultQuery}!Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}}
+\doxysubsubsection{\texorpdfstring{DefaultQuery}{DefaultQuery}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_edit_model_adf2418f400137c987dbdee2efa91720b} 
+string? Projekt.\+Models.\+Group\+Edit\+Model.\+Default\+Query\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Implements \mbox{\hyperlink{interface_projekt_1_1_models_1_1_i_table}{Projekt.\+Models.\+ITable}}.
+
+\Hypertarget{class_projekt_1_1_models_1_1_group_edit_model_a3568de1ee3513028a81c97ecf68368d8}\index{Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}!TableName@{TableName}}
+\index{TableName@{TableName}!Projekt.Models.GroupEditModel@{Projekt.Models.GroupEditModel}}
+\doxysubsubsection{\texorpdfstring{TableName}{TableName}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_edit_model_a3568de1ee3513028a81c97ecf68368d8} 
+string Projekt.\+Models.\+Group\+Edit\+Model.\+Table\+Name\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Implements \mbox{\hyperlink{interface_projekt_1_1_models_1_1_i_table}{Projekt.\+Models.\+ITable}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Models/Group\+Edit\+Model.\+cs\end{DoxyCompactItemize}

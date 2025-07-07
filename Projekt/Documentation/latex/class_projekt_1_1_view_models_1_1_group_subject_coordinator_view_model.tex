@@ -1,0 +1,131 @@
+\doxysection{Projekt.\+View\+Models.\+Group\+Subject\+Coordinator\+View\+Model Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model}{}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model}\index{Projekt.ViewModels.GroupSubjectCoordinatorViewModel@{Projekt.ViewModels.GroupSubjectCoordinatorViewModel}}
+
+
+View\+Model do koordynowania przypisywania prowadzących do grup i przedmiotów.  
+
+
+Inheritance diagram for Projekt.\+View\+Models.\+Group\+Subject\+Coordinator\+View\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.265306cm]{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a17d06829d1f9567a6f190da2a8a66f6f}{Group\+Subject\+Coordinator\+View\+Model}} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} wrapper)
+\begin{DoxyCompactList}\small\item\em Inicjalizuje nową instancję \doxylink{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model}{Group\+Subject\+Coordinator\+View\+Model}. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a126f257852b6c90d9d93ae496382cee1}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a126f257852b6c90d9d93ae496382cee1} 
+async Task {\bfseries Load\+Data\+Async} ()
+\begin{DoxyCompactList}\small\item\em Wczytuje dane grup i przedmiotów oraz przygotowuje listy. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_list_boxes_view_model}{Projekt.\+View\+Models.\+Two\+List\+Boxes\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+object? {\bfseries Set\+Selected\+Item} (Observable\+Collection$<$ object $>$ source, object? value)
+\item 
+{\bfseries Two\+List\+Boxes\+View\+Model} (string Left\+Header, string Right\+Header)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_ad017de7b9e3bc0f1d93dcbe87f26e51d}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_ad017de7b9e3bc0f1d93dcbe87f26e51d} 
+bool {\bfseries Is\+Loading} = false\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Czy trwa ładowanie danych. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a30f2f258db9c816519c92ba70eccdd0f}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a30f2f258db9c816519c92ba70eccdd0f} 
+string {\bfseries Error\+String}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komunikat o błędzie. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a79fc72987c50b3d5fff7b4a3a0c4b7e7}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a79fc72987c50b3d5fff7b4a3a0c4b7e7} 
+string {\bfseries Success\+String}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komunikat o sukcesie. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_aaae47f65a8286a3bc98fb5ab1a170691}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_aaae47f65a8286a3bc98fb5ab1a170691} 
+ICommand {\bfseries Save\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komenda zapisu zmian. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_aba3ecb2725d91af59411c0ce45aca44a}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_aba3ecb2725d91af59411c0ce45aca44a} 
+ICommand {\bfseries Cancel\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komenda anulowania zmian. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a2f62aa00113a5bbce8198047504fcfd9}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a2f62aa00113a5bbce8198047504fcfd9} 
+List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}} $>$ {\bfseries Groups}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Lista dostępnych grup. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a5a59d0ffdeeda1d04cd2ec562f28cc15}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a5a59d0ffdeeda1d04cd2ec562f28cc15} 
+List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_subject_model}{Subject\+Model}} $>$ {\bfseries Subjects}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Lista dostępnych przedmiotów. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a190a0e064cce4c46905fd6e8bab10fcc}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a190a0e064cce4c46905fd6e8bab10fcc} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}}? {\bfseries Selected\+Group}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Aktualnie wybrana grupa. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a315413ce4c6fc1b80b66cecd775f6e9e}\label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a315413ce4c6fc1b80b66cecd775f6e9e} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_subject_model}{Subject\+Model}}? {\bfseries Selected\+Subject}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Aktualnie wybrany przedmiot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_list_boxes_view_model}{Projekt.\+View\+Models.\+Two\+List\+Boxes\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+string {\bfseries Left\+Pane\+Header} = "{}Left Pane"{}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string {\bfseries Right\+Pane\+Header} = "{}Right Pane"{}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Observable\+Collection$<$ object $>$ {\bfseries Left\+Pane\+Items}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Observable\+Collection$<$ object $>$ {\bfseries Right\+Pane\+Items}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+object? {\bfseries Left\+Pane\+Selected\+Item}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+object? {\bfseries Right\+Pane\+Selected\+Item}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+ICommand {\bfseries Move\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+ICommand {\bfseries Move\+All\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_list_boxes_view_model}{Projekt.\+View\+Models.\+Two\+List\+Boxes\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+Func$<$ Task $>$ {\bfseries Get\+Data}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+View\+Model do koordynowania przypisywania prowadzących do grup i przedmiotów. 
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a17d06829d1f9567a6f190da2a8a66f6f}\index{Projekt.ViewModels.GroupSubjectCoordinatorViewModel@{Projekt.ViewModels.GroupSubjectCoordinatorViewModel}!GroupSubjectCoordinatorViewModel@{GroupSubjectCoordinatorViewModel}}
+\index{GroupSubjectCoordinatorViewModel@{GroupSubjectCoordinatorViewModel}!Projekt.ViewModels.GroupSubjectCoordinatorViewModel@{Projekt.ViewModels.GroupSubjectCoordinatorViewModel}}
+\doxysubsubsection{\texorpdfstring{GroupSubjectCoordinatorViewModel()}{GroupSubjectCoordinatorViewModel()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model_a17d06829d1f9567a6f190da2a8a66f6f} 
+Projekt.\+View\+Models.\+Group\+Subject\+Coordinator\+View\+Model.\+Group\+Subject\+Coordinator\+View\+Model (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}}}]{wrapper}{}\end{DoxyParamCaption})}
+
+
+
+Inicjalizuje nową instancję \doxylink{class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model}{Group\+Subject\+Coordinator\+View\+Model}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em wrapper} & Obiekt logowania.\\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Group\+Subject\+Coordinator\+View\+Model.\+cs\end{DoxyCompactItemize}

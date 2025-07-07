@@ -1,0 +1,62 @@
+\doxysection{Projekt.\+View\+Models.\+Login\+View\+Model Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_login_view_model}{}\label{class_projekt_1_1_view_models_1_1_login_view_model}\index{Projekt.ViewModels.LoginViewModel@{Projekt.ViewModels.LoginViewModel}}
+Inheritance diagram for Projekt.\+View\+Models.\+Login\+View\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.673307cm]{class_projekt_1_1_view_models_1_1_login_view_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_ae380688da5b737bbce56a7a3b719cb99}\label{class_projekt_1_1_view_models_1_1_login_view_model_ae380688da5b737bbce56a7a3b719cb99} 
+bool {\bfseries Login\+In\+Progress}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_ae95c4c519ccc294f04b6a7c7d924e76c}\label{class_projekt_1_1_view_models_1_1_login_view_model_ae95c4c519ccc294f04b6a7c7d924e76c} 
+string {\bfseries Username}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_adb2d6822b6794ddacdf91d0a0676a2d1}\label{class_projekt_1_1_view_models_1_1_login_view_model_adb2d6822b6794ddacdf91d0a0676a2d1} 
+string {\bfseries Password}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_a7eedf075ddd9c6552e4be614569c8f38}\label{class_projekt_1_1_view_models_1_1_login_view_model_a7eedf075ddd9c6552e4be614569c8f38} 
+string {\bfseries Error\+String}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_ae3acc3370e3d9e49dcc5622480ed6041}\label{class_projekt_1_1_view_models_1_1_login_view_model_ae3acc3370e3d9e49dcc5622480ed6041} 
+ICommand {\bfseries Login\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_afb55f4f5605ace8e68dc90811fe1a3a4}\label{class_projekt_1_1_view_models_1_1_login_view_model_afb55f4f5605ace8e68dc90811fe1a3a4} 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} {\bfseries Login\+Wrapper}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_login_view_model_ab7726c0e785a1de35dbac93dda1417ad}\label{class_projekt_1_1_view_models_1_1_login_view_model_ab7726c0e785a1de35dbac93dda1417ad} 
+Action? {\bfseries Authenticated}
+\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Login\+View\+Model.\+cs\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Template\+View\+Model.\+cs\end{DoxyCompactItemize}

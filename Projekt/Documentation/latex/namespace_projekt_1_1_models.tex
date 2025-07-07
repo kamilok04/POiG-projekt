@@ -1,0 +1,76 @@
+\doxysection{Projekt.\+Models Namespace Reference}
+\hypertarget{namespace_projekt_1_1_models}{}\label{namespace_projekt_1_1_models}\index{Projekt.Models@{Projekt.Models}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_base_table_model}{Base\+Table\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model}}
+\begin{DoxyCompactList}\small\item\em Reprezentuje rozszerzony model studenta z dodatkowymi informacjami o wydziale, kierunku i semestrze. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model}}
+\begin{DoxyCompactList}\small\item\em Reprezentuje model wydziału, przechowujący identyfikator oraz nazwę wydziału. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_create_model}{Group\+Create\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_delete_model}{Group\+Delete\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model}{Group\+Student\+Model}}
+\item 
+interface \mbox{\hyperlink{interface_projekt_1_1_models_1_1_i_table}{ITable}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_lesson_model}{Lesson\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_login_model}{Login\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_data_model}{Major\+Data\+Model}}
+\begin{DoxyCompactList}\small\item\em Model danych kierunku studiów, przechowujący nazwę kierunku. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}}
+\begin{DoxyCompactList}\small\item\em Reprezentuje model kierunku studiów, zawierający informacje o nazwie, wydziale oraz powiązaniach z innymi modelami. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_place_create_model}{Place\+Create\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_place_model}{Place\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_subject_model}{Subject\+Model}}
+\item 
+class \mbox{\hyperlink{class_projekt_1_1_models_1_1_user_model}{User\+Model}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespace_projekt_1_1_models_a4c41621a497b9212f434453b3bfe9565}\label{namespace_projekt_1_1_models_a4c41621a497b9212f434453b3bfe9565} 
+class {\bfseries Coordinator\+Model} (Dictionary$<$ string, object $>$ data)
+\item 
+\Hypertarget{namespace_projekt_1_1_models_ae71e0b269d1a881fe327498cb3bbf41c}\label{namespace_projekt_1_1_models_ae71e0b269d1a881fe327498cb3bbf41c} 
+class {\bfseries Faculty\+Edit\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+\Hypertarget{namespace_projekt_1_1_models_a861956a7f5142e2326c8e3fa57aac00e}\label{namespace_projekt_1_1_models_a861956a7f5142e2326c8e3fa57aac00e} 
+class {\bfseries Main\+Menu\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+class \mbox{\hyperlink{namespace_projekt_1_1_models_a49bcd013362b5f13aec8febd212631a5}{Student\+Model}} (Dictionary$<$ string, object $>$ data)
+\begin{DoxyCompactList}\small\item\em Model studenta dziedziczący po \doxylink{class_projekt_1_1_models_1_1_user_model}{User\+Model}. \end{DoxyCompactList}\item 
+\Hypertarget{namespace_projekt_1_1_models_a37e1cd2d216c2f5ec0939178e2a5c003}\label{namespace_projekt_1_1_models_a37e1cd2d216c2f5ec0939178e2a5c003} 
+class {\bfseries Users\+Edit\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{namespace_projekt_1_1_models_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespace_projekt_1_1_models_a49bcd013362b5f13aec8febd212631a5}\index{Projekt.Models@{Projekt.Models}!StudentModel@{StudentModel}}
+\index{StudentModel@{StudentModel}!Projekt.Models@{Projekt.Models}}
+\doxysubsubsection{\texorpdfstring{StudentModel()}{StudentModel()}}
+{\footnotesize\ttfamily \label{namespace_projekt_1_1_models_a49bcd013362b5f13aec8febd212631a5} 
+class Projekt.\+Models.\+Student\+Model (\begin{DoxyParamCaption}\item[{Dictionary$<$ string, object $>$}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Model studenta dziedziczący po \doxylink{class_projekt_1_1_models_1_1_user_model}{User\+Model}. 
+
+Identyfikator studenta (numer indeksu).
+
+Zwraca reprezentację tekstową studenta.
+
+\begin{DoxyReturn}{Returns}
+Imię, nazwisko, login i numer indeksu studenta.
+\end{DoxyReturn}

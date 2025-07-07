@@ -1,0 +1,56 @@
+\doxysection{Projekt.\+Miscellaneous.\+Observable\+Object Class Reference}
+\hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object}{}\label{class_projekt_1_1_miscellaneous_1_1_observable_object}\index{Projekt.Miscellaneous.ObservableObject@{Projekt.Miscellaneous.ObservableObject}}
+Inheritance diagram for Projekt.\+Miscellaneous.\+Observable\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{class_projekt_1_1_miscellaneous_1_1_observable_object}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object_a69c6cbb1ba5e086d551bc726029c9881}\label{class_projekt_1_1_miscellaneous_1_1_observable_object_a69c6cbb1ba5e086d551bc726029c9881} 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object_a000fcafbe21f0f60e19f469b88f354bc}\label{class_projekt_1_1_miscellaneous_1_1_observable_object_a000fcafbe21f0f60e19f469b88f354bc} 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object_abde74915584d5867b1228785f1c8ae00}\label{class_projekt_1_1_miscellaneous_1_1_observable_object_abde74915584d5867b1228785f1c8ae00} 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}\index{Projekt.Miscellaneous.ObservableObject@{Projekt.Miscellaneous.ObservableObject}!OnPropertyChanged@{OnPropertyChanged}}
+\index{OnPropertyChanged@{OnPropertyChanged}!Projekt.Miscellaneous.ObservableObject@{Projekt.Miscellaneous.ObservableObject}}
+\doxysubsubsection{\texorpdfstring{OnPropertyChanged()}{OnPropertyChanged()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b} 
+virtual void Projekt.\+Miscellaneous.\+Observable\+Object.\+On\+Property\+Changed (\begin{DoxyParamCaption}\item[{string}]{property\+Name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Raises this object\textquotesingle{}s Property\+Changed event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em property\+Name} & The property that has a new value.\\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Miscellaneous/Observable\+Object.\+cs\end{DoxyCompactItemize}

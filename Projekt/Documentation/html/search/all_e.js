@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['savecommand_0',['SaveCommand',['../class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model.html#aaae47f65a8286a3bc98fb5ab1a170691',1,'Projekt::ViewModels::GroupSubjectCoordinatorViewModel']]],
+  ['selectedgroup_1',['SelectedGroup',['../class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model.html#a190a0e064cce4c46905fd6e8bab10fcc',1,'Projekt::ViewModels::GroupSubjectCoordinatorViewModel']]],
+  ['selectedsubject_2',['SelectedSubject',['../class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model.html#a315413ce4c6fc1b80b66cecd775f6e9e',1,'Projekt::ViewModels::GroupSubjectCoordinatorViewModel']]],
+  ['semester_3',['Semester',['../class_projekt_1_1_models_1_1_extended_student_model.html#a4adaf6e8795fe9ba6e40ab4c293bc915',1,'Projekt::Models::ExtendedStudentModel']]],
+  ['setpropertyvalue_4',['SetPropertyValue',['../class_xaml_generated_namespace_1_1_generated_internal_type_helper.html#ade0f04c0f7b18dd5b170e071d5534d38',1,'XamlGeneratedNamespace::GeneratedInternalTypeHelper']]],
+  ['setselecteditem_5',['SetSelectedItem',['../class_projekt_1_1_view_models_1_1_two_data_grids_view_model.html#afef6f3ba63831cf565b25f4ab63a7623',1,'Projekt::ViewModels::TwoDataGridsViewModel']]],
+  ['studentid_6',['StudentID',['../class_projekt_1_1_models_1_1_extended_student_model.html#aed89b799670c449497860adc56e8c1f8',1,'Projekt::Models::ExtendedStudentModel']]],
+  ['studentmodel_7',['StudentModel',['../namespace_projekt_1_1_models.html#a49bcd013362b5f13aec8febd212631a5',1,'Projekt::Models']]],
+  ['subjectcreateview_8',['SubjectCreateView',['../class_projekt_1_1_views_1_1_subject_create_view.html',1,'Projekt::Views']]],
+  ['subjectcreateviewmodel_9',['SubjectCreateViewModel',['../class_projekt_1_1_view_models_1_1_subject_create_view_model.html',1,'Projekt::ViewModels']]],
+  ['subjectdeleteview_10',['SubjectDeleteView',['../class_projekt_1_1_views_1_1_subject_delete_view.html',1,'Projekt::Views']]],
+  ['subjectdeleteviewmodel_11',['SubjectDeleteViewModel',['../class_projekt_1_1_view_models_1_1_subject_delete_view_model.html',1,'Projekt::ViewModels']]],
+  ['subjecteditview_12',['SubjectEditView',['../class_projekt_1_1_views_1_1_subject_edit_view.html',1,'Projekt::Views']]],
+  ['subjecteditviewmodel_13',['SubjectEditViewModel',['../class_projekt_1_1_view_models_1_1_subject_edit_view_model.html',1,'Projekt::ViewModels']]],
+  ['subjectmodel_14',['SubjectModel',['../class_projekt_1_1_models_1_1_subject_model.html',1,'Projekt::Models']]],
+  ['subjects_15',['Subjects',['../class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model.html#a5a59d0ffdeeda1d04cd2ec562f28cc15',1,'Projekt::ViewModels::GroupSubjectCoordinatorViewModel']]],
+  ['subjecttableview_16',['SubjectTableView',['../class_projekt_1_1_views_1_1_subject_table_view.html',1,'Projekt::Views']]],
+  ['subjectviewtableviewmodel_17',['SubjectViewTableViewModel',['../class_projekt_1_1_view_models_1_1_subject_view_table_view_model.html',1,'Projekt::ViewModels']]],
+  ['successstring_18',['SuccessString',['../class_projekt_1_1_view_models_1_1_group_subject_coordinator_view_model.html#a79fc72987c50b3d5fff7b4a3a0c4b7e7',1,'Projekt::ViewModels::GroupSubjectCoordinatorViewModel']]],
+  ['surname_19',['Surname',['../class_projekt_1_1_models_1_1_extended_student_model.html#a0d0ded656dcc4a7fd8bb769366716e58',1,'Projekt::Models::ExtendedStudentModel']]]
+];

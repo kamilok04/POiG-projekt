@@ -1,0 +1,71 @@
+\doxysection{Projekt.\+View\+Models.\+Main\+Menu\+View\+Model Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model}{}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model}\index{Projekt.ViewModels.MainMenuViewModel@{Projekt.ViewModels.MainMenuViewModel}}
+Inheritance diagram for Projekt.\+View\+Models.\+Main\+Menu\+View\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.157996cm]{class_projekt_1_1_view_models_1_1_main_menu_view_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model_a9f72d9ff6081956082f5fda0a12d9b13}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model_a9f72d9ff6081956082f5fda0a12d9b13} 
+{\bfseries Main\+Menu\+View\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_conditional_content_control_view_model}{Projekt.\+View\+Models.\+Conditional\+Content\+Control\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Conditional\+Content\+Control\+View\+Model} ()
+\begin{DoxyCompactList}\small\item\em Konstruktor domyślny. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_conditional_content_control_view_model_a1afcf76ae53c11f0459947e22b41f593}{Change\+View\+Model}} (\mbox{\hyperlink{interface_projekt_1_1_view_models_1_1_i_page_view_model}{IPage\+View\+Model}} view\+Model)
+\begin{DoxyCompactList}\small\item\em Zmienia aktualny widok strony na podany. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model_aca2ab280d9727c272ddfd5db9ceaf657}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model_aca2ab280d9727c272ddfd5db9ceaf657} 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} {\bfseries Wrapper}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model_a607348cfa079ea52cdb8c62e7ea7f46a}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model_a607348cfa079ea52cdb8c62e7ea7f46a} 
+ICommand {\bfseries Change\+Current\+Page\+View\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model_a7d88380bc0ad24e039004f01126b752f}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model_a7d88380bc0ad24e039004f01126b752f} 
+ICommand {\bfseries Logout\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_main_menu_view_model_aa01ad0f61ffc984f5e5c945045073477}\label{class_projekt_1_1_view_models_1_1_main_menu_view_model_aa01ad0f61ffc984f5e5c945045073477} 
+Permission\+Loading {\bfseries this\mbox{[}string index\mbox{]}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_conditional_content_control_view_model}{Projekt.\+View\+Models.\+Conditional\+Content\+Control\+View\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+ICommand {\bfseries Change\+Page\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komenda do zmiany aktualnego widoku strony. \end{DoxyCompactList}\item 
+List$<$ \mbox{\hyperlink{interface_projekt_1_1_view_models_1_1_i_page_view_model}{IPage\+View\+Model}} $>$ {\bfseries Page\+View\+Models}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Lista dostępnych widoków stron. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{interface_projekt_1_1_view_models_1_1_i_page_view_model}{IPage\+View\+Model}}? {\bfseries Current\+Page\+View\+Model}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Aktualnie wybrany widok strony. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Main\+Menu\+View\+Model.\+cs\end{DoxyCompactItemize}

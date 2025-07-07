@@ -1,0 +1,204 @@
+\doxysection{Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model}{}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+
+
+Abstrakcyjny View\+Model do obsługi dwóch powiązanych Data\+Gridów z funkcjonalnością przenoszenia elementów między nimi.  
+
+
+Inheritance diagram for Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_projekt_1_1_view_models_1_1_two_data_grids_view_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_aec45d1ec4212c53cb9fe43aa509dac8b}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_aec45d1ec4212c53cb9fe43aa509dac8b} 
+{\bfseries Two\+Data\+Grids\+View\+Model} ()
+\begin{DoxyCompactList}\small\item\em Konstruktor domyślny. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a0878c19019947c1ab421d61c5b2135d1}{Two\+Data\+Grids\+View\+Model}} (string Left\+Header, string Right\+Header)
+\begin{DoxyCompactList}\small\item\em Konstruktor z nagłówkami paneli. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a54ef8b107dbced866579688f1021f521}{Move}} (Observable\+Collection$<$ object $>$ target)
+\begin{DoxyCompactList}\small\item\em Przenosi zaznaczony element do wybranego panelu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a261691039fdab86af6b6bd8ff31c6719}{Move\+All}} (Observable\+Collection$<$ object $>$ target)
+\begin{DoxyCompactList}\small\item\em Przenosi wszystkie elementy do wybranego panelu. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9aad147b450ec0f079d779da089a6072}{Can\+Move}} ()
+\begin{DoxyCompactList}\small\item\em Sprawdza, czy przenoszenie elementów jest możliwe. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a774a8c199357e96a7cd1f3b8293183f3}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a774a8c199357e96a7cd1f3b8293183f3} 
+Func$<$ Task $>$ {\bfseries Get\+Data}
+\begin{DoxyCompactList}\small\item\em Funkcja do pobierania danych (do implementacji w pochodnych). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+object? \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9f95ff4265fd6662872cffc3b1f4c0dc}{Get\+Selected\+Item}} (Observable\+Collection$<$ object $>$ source)
+\begin{DoxyCompactList}\small\item\em Zwraca zaznaczony element z podanej kolekcji. \end{DoxyCompactList}\item 
+object? \mbox{\hyperlink{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_afef6f3ba63831cf565b25f4ab63a7623}{Set\+Selected\+Item}} (Observable\+Collection$<$ object $>$ source, object? value)
+\begin{DoxyCompactList}\small\item\em Ustawia zaznaczony element w podanej kolekcji. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a1a7fe9a31e3dfa839419ec8dc9228533}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a1a7fe9a31e3dfa839419ec8dc9228533} 
+string {\bfseries Left\+Pane\+Header} = "{}Left Pane"{}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Nagłówek lewego panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a802ebd3079bb46bc25af59af44e075c1}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a802ebd3079bb46bc25af59af44e075c1} 
+string {\bfseries Right\+Pane\+Header} = "{}Right Pane"{}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Nagłówek prawego panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a4ae203720666c0b3f8783d51f17d1585}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a4ae203720666c0b3f8783d51f17d1585} 
+Observable\+Collection$<$ object $>$ {\bfseries Left\+Pane\+Items}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Elementy w lewym panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a755c146f72b118d80f5e659640e5fd3c}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a755c146f72b118d80f5e659640e5fd3c} 
+Observable\+Collection$<$ object $>$ {\bfseries Right\+Pane\+Items}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Elementy w prawym panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a757c26037d751f4d2f84fd46009fd8b7}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a757c26037d751f4d2f84fd46009fd8b7} 
+object? {\bfseries Left\+Pane\+Selected\+Item}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Zaznaczony element w lewym panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_aa2190d9efca4286dfa45a803fbca6540}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_aa2190d9efca4286dfa45a803fbca6540} 
+object? {\bfseries Right\+Pane\+Selected\+Item}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Zaznaczony element w prawym panelu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a17ebf1a9a95ca12bcee36176506867f4}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a17ebf1a9a95ca12bcee36176506867f4} 
+ICommand {\bfseries Move\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komenda do przenoszenia pojedynczego elementu. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a4b0608fdff392141826caf0dc1c9074c}\label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a4b0608fdff392141826caf0dc1c9074c} 
+ICommand {\bfseries Move\+All\+Command}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Komenda do przenoszenia wszystkich elementów. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstrakcyjny View\+Model do obsługi dwóch powiązanych Data\+Gridów z funkcjonalnością przenoszenia elementów między nimi. 
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a0878c19019947c1ab421d61c5b2135d1}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!TwoDataGridsViewModel@{TwoDataGridsViewModel}}
+\index{TwoDataGridsViewModel@{TwoDataGridsViewModel}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{TwoDataGridsViewModel()}{TwoDataGridsViewModel()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a0878c19019947c1ab421d61c5b2135d1} 
+Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Two\+Data\+Grids\+View\+Model (\begin{DoxyParamCaption}\item[{string}]{Left\+Header}{, }\item[{string}]{Right\+Header}{}\end{DoxyParamCaption})}
+
+
+
+Konstruktor z nagłówkami paneli. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Left\+Header} & Nagłówek lewego panelu.\\
+\hline
+{\em Right\+Header} & Nagłówek prawego panelu.\\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9aad147b450ec0f079d779da089a6072}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!CanMove@{CanMove}}
+\index{CanMove@{CanMove}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{CanMove()}{CanMove()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9aad147b450ec0f079d779da089a6072} 
+bool Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Can\+Move (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Sprawdza, czy przenoszenie elementów jest możliwe. 
+
+\begin{DoxyReturn}{Returns}
+True, jeśli przenoszenie jest możliwe.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9f95ff4265fd6662872cffc3b1f4c0dc}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!GetSelectedItem@{GetSelectedItem}}
+\index{GetSelectedItem@{GetSelectedItem}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{GetSelectedItem()}{GetSelectedItem()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a9f95ff4265fd6662872cffc3b1f4c0dc} 
+object? Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Get\+Selected\+Item (\begin{DoxyParamCaption}\item[{Observable\+Collection$<$ object $>$}]{source}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Zwraca zaznaczony element z podanej kolekcji. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & Kolekcja źródłowa.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zaznaczony element.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a54ef8b107dbced866579688f1021f521}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!Move@{Move}}
+\index{Move@{Move}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{Move()}{Move()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a54ef8b107dbced866579688f1021f521} 
+void Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Move (\begin{DoxyParamCaption}\item[{Observable\+Collection$<$ object $>$}]{target}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Przenosi zaznaczony element do wybranego panelu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em target} & Panel docelowy.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a261691039fdab86af6b6bd8ff31c6719}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!MoveAll@{MoveAll}}
+\index{MoveAll@{MoveAll}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{MoveAll()}{MoveAll()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_a261691039fdab86af6b6bd8ff31c6719} 
+void Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Move\+All (\begin{DoxyParamCaption}\item[{Observable\+Collection$<$ object $>$}]{target}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Przenosi wszystkie elementy do wybranego panelu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em target} & Panel docelowy.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_afef6f3ba63831cf565b25f4ab63a7623}\index{Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}!SetSelectedItem@{SetSelectedItem}}
+\index{SetSelectedItem@{SetSelectedItem}!Projekt.ViewModels.TwoDataGridsViewModel@{Projekt.ViewModels.TwoDataGridsViewModel}}
+\doxysubsubsection{\texorpdfstring{SetSelectedItem()}{SetSelectedItem()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_two_data_grids_view_model_afef6f3ba63831cf565b25f4ab63a7623} 
+object? Projekt.\+View\+Models.\+Two\+Data\+Grids\+View\+Model.\+Set\+Selected\+Item (\begin{DoxyParamCaption}\item[{Observable\+Collection$<$ object $>$}]{source}{, }\item[{object?}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Ustawia zaznaczony element w podanej kolekcji. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & Kolekcja źródłowa.\\
+\hline
+{\em value} & Element do zaznaczenia.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Nowo ustawiony zaznaczony element.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Two\+Data\+Grids\+View\+Model.\+cs\end{DoxyCompactItemize}

@@ -1,0 +1,77 @@
+\doxysection{Projekt.\+View\+Models.\+Relay\+Command Class Reference}
+\hypertarget{class_projekt_1_1_view_models_1_1_relay_command}{}\label{class_projekt_1_1_view_models_1_1_relay_command}\index{Projekt.ViewModels.RelayCommand@{Projekt.ViewModels.RelayCommand}}
+
+
+A command whose sole purpose is to relay its functionality to other objects by invoking delegates. The default return value for the Can\+Execute method is \textquotesingle{}true\textquotesingle{}.  
+
+
+Inheritance diagram for Projekt.\+View\+Models.\+Relay\+Command\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_projekt_1_1_view_models_1_1_relay_command}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projekt_1_1_view_models_1_1_relay_command_a81baeac31c056bf7875783ffd1320b5a}{Relay\+Command}} (Action$<$ object?$>$ execute)
+\begin{DoxyCompactList}\small\item\em Creates a new command that can always execute. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_projekt_1_1_view_models_1_1_relay_command_a10d65d2a300a2e0b69862e69af31de7a}{Relay\+Command}} (Action$<$ object?$>$ execute, Predicate$<$ object?$>$? can\+Execute)
+\begin{DoxyCompactList}\small\item\em Creates a new command. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_ab8fff1212e8f0f7e60e5133606deeb5f}\label{class_projekt_1_1_view_models_1_1_relay_command_ab8fff1212e8f0f7e60e5133606deeb5f} 
+bool {\bfseries Can\+Execute} (object? parameters)
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_a3f33155b6c767a9514c40ac98a71c534}\label{class_projekt_1_1_view_models_1_1_relay_command_a3f33155b6c767a9514c40ac98a71c534} 
+void {\bfseries Execute} (object? parameters)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_a4afa9a19f38f71b2cb09b463c6ba3a2c}\label{class_projekt_1_1_view_models_1_1_relay_command_a4afa9a19f38f71b2cb09b463c6ba3a2c} 
+Event\+Handler? {\bfseries Can\+Execute\+Changed}\hspace{0.3cm}{\ttfamily  \mbox{[}add, remove\mbox{]}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A command whose sole purpose is to relay its functionality to other objects by invoking delegates. The default return value for the Can\+Execute method is \textquotesingle{}true\textquotesingle{}. 
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_a81baeac31c056bf7875783ffd1320b5a}\index{Projekt.ViewModels.RelayCommand@{Projekt.ViewModels.RelayCommand}!RelayCommand@{RelayCommand}}
+\index{RelayCommand@{RelayCommand}!Projekt.ViewModels.RelayCommand@{Projekt.ViewModels.RelayCommand}}
+\doxysubsubsection{\texorpdfstring{RelayCommand()}{RelayCommand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_relay_command_a81baeac31c056bf7875783ffd1320b5a} 
+Projekt.\+View\+Models.\+Relay\+Command.\+Relay\+Command (\begin{DoxyParamCaption}\item[{Action$<$ object?$>$}]{execute}{}\end{DoxyParamCaption})}
+
+
+
+Creates a new command that can always execute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em execute} & The execution logic.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_projekt_1_1_view_models_1_1_relay_command_a10d65d2a300a2e0b69862e69af31de7a}\index{Projekt.ViewModels.RelayCommand@{Projekt.ViewModels.RelayCommand}!RelayCommand@{RelayCommand}}
+\index{RelayCommand@{RelayCommand}!Projekt.ViewModels.RelayCommand@{Projekt.ViewModels.RelayCommand}}
+\doxysubsubsection{\texorpdfstring{RelayCommand()}{RelayCommand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_view_models_1_1_relay_command_a10d65d2a300a2e0b69862e69af31de7a} 
+Projekt.\+View\+Models.\+Relay\+Command.\+Relay\+Command (\begin{DoxyParamCaption}\item[{Action$<$ object?$>$}]{execute}{, }\item[{Predicate$<$ object?$>$?}]{can\+Execute}{}\end{DoxyParamCaption})}
+
+
+
+Creates a new command. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em execute} & The execution logic.\\
+\hline
+{\em can\+Execute} & The execution status logic.\\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+View\+Models/Relay\+Command.\+cs\end{DoxyCompactItemize}

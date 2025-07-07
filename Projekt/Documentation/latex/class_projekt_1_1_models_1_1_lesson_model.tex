@@ -1,0 +1,70 @@
+\doxysection{Projekt.\+Models.\+Lesson\+Model Class Reference}
+\hypertarget{class_projekt_1_1_models_1_1_lesson_model}{}\label{class_projekt_1_1_models_1_1_lesson_model}\index{Projekt.Models.LessonModel@{Projekt.Models.LessonModel}}
+Inheritance diagram for Projekt.\+Models.\+Lesson\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_projekt_1_1_models_1_1_lesson_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_ae88aa672773be8892bbd76a529465e33}\label{class_projekt_1_1_models_1_1_lesson_model_ae88aa672773be8892bbd76a529465e33} 
+{\bfseries Lesson\+Model} (Dictionary$<$ string, object $>$ row)
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_aa6b1f6f9711f6967fb8cba35cced930b}\label{class_projekt_1_1_models_1_1_lesson_model_aa6b1f6f9711f6967fb8cba35cced930b} 
+async Task {\bfseries Load\+Data\+Async} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} wrapper)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a11764f5c8396cda2e2476ea26ecf5198}\label{class_projekt_1_1_models_1_1_lesson_model_a11764f5c8396cda2e2476ea26ecf5198} 
+int {\bfseries Id}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a57b05c3c1646722d5cb898be152468a6}\label{class_projekt_1_1_models_1_1_lesson_model_a57b05c3c1646722d5cb898be152468a6} 
+Time\+Only {\bfseries Time\+Start}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a5dcfc261b2a421c7f4c07a7eee05797c}\label{class_projekt_1_1_models_1_1_lesson_model_a5dcfc261b2a421c7f4c07a7eee05797c} 
+Time\+Only {\bfseries Time\+End}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a33e64f091348dde26cb25c3a517c32e9}\label{class_projekt_1_1_models_1_1_lesson_model_a33e64f091348dde26cb25c3a517c32e9} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_subject_model}{Subject\+Model}}? {\bfseries Subject}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a4bf754e9875dd9c61dc9299e5e916e29}\label{class_projekt_1_1_models_1_1_lesson_model_a4bf754e9875dd9c61dc9299e5e916e29} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_place_model}{Place\+Model}}? {\bfseries Place}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_acc62fcf777a5b8236f99f3746f04cdf1}\label{class_projekt_1_1_models_1_1_lesson_model_acc62fcf777a5b8236f99f3746f04cdf1} 
+\mbox{\hyperlink{class_projekt_1_1_models_1_1_group_edit_model}{Group\+Edit\+Model}}? {\bfseries Group}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_ae13bdba50a8611a22dccdb6614f5dabb}\label{class_projekt_1_1_models_1_1_lesson_model_ae13bdba50a8611a22dccdb6614f5dabb} 
+List$<$ string $>$ {\bfseries Coordinators}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_lesson_model_a54ca0adaca869acdd1f7709802fdb77f}\label{class_projekt_1_1_models_1_1_lesson_model_a54ca0adaca869acdd1f7709802fdb77f} 
+string {\bfseries Day\+Of\+Week}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Models/Lesson\+Model.\+cs\end{DoxyCompactItemize}

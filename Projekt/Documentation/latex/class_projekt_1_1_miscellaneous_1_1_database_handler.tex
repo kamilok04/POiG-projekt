@@ -1,0 +1,87 @@
+\doxysection{Projekt.\+Miscellaneous.\+Database\+Handler Class Reference}
+\hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler}{}\label{class_projekt_1_1_miscellaneous_1_1_database_handler}\index{Projekt.Miscellaneous.DatabaseHandler@{Projekt.Miscellaneous.DatabaseHandler}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_aaef411bc61970507ed6f0122e77b5896}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_aaef411bc61970507ed6f0122e77b5896} 
+async Task$<$ My\+Sql\+Connection $>$ {\bfseries Get\+Connection\+Async} ()
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_acf0ea9a6e41fb020a865860541729295}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_acf0ea9a6e41fb020a865860541729295} 
+async Task$<$ bool $>$ {\bfseries Test\+Connection\+Async} ()
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_a442f649dd06caec6a3a1041d3e61c2ad}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_a442f649dd06caec6a3a1041d3e61c2ad} 
+async Task$<$ int $>$ {\bfseries Execute\+Non\+Query\+Async} (string query, Dictionary$<$ string, object $>$? parameters=null)
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_acd206a388becad216ad6c531882bf0ea}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_acd206a388becad216ad6c531882bf0ea} 
+async Task$<$ object?$>$ {\bfseries Execute\+Scalar\+Async} (string query, Dictionary$<$ string, object $>$? parameters=null)
+\item 
+async Task$<$ List$<$ Dictionary$<$ string, object $>$ $>$ $>$ \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_database_handler_ab5eaec5620d6bc874a637432bf809bf7}{Execute\+Query\+Async}} (string query, Dictionary$<$ string, object $>$? parameters=null)
+\begin{DoxyCompactList}\small\item\em Executes a query and returns the results as a list of dictionaries, where each dictionary represents a row. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_ab7457d3e644786773ea7db3901628d63}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_ab7457d3e644786773ea7db3901628d63} 
+async Task$<$ int $>$ {\bfseries Suggest\+Student\+ID} ()
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_a40a284b7c87d31e6a66d79707a34f846}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_a40a284b7c87d31e6a66d79707a34f846} 
+async Task$<$ Data\+Table $>$ {\bfseries Generate\+Datatable\+Async} (string query, Dictionary$<$ string, object $>$? parameters=null)
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_acb6bb2c9e0ad5dd0070c3fc6e27d9219}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_acb6bb2c9e0ad5dd0070c3fc6e27d9219} 
+async Task$<$ int $>$ {\bfseries Authenticate\+Async} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} wrapper)
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_a2e3804cbf016c993e388a83e12d0cbe6}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_a2e3804cbf016c993e388a83e12d0cbe6} 
+async Task {\bfseries Destroy\+Session} (string username)
+\item 
+async Task$<$ bool $>$ \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_database_handler_a02d5f7014a6701dcb3ea5d57884513e7}{Execute\+In\+Transaction\+Async}} (params My\+Sql\+Command\mbox{[}$\,$\mbox{]} commands)
+\begin{DoxyCompactList}\small\item\em Executes a set of database operations within a transaction. Rolls back if an exception occurs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_ab18ff76ae863367b042c645b7f9e86b4}\label{class_projekt_1_1_miscellaneous_1_1_database_handler_ab18ff76ae863367b042c645b7f9e86b4} 
+static My\+Sql\+Command {\bfseries Create\+Command} (string query, Dictionary$<$ string, object $>$? parameters)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_a02d5f7014a6701dcb3ea5d57884513e7}\index{Projekt.Miscellaneous.DatabaseHandler@{Projekt.Miscellaneous.DatabaseHandler}!ExecuteInTransactionAsync@{ExecuteInTransactionAsync}}
+\index{ExecuteInTransactionAsync@{ExecuteInTransactionAsync}!Projekt.Miscellaneous.DatabaseHandler@{Projekt.Miscellaneous.DatabaseHandler}}
+\doxysubsubsection{\texorpdfstring{ExecuteInTransactionAsync()}{ExecuteInTransactionAsync()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_miscellaneous_1_1_database_handler_a02d5f7014a6701dcb3ea5d57884513e7} 
+async Task$<$ bool $>$ Projekt.\+Miscellaneous.\+Database\+Handler.\+Execute\+In\+Transaction\+Async (\begin{DoxyParamCaption}\item[{params My\+Sql\+Command\mbox{[}$\,$\mbox{]}}]{commands}{}\end{DoxyParamCaption})}
+
+
+
+Executes a set of database operations within a transaction. Rolls back if an exception occurs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em operation} & A function that receives an open My\+Sql\+Connection and My\+Sql\+Transaction to perform operations.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if committed successfully, false if rolled back due to an error.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_database_handler_ab5eaec5620d6bc874a637432bf809bf7}\index{Projekt.Miscellaneous.DatabaseHandler@{Projekt.Miscellaneous.DatabaseHandler}!ExecuteQueryAsync@{ExecuteQueryAsync}}
+\index{ExecuteQueryAsync@{ExecuteQueryAsync}!Projekt.Miscellaneous.DatabaseHandler@{Projekt.Miscellaneous.DatabaseHandler}}
+\doxysubsubsection{\texorpdfstring{ExecuteQueryAsync()}{ExecuteQueryAsync()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_miscellaneous_1_1_database_handler_ab5eaec5620d6bc874a637432bf809bf7} 
+async Task$<$ List$<$ Dictionary$<$ string, object $>$ $>$ $>$ Projekt.\+Miscellaneous.\+Database\+Handler.\+Execute\+Query\+Async (\begin{DoxyParamCaption}\item[{string}]{query}{, }\item[{Dictionary$<$ string, object $>$?}]{parameters}{ = {\ttfamily null}}\end{DoxyParamCaption})}
+
+
+
+Executes a query and returns the results as a list of dictionaries, where each dictionary represents a row. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em query} & A My\+SQL query. Replace parameters with @parameter\+\_\+name.\\
+\hline
+{\em parameters} & A list of parameters, of format \{"{}@parameter\+\_\+name"{} \+: object\}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Miscellaneous/Database\+Handler.\+cs\end{DoxyCompactItemize}

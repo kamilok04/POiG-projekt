@@ -1,0 +1,165 @@
+\doxysection{Projekt.\+Models.\+Group\+Student\+Model Class Reference}
+\hypertarget{class_projekt_1_1_models_1_1_group_student_model}{}\label{class_projekt_1_1_models_1_1_group_student_model}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+Inheritance diagram for Projekt.\+Models.\+Group\+Student\+Model\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_projekt_1_1_models_1_1_group_student_model}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_a4399bb0ff7768a9897b1c029ccea69af}\label{class_projekt_1_1_models_1_1_group_student_model_a4399bb0ff7768a9897b1c029ccea69af} 
+{\bfseries Group\+Student\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} wrapper)
+\begin{DoxyCompactList}\small\item\em Inicjalizuje nową instancję klasy \doxylink{class_projekt_1_1_models_1_1_group_student_model}{Group\+Student\+Model} z podanym wrapperem logowania. \end{DoxyCompactList}\item 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model}} $>$ $>$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model_ac0c64ab0d707c06384482a55bfb966b4}{Get\+Current\+Group\+Students}} (int group\+Id)
+\begin{DoxyCompactList}\small\item\em Pobiera listę studentów przypisanych do określonej grupy na podstawie identyfikatora grupy. \end{DoxyCompactList}\item 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model}} $>$ $>$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model_a45ad0c279048849746f9af2912d7e810}{Get\+Filtered\+Students}} (\mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model}}? faculty, int? semester, \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}}? major)
+\begin{DoxyCompactList}\small\item\em Pobiera listę studentów spełniających określone kryteria filtrowania (wydział, semestr, kierunek). \end{DoxyCompactList}\item 
+My\+Sql\+Command\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model_a977f8e59e36b8ea07baef5f410d45f14}{Create\+Group\+Transaction\+Commands}} (List$<$ int $>$ to\+Add, List$<$ int $>$ to\+Remove, int group\+Id)
+\begin{DoxyCompactList}\small\item\em Tworzy polecenia SQL do dodania i usunięcia przypisań studentów do grupy. \end{DoxyCompactList}\item 
+async Task$<$ bool $>$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model_a2cc35122a6024de29d28305b49a67236}{Execute\+Assignments}} (My\+Sql\+Command\mbox{[}$\,$\mbox{]} commands)
+\begin{DoxyCompactList}\small\item\em Wykonuje przekazane polecenia SQL w ramach jednej transakcji. \end{DoxyCompactList}\item 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}} $>$ $>$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_group_student_model_a04db62ad6e80928d83cedb6b26fee860}{Get\+Filtered\+Majors}} (string faculty\+Name)
+\begin{DoxyCompactList}\small\item\em Pobiera listę kierunków przypisanych do określonego wydziału. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_models_1_1_base_table_model}{Projekt.\+Models.\+Base\+Table\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Base\+Table\+Model} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}} login\+Wrapper)
+\item 
+async Task$<$ List$<$ Dictionary$<$ string, object $>$ $>$ $>$ {\bfseries Retrieve\+Default\+Query} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_models_1_1_base_table_model}{Projekt.\+Models.\+Base\+Table\+Model}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper}}? {\bfseries Login\+Wrapper}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_a977f8e59e36b8ea07baef5f410d45f14}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}!CreateGroupTransactionCommands@{CreateGroupTransactionCommands}}
+\index{CreateGroupTransactionCommands@{CreateGroupTransactionCommands}!Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+\doxysubsubsection{\texorpdfstring{CreateGroupTransactionCommands()}{CreateGroupTransactionCommands()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_student_model_a977f8e59e36b8ea07baef5f410d45f14} 
+My\+Sql\+Command\mbox{[}$\,$\mbox{]} Projekt.\+Models.\+Group\+Student\+Model.\+Create\+Group\+Transaction\+Commands (\begin{DoxyParamCaption}\item[{List$<$ int $>$}]{to\+Add}{, }\item[{List$<$ int $>$}]{to\+Remove}{, }\item[{int}]{group\+Id}{}\end{DoxyParamCaption})}
+
+
+
+Tworzy polecenia SQL do dodania i usunięcia przypisań studentów do grupy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+Add} & Lista identyfikatorów studentów do dodania.\\
+\hline
+{\em to\+Remove} & Lista identyfikatorów studentów do usunięcia.\\
+\hline
+{\em group\+Id} & Identyfikator grupy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Tablica poleceń My\+Sql\+Command do wykonania w transakcji.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_a2cc35122a6024de29d28305b49a67236}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}!ExecuteAssignments@{ExecuteAssignments}}
+\index{ExecuteAssignments@{ExecuteAssignments}!Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+\doxysubsubsection{\texorpdfstring{ExecuteAssignments()}{ExecuteAssignments()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_student_model_a2cc35122a6024de29d28305b49a67236} 
+async Task$<$ bool $>$ Projekt.\+Models.\+Group\+Student\+Model.\+Execute\+Assignments (\begin{DoxyParamCaption}\item[{My\+Sql\+Command\mbox{[}$\,$\mbox{]}}]{commands}{}\end{DoxyParamCaption})}
+
+
+
+Wykonuje przekazane polecenia SQL w ramach jednej transakcji. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em commands} & Tablica poleceń My\+Sql\+Command do wykonania.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True, jeśli transakcja zakończyła się sukcesem; w przeciwnym razie false.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_ac0c64ab0d707c06384482a55bfb966b4}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}!GetCurrentGroupStudents@{GetCurrentGroupStudents}}
+\index{GetCurrentGroupStudents@{GetCurrentGroupStudents}!Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+\doxysubsubsection{\texorpdfstring{GetCurrentGroupStudents()}{GetCurrentGroupStudents()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_student_model_ac0c64ab0d707c06384482a55bfb966b4} 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model}} $>$ $>$ Projekt.\+Models.\+Group\+Student\+Model.\+Get\+Current\+Group\+Students (\begin{DoxyParamCaption}\item[{int}]{group\+Id}{}\end{DoxyParamCaption})}
+
+
+
+Pobiera listę studentów przypisanych do określonej grupy na podstawie identyfikatora grupy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em group\+Id} & Identyfikator grupy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Lista obiektów \doxylink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model} należących do grupy.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_a04db62ad6e80928d83cedb6b26fee860}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}!GetFilteredMajors@{GetFilteredMajors}}
+\index{GetFilteredMajors@{GetFilteredMajors}!Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+\doxysubsubsection{\texorpdfstring{GetFilteredMajors()}{GetFilteredMajors()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_student_model_a04db62ad6e80928d83cedb6b26fee860} 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}} $>$ $>$ Projekt.\+Models.\+Group\+Student\+Model.\+Get\+Filtered\+Majors (\begin{DoxyParamCaption}\item[{string}]{faculty\+Name}{}\end{DoxyParamCaption})}
+
+
+
+Pobiera listę kierunków przypisanych do określonego wydziału. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em faculty\+Name} & Nazwa wydziału.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Lista obiektów \doxylink{class_projekt_1_1_models_1_1_major_model}{Major\+Model} przypisanych do wydziału.
+\end{DoxyReturn}
+\Hypertarget{class_projekt_1_1_models_1_1_group_student_model_a45ad0c279048849746f9af2912d7e810}\index{Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}!GetFilteredStudents@{GetFilteredStudents}}
+\index{GetFilteredStudents@{GetFilteredStudents}!Projekt.Models.GroupStudentModel@{Projekt.Models.GroupStudentModel}}
+\doxysubsubsection{\texorpdfstring{GetFilteredStudents()}{GetFilteredStudents()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_models_1_1_group_student_model_a45ad0c279048849746f9af2912d7e810} 
+async Task$<$ List$<$ \mbox{\hyperlink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model}} $>$ $>$ Projekt.\+Models.\+Group\+Student\+Model.\+Get\+Filtered\+Students (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_projekt_1_1_models_1_1_faculty_model}{Faculty\+Model}}?}]{faculty}{, }\item[{int?}]{semester}{, }\item[{\mbox{\hyperlink{class_projekt_1_1_models_1_1_major_model}{Major\+Model}}?}]{major}{}\end{DoxyParamCaption})}
+
+
+
+Pobiera listę studentów spełniających określone kryteria filtrowania (wydział, semestr, kierunek). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em faculty} & Model wydziału (może być null).\\
+\hline
+{\em semester} & Numer semestru (może być null).\\
+\hline
+{\em major} & Model kierunku (może być null).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Lista obiektów \doxylink{class_projekt_1_1_models_1_1_extended_student_model}{Extended\+Student\+Model} spełniających kryteria.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Models/Group\+Student\+Model.\+cs\end{DoxyCompactItemize}

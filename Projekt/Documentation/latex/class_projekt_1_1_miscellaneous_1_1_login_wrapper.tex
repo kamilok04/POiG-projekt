@@ -1,0 +1,106 @@
+\doxysection{Projekt.\+Miscellaneous.\+Login\+Wrapper Class Reference}
+\hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper}\index{Projekt.Miscellaneous.LoginWrapper@{Projekt.Miscellaneous.LoginWrapper}}
+Inheritance diagram for Projekt.\+Miscellaneous.\+Login\+Wrapper\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_projekt_1_1_miscellaneous_1_1_login_wrapper}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a23976a54482fa3a9ae0d64b9360cc7c5}{Login\+Wrapper}} (\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_database_handler}{Database\+Handler}} \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper_accd095a12ea58ec7f06e815976bbd4ce}{DBHandler}}, string username, string token)
+\begin{DoxyCompactList}\small\item\em Inicjalizuje nową instancję klasy \doxylink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper} z podanym handlerem bazy, nazwą użytkownika i tokenem. \end{DoxyCompactList}\item 
+async Task$<$ bool $>$ \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a9db01f6f6004064a7bd40e396bb11eb5}{Authenticate}} (params int\mbox{[}$\,$\mbox{]} required\+Permissions)
+\begin{DoxyCompactList}\small\item\em Sprawdza, czy użytkownik posiada wymagane uprawnienia. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_aee72a13cd5503a46e25b2de5488d05f4}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_aee72a13cd5503a46e25b2de5488d05f4} 
+void {\bfseries Logout} ()
+\begin{DoxyCompactList}\small\item\em Wylogowuje użytkownika i zamyka sesję. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void {\bfseries Verify\+Property\+Name} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Warns the developer if this object does not have a public property with the specified name. This method does not exist in a Release build. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a70cf66f6a0112bb7f8113d10a39de509}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a70cf66f6a0112bb7f8113d10a39de509} 
+bool {\bfseries Valid}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Flaga informująca o poprawności sesji. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_ae281cd3bb1bbebe581cfbeebe5415f34}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_ae281cd3bb1bbebe581cfbeebe5415f34} 
+string? {\bfseries Token}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Token autoryzacyjny użytkownika. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_accd095a12ea58ec7f06e815976bbd4ce}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_accd095a12ea58ec7f06e815976bbd4ce} 
+\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_database_handler}{Database\+Handler}} {\bfseries DBHandler}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Handler bazy danych powiązany z użytkownikiem. \end{DoxyCompactList}\item 
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a4bae109e3b2327756672e7757d905669}\label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a4bae109e3b2327756672e7757d905669} 
+string? {\bfseries Username}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Nazwa użytkownika. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool {\bfseries Throw\+On\+Invalid\+Property\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns whether an exception is thrown, or if a Debug.\+Fail() is used when an invalid property name is passed to the Verify\+Property\+Name method. The default value is false, but subclasses used by unit tests might override this property\textquotesingle{}s getter to return true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object_a6f67938445264ea78e81b5989dd70e9b}{On\+Property\+Changed}} (string property\+Name)
+\begin{DoxyCompactList}\small\item\em Raises this object\textquotesingle{}s Property\+Changed event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Events inherited from \mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_observable_object}{Projekt.\+Miscellaneous.\+Observable\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+Property\+Changed\+Event\+Handler? {\bfseries Property\+Changed}
+\begin{DoxyCompactList}\small\item\em Raised when a property on this object has a new value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a23976a54482fa3a9ae0d64b9360cc7c5}\index{Projekt.Miscellaneous.LoginWrapper@{Projekt.Miscellaneous.LoginWrapper}!LoginWrapper@{LoginWrapper}}
+\index{LoginWrapper@{LoginWrapper}!Projekt.Miscellaneous.LoginWrapper@{Projekt.Miscellaneous.LoginWrapper}}
+\doxysubsubsection{\texorpdfstring{LoginWrapper()}{LoginWrapper()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a23976a54482fa3a9ae0d64b9360cc7c5} 
+Projekt.\+Miscellaneous.\+Login\+Wrapper.\+Login\+Wrapper (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_projekt_1_1_miscellaneous_1_1_database_handler}{Database\+Handler}}}]{DBHandler}{, }\item[{string}]{username}{, }\item[{string}]{token}{}\end{DoxyParamCaption})}
+
+
+
+Inicjalizuje nową instancję klasy \doxylink{class_projekt_1_1_miscellaneous_1_1_login_wrapper}{Login\+Wrapper} z podanym handlerem bazy, nazwą użytkownika i tokenem. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em DBHandler} & Handler bazy danych.\\
+\hline
+{\em username} & Nazwa użytkownika.\\
+\hline
+{\em token} & Token autoryzacyjny.\\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a9db01f6f6004064a7bd40e396bb11eb5}\index{Projekt.Miscellaneous.LoginWrapper@{Projekt.Miscellaneous.LoginWrapper}!Authenticate@{Authenticate}}
+\index{Authenticate@{Authenticate}!Projekt.Miscellaneous.LoginWrapper@{Projekt.Miscellaneous.LoginWrapper}}
+\doxysubsubsection{\texorpdfstring{Authenticate()}{Authenticate()}}
+{\footnotesize\ttfamily \label{class_projekt_1_1_miscellaneous_1_1_login_wrapper_a9db01f6f6004064a7bd40e396bb11eb5} 
+async Task$<$ bool $>$ Projekt.\+Miscellaneous.\+Login\+Wrapper.\+Authenticate (\begin{DoxyParamCaption}\item[{params int\mbox{[}$\,$\mbox{]}}]{required\+Permissions}{}\end{DoxyParamCaption})}
+
+
+
+Sprawdza, czy użytkownik posiada wymagane uprawnienia. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em required\+Permissions} & Wymagane uprawnienia.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True, jeśli użytkownik ma żądane uprawnienia.
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/user/source/repos/kamilok04/\+POi\+G-\/projekt/\+Projekt/\+Miscellaneous/Login\+Wrapper.\+cs\end{DoxyCompactItemize}
