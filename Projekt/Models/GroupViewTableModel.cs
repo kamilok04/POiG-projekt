@@ -23,8 +23,6 @@ namespace Projekt.Models
             ON 
                 r.id = g.id_rocznika
             JOIN 
-                grupa
-            JOIN 
                 kierunek k
             ON 
                 k.id = r.id_kierunku
