@@ -289,6 +289,7 @@ namespace Projekt.ViewModels
             {
                 ErrorString = null;
                 SuccessString = "Miejsce zaktualizowano z powodzeniem!";
+                MessageBox.Show(SuccessString, "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 await GetDataAsync();
                 ClearFields();
@@ -296,8 +297,8 @@ namespace Projekt.ViewModels
             else
             {
                 SuccessString = null;
-                ErrorString = "Aktualizacja nieudana! Spróbuj ponownie.";
-                MessageBox.Show($"ID: {SubjectId}, ");
+                ErrorString = "Aktualizacja nieudana! Źle wprowadzone dane. Spróbuj ponownie. ";
+                MessageBox.Show(ErrorString, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return success;
         }
