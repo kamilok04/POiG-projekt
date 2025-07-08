@@ -21,7 +21,7 @@
             <RowDefinition Height="10*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.ColumnSpan="6" ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}"/>
+        <DataGrid Grid.ColumnSpan="6" ItemsSource="{Binding Subjects}" SelectedItem="{Binding SelectedSubject}" IsReadOnly="True"/>
         <Button Grid.Row="1" Grid.Column="5" Command="{Binding DeleteSelectedCommand}" Margin="10">Usuń</Button>
     </Grid>
 </UserControl>
