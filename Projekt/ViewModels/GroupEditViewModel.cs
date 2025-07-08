@@ -235,16 +235,17 @@ namespace Projekt.ViewModels
             bool success = await GroupEditModel.UpdateGroup();
             if (success)
             {
-                ErrorString = null;
-                SuccessString = "Grupę zaktualizowano z powodzeniem!";
+                MessageBox.Show("Grupa została zaktualizowana.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+                //SuccessString = "Grupę zaktualizowano z powodzeniem!";
 
                 await GetDataAsync();
                 ClearFields();
             }
             else
             {
-                SuccessString = null;
-                ErrorString = "Aktualizacja nieudana! Podano nieprawidłowe dane! Spróbuj ponownie. Sprawdź czy dany kierunek istnieje dla wydziału.";
+                //SuccessString = null;
+                //ErrorString = "Aktualizacja nieudana! Podano nieprawidłowe dane! Spróbuj ponownie. Sprawdź czy dany kierunek istnieje dla wybranego wydziału.";
+                MessageBox.Show("Aktualizacja nieudana! Podano nieprawidłowe dane! Spróbuj ponownie. Sprawdź czy dany kierunek istnieje dla wybranego wydziału.", "Błąd aktualizacji", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return success;
         }
