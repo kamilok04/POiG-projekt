@@ -115,7 +115,7 @@ namespace Projekt.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Wystąpił błąd podczas usuwania przedmiotu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Wystąpił błąd podczas usuwania grupy: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             #endregion
         }
