@@ -59,6 +59,7 @@
                 <Fluent:RibbonGroupBox Header="Przedmioty" MinWidth="68">
                     <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectCreateViewModel" Visibility="{Binding Path='[SubjectCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                     <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectEditViewModel" Visibility="{Binding Path='[SubjectEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="SubjectDeleteViewModel" Visibility="{Binding Path='[SubjectDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Grupy">
