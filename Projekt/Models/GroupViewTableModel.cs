@@ -15,15 +15,13 @@ namespace Projekt.Models
         public string TableName => String.Empty;
         public string DefaultQuery => """
             SELECT 
-                g.numer "Numer Grupy", w.nazwa "Wydział", dk.nazwa "Kierunek", r.semestr "Semestr",  IF(g.podgrupa is NULL, -1, g.podgrupa) "Podgrupa"
+                g.id "ID grupy", g.numer "Numer Grupy", w.nazwa_krotka "Wydział", dk.nazwa "Kierunek", r.semestr "Semestr"
             FROM 
                 grupa g 
             JOIN 
                 rocznik r 
             ON 
                 r.id = g.id_rocznika
-            JOIN 
-                grupa
             JOIN 
                 kierunek k
             ON 

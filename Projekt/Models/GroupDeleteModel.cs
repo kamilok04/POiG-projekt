@@ -18,7 +18,7 @@ namespace Projekt.Models
         public int StudentCount { get; set; }
 
         public string TableName => "groups";
-        public string? DefaultQuery => BuildDefaultQuery();
+        public string? DefaultQuery => "CALL DeleteGroup(@groupId);";
         public Dictionary<string, object>? DefaultParameters => new()
         {
             { "@groupId", GroupId }
@@ -76,32 +76,13 @@ namespace Projekt.Models
         {
             try
             {
-                // Usuń najpierw powiązania z tabeli pośredniej
-                var deleteIntermediateQuery = "DELETE FROM grupa_student_rocznik WHERE id_grupy = @groupId";
-                var deleteIntermediateParams = new Dictionary<string, object>
-                {
-                    { "@groupId", GroupId }
-                };
+                var deleteGroupQuery = DefaultQuery;
 
-                var deleteIntermediateCommand = DatabaseHandler.CreateCommand(deleteIntermediateQuery, deleteIntermediateParams);
-                var deleteIntermediateSuccess = await DatabaseHandler.ExecuteInTransactionAsync(deleteIntermediateCommand);
-
-                if (!deleteIntermediateSuccess)
-                {
-                    return false;
-                }
-
-                // Następnie usuń grupę
-                var deleteGroupQuery = "DELETE FROM grupa WHERE id = @groupId";
-                var deleteGroupParams = new Dictionary<string, object>
-                {
-                    { "@groupId", GroupId }
-                };
+                var deleteGroupParams = DefaultParameters;
 
                 var deleteGroupCommand = DatabaseHandler.CreateCommand(deleteGroupQuery, deleteGroupParams);
-                var deleteGroupSuccess = await DatabaseHandler.ExecuteInTransactionAsync(deleteGroupCommand);
 
-                return deleteGroupSuccess;
+                return await DatabaseHandler.ExecuteInTransactionAsync(deleteGroupCommand);
             }
             catch (Exception ex)
             {
@@ -166,12 +147,6 @@ namespace Projekt.Models
             }
 
             return groups;
-        }
-        public string BuildDefaultQuery()
-        {
-            StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.Append("DELETE FROM grupa WHERE id = @groupId");
-            return queryBuilder.ToString();
         }
     }
 }

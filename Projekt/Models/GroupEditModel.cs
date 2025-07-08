@@ -87,128 +87,17 @@ namespace Projekt.Models
         {
             try
             {
-                // Sprawdź czy wydział i kierunek istnieją
-                var checkFacultyQuery = "SELECT COUNT(*) as count FROM wydzial WHERE nazwa_krotka = @currentFaculty";
-                var checkFacultyParams = new Dictionary<string, object>
-                {
-                    { "@currentFaculty", CurrentFaculty ?? string.Empty }
-                };
+                var updateSubjectQuery = "CALL UpdateGroup(@groupId, @groupnumber, @currentFaculty, @currentDegree, @currentSemester)";
 
-                var facultyResult = await DatabaseHandler.ExecuteQueryAsync(checkFacultyQuery, checkFacultyParams);
-                int facultyCount = 0;
-                if (facultyResult?.Count > 0 && facultyResult[0].ContainsKey("count"))
-                {
-                    facultyCount = Convert.ToInt32(facultyResult[0]["count"]);
-                }
+                var updateSubjectParams = DefaultParameters;
 
-                var checkDegreeQuery = "SELECT COUNT(*) as count FROM dane_kierunku WHERE nazwa = @currentDegree";
-                var checkDegreeParams = new Dictionary<string, object>
-                {
-                    { "@currentDegree", CurrentDegree ?? string.Empty }
-                };
+                var updateSubjectCommand = DatabaseHandler.CreateCommand(updateSubjectQuery, updateSubjectParams);
 
-                var degreeResult = await DatabaseHandler.ExecuteQueryAsync(checkDegreeQuery, checkDegreeParams);
-                int degreeCount = 0;
-                if (degreeResult?.Count > 0 && degreeResult[0].ContainsKey("count"))
-                {
-                    degreeCount = Convert.ToInt32(degreeResult[0]["count"]);
-                }
-
-                if (facultyCount == 0 || degreeCount == 0)
-                {
-                    return false;
-                }
-
-                // Pobierz ID wydziału i kierunku
-                var getIdFacultyQuery = "SELECT id FROM wydzial WHERE nazwa_krotka = @currentFaculty";
-                var getIdDegreeDetailsQuery = "SELECT id FROM dane_kierunku WHERE nazwa = @currentDegree";
-
-                var facultyIdResult = await DatabaseHandler.ExecuteQueryAsync(getIdFacultyQuery, checkFacultyParams);
-                var degreeIdResult = await DatabaseHandler.ExecuteQueryAsync(getIdDegreeDetailsQuery, checkDegreeParams);
-
-                int facultyId = Convert.ToInt32(facultyIdResult?[0]["id"]);
-                int degreeId = Convert.ToInt32(degreeIdResult?[0]["id"]);
-
-                // Znajdź lub utwórz kierunek
-                var findDegreeQuery = "SELECT id FROM kierunek WHERE id_wydzialu = @facultyId AND id_danych_kierunku = @degreeId";
-                var findDegreeParams = new Dictionary<string, object>
-                {
-                    { "@facultyId", facultyId },
-                    { "@degreeId", degreeId }
-                };
-
-                var existingDegreeResult = await DatabaseHandler.ExecuteQueryAsync(findDegreeQuery, findDegreeParams);
-                int degreeIdFinal;
-
-                if (existingDegreeResult?.Count > 0)
-                {
-                    degreeIdFinal = Convert.ToInt32(existingDegreeResult[0]["id"]);
-                }
-                else
-                {
-                    var insertDegreeQuery = "INSERT INTO kierunek (id_wydzialu, id_danych_kierunku) VALUES (@facultyId, @degreeId); SELECT LAST_INSERT_ID() as id;";
-                    await DatabaseHandler.ExecuteQueryAsync(insertDegreeQuery, findDegreeParams);
-                    var newDegreeResult = await DatabaseHandler.ExecuteQueryAsync(findDegreeQuery, findDegreeParams);
-                    degreeIdFinal = Convert.ToInt32(newDegreeResult?[0]["id"]);
-                }
-
-                // Znajdź lub utwórz rocznik
-                var findSemesterQuery = "SELECT id FROM rocznik WHERE id_kierunku = @degreeId AND semestr = @currentSemester";
-                var findSemesterParams = new Dictionary<string, object>
-                {
-                    { "@degreeId", degreeIdFinal },
-                    { "@currentSemester", CurrentSemester ?? string.Empty }
-                };
-
-                var existingSemesterResult = await DatabaseHandler.ExecuteQueryAsync(findSemesterQuery, findSemesterParams);
-                int semesterIdFinal;
-
-                if (existingSemesterResult?.Count > 0)
-                {
-                    semesterIdFinal = Convert.ToInt32(existingSemesterResult[0]["id"]);
-                }
-                else
-                {
-                    var insertSemesterQuery = "INSERT INTO rocznik (id_kierunku, semestr) VALUES (@degreeId, @currentSemester); SELECT LAST_INSERT_ID() as id;";
-                    await DatabaseHandler.ExecuteQueryAsync(insertSemesterQuery, findSemesterParams);
-                    var newSemesterResult = await DatabaseHandler.ExecuteQueryAsync(findSemesterQuery, findSemesterParams);
-                    semesterIdFinal = Convert.ToInt32(newSemesterResult[0]["id"]);
-                }
-
-                // Aktualizuj grupę
-                var updateGroupQuery = "UPDATE grupa SET numer = @groupnumber, id_rocznika = @semesterId WHERE id = @groupId";
-                var updateGroupParams = new Dictionary<string, object>
-                {
-                    { "@groupnumber", GroupNumber ?? string.Empty },
-                    { "@semesterId", semesterIdFinal },
-                    { "@groupId", GroupId }
-                };
-
-                var updateCommand = DatabaseHandler.CreateCommand(updateGroupQuery, updateGroupParams);
-                var updateSuccess = await DatabaseHandler.ExecuteInTransactionAsync(updateCommand);
-
-                if (!updateSuccess)
-                {
-                    return false;
-                }
-
-                // Aktualizuj tabelę pośrednią
-                var updateIntermediateQuery = "UPDATE grupa_student_rocznik SET id_rocznika = @semesterId WHERE id_grupy = @groupId";
-                var updateIntermediateParams = new Dictionary<string, object>
-                {
-                    { "@semesterId", semesterIdFinal },
-                    { "@groupId", GroupId }
-                };
-
-                var updateIntermediateCommand = DatabaseHandler.CreateCommand(updateIntermediateQuery, updateIntermediateParams);
-                var updateIntermediateSuccess = await DatabaseHandler.ExecuteInTransactionAsync(updateIntermediateCommand);
-
-                return updateIntermediateSuccess;
+                return await DatabaseHandler.ExecuteInTransactionAsync(updateSubjectCommand);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error updating group: {ex.Message}");
-                return false;
+                return false; // Return false on any error
             }
         }
 
