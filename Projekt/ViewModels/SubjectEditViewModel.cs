@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.ServiceModel.Channels;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using Projekt.Miscellaneous;
 using Projekt.Models;
 
@@ -16,21 +18,29 @@ namespace Projekt.ViewModels
     {
         string IPageViewModel.Name => nameof(SubjectEditViewModel);
 
-        private SubjectViewTableModel Model { get; init; }
+        private SubjectEditModel Model { get; init; }
+        private LoginWrapper Wrapper { get; init; }
 
-        private DataTable? _subjects;
-        public DataTable? Subjects
+
+        public NotifyTaskCompletion<ObservableCollection<ExtendedSubjectModel>> NotifySubjects { get; private set; }
+        private async Task<ObservableCollection<ExtendedSubjectModel>> GetSubjects()
         {
-            get => _subjects;
-            private set
-            {
-                _subjects = value;
-                OnPropertyChanged(nameof(Subjects));
-            }
+            var subjects = await RetrieveService.GetAllAsync<SubjectModel>(Wrapper);
+            return subjects != null ? [.. Array.ConvertAll<SubjectModel, ExtendedSubjectModel>(subjects.ToArray(), a => new(a))] : [];
+        }
+        public NotifyTaskCompletion<ObservableCollection<FacultyModel>> NotifyFaculties { get; private set; }
+        private async Task<ObservableCollection<FacultyModel>> GetFaculties()
+        {
+            if (Wrapper == null || Wrapper.DBHandler == null)
+                throw new InvalidOperationException("LoginWrapper or DBHandler is not initialized.");
+           List<FacultyModel> faculties = await RetrieveService.GetAllAsync<FacultyModel>(Wrapper);
+            if (faculties == null) return [];
+            return [.. faculties];
         }
 
-        private DataRowView? _selectedSubject;
-        public DataRowView? SelectedSubject
+
+        private ExtendedSubjectModel? _selectedSubject;
+        public ExtendedSubjectModel? SelectedSubject
         {
             get => _selectedSubject;
             set
@@ -47,35 +57,32 @@ namespace Projekt.ViewModels
 
         public SubjectEditViewModel(LoginWrapper loginWrapper)
         {
-            Model = new(loginWrapper);
-            SubjectEditModel = new SubjectEditModel(loginWrapper);
-            GetDataAsync().ConfigureAwait(false);
+            Wrapper = loginWrapper;
+            Model = new(Wrapper);
+            NotifySubjects = new(GetSubjects());
+            NotifyFaculties = new(GetFaculties());
+
         }
+
+
 
         public SubjectEditViewModel() { } //for designer only
 
-        private async Task GetDataAsync()
-        {
-            if (Model?.LoginWrapper != null && Model?.DefaultQuery != null)
-            {
-                Subjects = await Model.LoginWrapper.DBHandler.GenerateDatatableAsync(Model.DefaultQuery);
-            }
-        }
 
         #region Fields
         private int _subjectId;
         private string? _name;
-        private string? _faculty;
+        private FacultyModel? _faculty;
         private string? _code;
         private string? _description;
         private string? _literature;
         private string? _passingTerms;
         private Int16 _points;
-        private SubjectEditModel? _SubjectEditModel;
+        private ExtendedSubjectModel? _ExtendedSubjectModel;
         #endregion
 
-        private string? _errorString;
-        private string? _successString;
+        private string _errorString = "";
+        private string _successString = "";
 
         #region Public Properties/Commands
         public int SubjectId
@@ -104,9 +111,9 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string Faculty
+        public FacultyModel? Faculty
         {
-            get => _faculty ?? string.Empty;
+            get => _faculty;
             set
             {
                 if (_faculty != value)
@@ -182,7 +189,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? ErrorString
+        public string ErrorString
         {
             get => _errorString;
             set
@@ -190,12 +197,13 @@ namespace Projekt.ViewModels
                 if (_errorString != value)
                 {
                     _errorString = value;
+                    _successString = "";
                     OnPropertyChanged(nameof(ErrorString));
                 }
             }
         }
 
-        public string? SuccessString
+        public string SuccessString
         {
             get => _successString;
             set
@@ -203,12 +211,12 @@ namespace Projekt.ViewModels
                 if (_successString != value)
                 {
                     _successString = value;
+                    _errorString = "";
                     OnPropertyChanged(nameof(SuccessString));
                 }
             }
         }
 
-        public SubjectEditModel? SubjectEditModel { get => _SubjectEditModel; set => _SubjectEditModel = value; }
 
         private ICommand? _updateSelectedCommand;
         public ICommand UpdateSelectedCommand
@@ -216,35 +224,75 @@ namespace Projekt.ViewModels
             get
             {
                 return _updateSelectedCommand ??= new RelayCommand(
-                    async param => await UpdatePlace(),
+                    async param => await HandleUpdate(),
                     param => AreAllFieldsFilled() && SelectedSubject != null);
             }
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private void LoadSelectedSubject()
+        private ICommand? _deleteSelectedCommand;
+        public ICommand DeleteSelectedCommand
         {
-            if (SelectedSubject != null)
+            get
             {
-                SubjectId = Convert.ToInt32(SelectedSubject["ID przedmiotu"]);
-                Name = SelectedSubject["Nazwa"]?.ToString() ?? string.Empty;
-                Faculty = SelectedSubject["Wydział"]?.ToString() ?? string.Empty;
-                Code = SelectedSubject["Kod"]?.ToString() ?? string.Empty;
-                Description = SelectedSubject["Opis"]?.ToString() ?? string.Empty;
-                Points = Convert.ToInt16(SelectedSubject["Punkty"]);
-                Literature = SelectedSubject["Literatura"]?.ToString() ?? string.Empty;
-                PassingTerms = SelectedSubject["Warunki zaliczenia"]?.ToString() ?? string.Empty;
+                return _deleteSelectedCommand ??= new RelayCommand(
+                    async param =>
+                    {
+                        if (SelectedSubject != null)
+                        {
+                            await HandleDelete();
+                            ClearFields();
+
+                        }
+                    },
+                    param => SelectedSubject != null);
+                    
             }
         }
+
+        private async Task LoadSelectedSubject()
+        {
+            if (SelectedSubject == null)
+            {
+                ClearFields();
+                return;
+            }
+
+            SubjectId = SelectedSubject.Id;
+            Name = SelectedSubject.Name;
+            Faculty = await RetrieveService.GetAsync<FacultyModel>(Wrapper, SelectedSubject.FacultyId);
+            Code = SelectedSubject.Code;
+            Points = SelectedSubject.Credits;
+            Description = SelectedSubject.Description;
+            Literature = SelectedSubject.Literature;
+            PassingTerms = SelectedSubject.PassConditions;
+
+            if (NotifyFaculties?.Result != null && Faculty != null)
+            {
+                var matchingFaculty = NotifyFaculties.Result.FirstOrDefault(f => f.Id == Faculty.Id);
+                if (matchingFaculty != null)
+                {
+                    Faculty = matchingFaculty;
+                }
+            }
+
+
+            await SelectedSubject.GetDetails(Wrapper);
+
+            // Zastąp czekajki normalnymi danymi
+            Description = SelectedSubject.Description;
+            Literature = SelectedSubject.Literature;
+            PassingTerms = SelectedSubject.PassConditions;
+
+        
+        }
+        
 
         private void ClearFields()
         {
             Points = 0;
-            Faculty = string.Empty;
+            Faculty = null;
             Code = string.Empty;
+            Name = string.Empty;
             Literature = string.Empty;
             Description = string.Empty;
             PassingTerms = string.Empty;
@@ -252,54 +300,57 @@ namespace Projekt.ViewModels
             SelectedSubject = null;
         }
 
-        private void ClearEndStrings()
-        {
-            ErrorString = null;
-            SuccessString = null;
-        }
+  
 
         private bool AreAllFieldsFilled()
         {
             return SubjectId > 0 &&
-                   !string.IsNullOrEmpty(Faculty) &&
+                   Faculty != null &&
                    !string.IsNullOrEmpty(Code) &&
-                   !string.IsNullOrEmpty(Description) &&
-                   Points > 0 &&
-                   !string.IsNullOrEmpty(Literature);
+                   Points >= 0;
+                   // puste opisy, brak literatury i 0 punktów są ok(WF);
         }
 
-        private async Task<bool> UpdatePlace()
+        public async Task HandleUpdate()
         {
-            if (SubjectEditModel == null)
-                throw new InvalidOperationException("SubjectEditModel is not initialized.");
-
-            ClearEndStrings();
-
-            SubjectEditModel.Id = SubjectId;
-            SubjectEditModel.FacultyId = Faculty;
-            SubjectEditModel.Name = Name;
-            SubjectEditModel.Description = Description;
-            SubjectEditModel.Code = Code;
-            SubjectEditModel.Literature = Literature;
-            SubjectEditModel.PassConditions = PassingTerms;
-            SubjectEditModel.Credits = Points;
-
-            bool success = await SubjectEditModel.UpdateSubject();
-            if (success)
+            bool success = await Model.HandleUpdate(SelectedSubject.DataId, SelectedSubject.LiteratureId,
+                SelectedSubject.DescriptionId,
+                SelectedSubject.PassConditionsId,
+                SelectedSubject.FacultyId,
+                Name,  Code, Points, Literature, Description, PassingTerms);
+            if(success)
             {
-                ErrorString = null;
-                SuccessString = "Miejsce zaktualizowano z powodzeniem!";
-
-                await GetDataAsync();
+                SuccessString = "Przedmiot został zaktualizowany pomyślnie.";
                 ClearFields();
+                NotifySubjects = new(GetSubjects());
             }
             else
             {
-                SuccessString = null;
-                ErrorString = "Aktualizacja nieudana! Spróbuj ponownie.";
-                MessageBox.Show($"ID: {SubjectId}, ");
+                ErrorString = "Wystąpił błąd podczas aktualizacji przedmiotu.";
+                
             }
-            return success;
+
+        }
+
+        public async Task HandleDelete()
+        {
+            if (SelectedSubject == null) return;
+            MessageBoxResult result = MessageBox.Show(
+                        "Potwierdzenie spowoduje nieodwracalne usunięcie przedmiotu z bazy. Kontynuować?",
+                        "Usuwanie przedmiotu",
+                        MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            if (result != MessageBoxResult.Yes) { return; }
+            bool success = await Model.HandleDelete(SelectedSubject.Id);
+            if(success)
+            {
+                SuccessString = "Przedmiot został usunięty pomyślnie.";
+                ClearFields();
+                NotifySubjects = new(GetSubjects());
+            }
+            else
+            {
+                ErrorString = "Wystąpił błąd podczas usuwania przedmiotu.";
+            }
         }
 
         #endregion

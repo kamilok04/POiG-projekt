@@ -11,8 +11,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -25,57 +25,71 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" Grid.ColumnSpan="6" 
-          ItemsSource="{Binding Subjects}" 
+          ItemsSource="{Binding NotifySubjects.Result}" 
           SelectedItem="{Binding SelectedSubject}"
-          AutoGenerateColumns="True"
+          AutoGenerateColumns="False"
           SelectionMode="Single"
           CanUserAddRows="False"
           CanUserDeleteRows="False"
           IsReadOnly="True"
-          Margin="0,0,0,10"/>
+          Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Kod" Binding="{Binding Code}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Wydział" Binding="{Binding FacultyId}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Punkty" Binding="{Binding Credits}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="ID miejsca:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SubjectId}" IsReadOnly="True" Margin="5"/>
-
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="Kod:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Code}" Margin="5"/>
+  
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Kod:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Code}" Margin="5"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Nazwa przedmiotu:" VerticalAlignment="Center" Margin="5"/>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Name}" Margin="5"/>
 
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Wydział:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Faculty}" Margin="5"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding NotifyFaculties.Result}" SelectedItem="{Binding Faculty}" Margin="5"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Opis:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Description}" Margin="5"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Opis:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Text="{Binding Description}" Margin="5" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="2" Text="Literatura:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="2" Grid.Column="3" Text="{Binding Literature}" Margin="5"/>
+        <TextBlock Grid.Row="3" Grid.Column="3" Text="Literatura:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="2" Text="{Binding Literature}" Margin="5" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="2" Text="Punkty:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="4" Grid.Column="3" Text="{Binding Points}" Margin="5"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Punkty:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Points}" Margin="5"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="2" Text="Warunki zaliczenia:" VerticalAlignment="Center" Margin="5"/>
-        <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding PassingTerms}" Margin="5"/>
+        <TextBlock Grid.Row="1" Grid.Column="3" Text="Warunki zaliczenia:" VerticalAlignment="Center" Margin="5"/>
+        <TextBox Grid.Row="1" Grid.Column="4" Grid.RowSpan="2" Grid.ColumnSpan="2" Text="{Binding PassingTerms}" Margin="5" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-        <TextBlock Grid.Row="5" Grid.ColumnSpan="6" 
+        <TextBlock Grid.Row="7" Grid.ColumnSpan="6" 
            Text="{Binding ErrorString}" 
            Foreground="Red" 
            Margin="5"
-           Visibility="{Binding ErrorString}"/>
+           />
 
-        <TextBlock Grid.Row="5" Grid.ColumnSpan="6" 
+        <TextBlock Grid.Row="7" Grid.ColumnSpan="6" 
            Text="{Binding SuccessString}" 
            Foreground="Green" 
            Margin="5"
-           Visibility="{Binding SuccessString}"/>
-
+/>
         <Button Grid.Row="6" Grid.Column="5" 
         Command="{Binding UpdateSelectedCommand}" 
         Content="Edytuj" 
         Margin="10"
+        Padding="10,5"/> 
+        
+        <Button Grid.Row="6" Grid.Column="4" 
+        Command="{Binding DeleteSelectedCommand}" 
+        Content="Usuń" 
+        Margin="10"
         Padding="10,5"/>
+        
+        
     </Grid>
 </UserControl>

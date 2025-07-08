@@ -141,7 +141,7 @@ namespace Projekt.ViewModels
                 var query = @"SELECT DISTINCT dk.nazwa 
                              FROM dane_kierunku dk
                              JOIN kierunek k ON dk.id = k.id_danych_kierunku
-                             JOIN wydzial w ON k.id_wydzialu = w.id
+                             JOIN wydzial w ON k.id_wydzialu = w.nazwa_krotka
                              WHERE w.nazwa_krotka = @faculty
                              ORDER BY dk.nazwa";
 
