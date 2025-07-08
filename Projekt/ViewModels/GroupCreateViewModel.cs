@@ -207,11 +207,23 @@ namespace Projekt.ViewModels
                    !IsLoading;
         }
 
+        private bool IsFormValid()
+        {
+            return GroupNumber.Length > 0 && GroupNumber.Length <= 5;
+        }
+
         private async Task SaveAsync()
         {
             try
             {
                 IsLoading = true;
+
+                if (!IsFormValid())
+                {
+                    MessageBox.Show("Proszę wprowadzić poprawne dane grupy. Numer grupy może mieć maksymalnie 5 znaków.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 var success = await _model.AddGroup();
 
                 if (success)
