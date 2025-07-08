@@ -54,6 +54,9 @@
                     <Fluent:Button Header="Przypisz prowadzących do grup przedmiotowych" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="GroupSubjectCoordinatorViewModel" Visibility="{Binding Path='[GroupSubjectCoordinatorViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}"/>
 
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Plan lekcji" MinWidth="68">
+                    <Fluent:Button Header="Zobacz swój plan lekcji" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="TimeTableViewModel" Visibility="{Binding Path='[TimeTableViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}"/>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Przedmioty">
                 <Fluent:RibbonGroupBox Header="Przedmioty" MinWidth="68">

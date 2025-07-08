@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Projekt.Miscellaneous
 {
@@ -90,6 +91,22 @@ namespace Projekt.Miscellaneous
         
             Valid = false;
             
+        }
+
+        public async Task<bool> IsUserAStudent()
+        {
+            if (string.IsNullOrEmpty(Username)) return false;
+
+            return (await DBHandler.ExecuteQueryAsync(
+                "SELECT 1 FROM student WHERE login = @login", new() { { "@login", Username } })).Count == 1;
+        }
+
+        public async Task<bool> IsUserACoordinator()
+        {
+            if (string.IsNullOrEmpty(Username)) return false;
+
+            return (await DBHandler.ExecuteQueryAsync(
+                "SELECT 1 FROM prowadzacy WHERE login = @login", new() { { "@login", Username } })).Count == 1;
         }
 
     }

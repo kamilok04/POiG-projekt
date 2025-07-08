@@ -116,7 +116,7 @@ namespace Projekt.ViewModels
                 SelectedRowKey = SelectedRow?[RowKey].ToString();
                 SelectedCellValue = (SelectedColumnName == null || SelectedRow == null) ? null : SelectedRow[SelectedColumnName].ToString();
 
-                if (oldRow == null || String.IsNullOrEmpty(oldKey) || String.IsNullOrEmpty(oldValue) || String.IsNullOrEmpty(oldColumn))
+                if (oldRow == null || String.IsNullOrEmpty(oldKey) || String.IsNullOrEmpty(oldColumn))
                     return;
 
 

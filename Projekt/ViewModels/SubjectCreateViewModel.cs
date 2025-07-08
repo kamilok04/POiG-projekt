@@ -227,8 +227,8 @@ namespace Projekt.ViewModels
                 ErrorString = "";
                 SuccessString = "Dodano pomyślnie!";
                 MessageBox.Show(SuccessString);
+                Cancel();
             }
-            Cancel();
             return success;
         }
 

@@ -121,6 +121,7 @@ namespace Projekt.ViewModels
                                         PermissionHelper.CanEditOtherSchedules,
                                         PermissionHelper.CanEditOtherProfiles,
                                         PermissionHelper.CanEditOwnProfile),
+                "TimeTableViewModel" => await Authenticate(PermissionHelper.CanSeeOwnSchedule),
                 "PlacesViewTableViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "PlaceCreateViewModel" => await Authenticate(PermissionHelper.CanModifyData),
                 "PlaceEditViewModel" => await Authenticate(PermissionHelper.CanModifyData),

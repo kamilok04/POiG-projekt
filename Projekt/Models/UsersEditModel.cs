@@ -113,15 +113,23 @@ namespace Projekt.Models
         {
             switch (columnName)
             {
+                case "login":
                 case "Login": return "login";
+                case "data_urodzenia":
                 case "Data urodzenia": return "data_urodzenia";
                 case "Imię":
+                case "imie":
                     return "imie";
                 case "Nazwisko":
+                case "nazwisko":
                     return "Nazwisko";
+                case "email":
                 case "Adres e-mail": return "email";
+                case "uprawnienia":
                 case "Uprawnienia": return "uprawnienia";
+                case "indeks":
                 case "Nr indeksu": return "indeks";
+                case "tytul":
                 case "Tytuł naukowy": return "tytul";
                 default: return String.Empty;
             }

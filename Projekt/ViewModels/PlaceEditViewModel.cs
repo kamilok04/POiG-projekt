@@ -71,8 +71,9 @@ namespace Projekt.ViewModels
         private PlaceEditModel? _placeEditModel;
         #endregion
 
-        private string? _errorString;
-        private string? _successString;
+        private string _errorString = "";
+        private string _successString = "";
+
 
         #region Public Properties/Commands
         public int PlaceId
@@ -140,7 +141,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? ErrorString
+        public string ErrorString
         {
             get => _errorString;
             set
@@ -153,7 +154,7 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? SuccessString
+        public string SuccessString
         {
             get => _successString;
             set
@@ -207,8 +208,8 @@ namespace Projekt.ViewModels
 
         private void ClearEndStrings()
         {
-            ErrorString = null;
-            SuccessString = null;
+            ErrorString = "";
+            SuccessString = "";
         }
 
         private bool AreAllFieldsFilled()
@@ -236,7 +237,7 @@ namespace Projekt.ViewModels
             bool success = await PlaceEditModel.UpdatePlace();
             if (success)
             {
-                ErrorString = null;
+                ErrorString = "";
                 SuccessString = "Miejsce zaktualizowano z powodzeniem!";
 
                 await GetDataAsync();
@@ -244,7 +245,7 @@ namespace Projekt.ViewModels
             }
             else
             {
-                SuccessString = null;
+                SuccessString = "";
                 ErrorString = "Aktualizacja nieudana! Spróbuj ponownie.";
             }
             return success;

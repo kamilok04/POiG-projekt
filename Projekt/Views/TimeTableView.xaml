@@ -3,34 +3,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:Projekt.ViewModels"
              xmlns:local="clr-namespace:Projekt.Views"
       
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition  Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-        </Grid.RowDefinitions>
-        
-        <Label Grid.Row="0" Grid.ColumnSpan="7" FontWeight="Bold" HorizontalAlignment="Center" FontSize="18">Plan Zajęć</Label>
-        <Label Grid.Row="1">Poniedziałek</Label>
-        <Label Grid.Row="1" Grid.Column="1">Wtorek</Label>
-        <Label Grid.Row="1" Grid.Column="2">Środa</Label>
-        <Label Grid.Row="1" Grid.Column="3">Czwartek</Label>
-        <Label Grid.Row="1" Grid.Column="4">Piątek</Label>
-        <Label Grid.Row="1" Grid.Column="5">Sobota</Label>
-        <Label Grid.Row="1" Grid.Column="6">Niedziela</Label>
-       
-    </Grid>
+             d:DesignHeight="450" d:DesignWidth="800"
+              d:DataContext="{d:DesignInstance Type={x:Type viewmodels:TimeTableViewModel}, IsDesignTimeCreatable=True}"
+             >
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border Grid.ColumnSpan="7" Grid.RowSpan="4"  Panel.ZIndex="1" x:Name="Overlay"
+Background="#80000000" d:Visibility="Visible"
+Visibility="{Binding TimeTable.IsNotCompleted, Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" 
+            Width="100" 
+            Height="10" 
+            Margin="0,0,0,10"/>
+                    <TextBlock Text="Wczytywanie..." 
+          Foreground="White"
+          HorizontalAlignment="Center"
+          FontSize="18"/>
+                </StackPanel>
+            </Border>
+            <Label Grid.Row="0" Grid.ColumnSpan="7" FontWeight="Bold" HorizontalAlignment="Center" FontSize="18">Plan Zajęć</Label>
+            <Label Grid.Row="1">Poniedziałek</Label>
+            <Label Grid.Row="1" Grid.Column="1">Wtorek</Label>
+            <Label Grid.Row="1" Grid.Column="2">Środa</Label>
+            <Label Grid.Row="1" Grid.Column="3">Czwartek</Label>
+            <Label Grid.Row="1" Grid.Column="4">Piątek</Label>
+            <Label Grid.Row="1" Grid.Column="5">Sobota</Label>
+            <Label Grid.Row="1" Grid.Column="6">Niedziela</Label>
+
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding TimeTable.Result[poniedziałek]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TimeTable.Result[wtorek]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TimeTable.Result[środa]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding TimeTable.Result[czwartek]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="4" ItemsSource="{Binding TimeTable.Result[piątek]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="5" ItemsSource="{Binding TimeTable.Result[sobota]}"/>
+            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="6" ItemsSource="{Binding TimeTable.Result[niedziela]}"/>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

@@ -127,6 +127,11 @@ namespace Projekt.Models
             Group = new(wrapper);
             await Group.LoadGroupData(GroupID);
         }
+
+        public override string ToString()
+        {
+            return $"{DayOfWeek}, {TimeStart} - {TimeEnd}: {Subject}, {Coordinators}, {Place}";
+        }
     }
 
 
