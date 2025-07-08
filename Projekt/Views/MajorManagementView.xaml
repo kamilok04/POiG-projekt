@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="Projekt.Views.MajorManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Projekt.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.ColumnSpan="3" Grid.RowSpan="4" ItemsSource="{Binding NotifyMajors.Result}" SelectedItem="{Binding SelectedMajor}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Wydział" Binding="{Binding Faculty}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Grid.Column="3" HorizontalAlignment="Right"> ID:</Label>
+        <TextBox Text="{Binding SelectedMajor.Id}" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" IsReadOnly="True" IsEnabled="False"/>
+        <Label Grid.Row="1" Grid.Column="3" Content="Nazwa:" HorizontalAlignment="Right"/>
+        <TextBox Text="{Binding Name}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2"></TextBox>
+        <Label Grid.Row="2" Grid.Column="3" Content="Wydział:" HorizontalAlignment="Right"/>
+        <ComboBox Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" 
+                  SelectedItem="{Binding SelectedFaculty, Mode=TwoWay}" 
+                  ItemsSource="{Binding NotifyFaculties.Result}" 
+                  DisplayMemberPath="Name" 
+                  /> 
+        <Button Content="Zatwierdź" 
+                Grid.Row="4" Grid.Column="5"
+           Command="{Binding SaveCommand}" 
+           Width="100" Margin="0,10,10,10" 
+           HorizontalAlignment="Right"
+          />
+        <Button Grid.Column="4"  Grid.Row="4" 
+           Content="Anuluj" 
+           Command="{Binding CancelCommand}" 
+           Width="100" Margin="0,10,10,10"
+           HorizontalAlignment="Right"/>
+        <Button Grid.Column="3"  Grid.Row="4" 
+   Content="Usuń" 
+   Command="{Binding DeleteCommand}" 
+   Width="100" Margin="0,10,10,10"/>
+        <Label Grid.Row="5" MinHeight="40" Grid.ColumnSpan="6" Foreground="Green" Content="{Binding SuccessString}"/>
+        <Label Grid.Row="5" MinHeight="40" Grid.ColumnSpan="6" Foreground="Red" Content="{Binding ErrorString}"/>
+    </Grid>
+</UserControl>

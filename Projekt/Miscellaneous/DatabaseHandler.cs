@@ -56,7 +56,13 @@ namespace Projekt.Miscellaneous
             using var connection = await GetConnectionAsync();
 
             command.Connection = connection;
-            return await command.ExecuteNonQueryAsync();
+            try
+            {
+                return await command.ExecuteNonQueryAsync();
+            } catch (MySql.Data.MySqlClient.MySqlException)
+            {
+                return -1;
+            }
         }
 
         public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)

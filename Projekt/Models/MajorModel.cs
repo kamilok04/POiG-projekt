@@ -138,7 +138,7 @@ namespace Projekt.Models
             {
                 throw new InvalidOperationException("LoginWrapper cannot be null when retrieving the Name.");
             }
-            var majorDataModel = await RetrieveService.GetAsync<MajorDataModel>(LoginWrapper, Id);
+            var majorDataModel = await RetrieveService.GetAsync<MajorDataModel>(LoginWrapper, NameId);
             if (majorDataModel == null)
             {
                 throw new InvalidOperationException($"No MajorDataModel found for Id {Id}.");

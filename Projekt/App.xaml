@@ -23,8 +23,8 @@
             <DataTemplate DataType="{x:Type viewmodels:FacultyEditViewModel}">
                 <views:TableView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:MajorManagmentViewModel}">
-                <views:TableView/>
+            <DataTemplate DataType="{x:Type viewmodels:MajorManagementViewModel}">
+                <views:MajorManagementView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:UsersCreateViewModel}">
                 <views:UsersCreateView/>

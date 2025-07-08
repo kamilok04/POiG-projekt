@@ -46,8 +46,8 @@ namespace Projekt.Models
 
         public FacultyModel(Dictionary<string, object> data)
         {
-            _id = (string)data["nazwa"];
-            _name = (string)data["nazwa_krotka"];
+            _name = (string)data["nazwa"];
+            _id = (string)data["nazwa_krotka"];
         }
 
         public override string ToString()

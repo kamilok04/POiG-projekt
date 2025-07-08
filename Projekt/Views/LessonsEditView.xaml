@@ -39,6 +39,6 @@
                 <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <local:LessonsCreateView DataContext="{Binding CurrentLessonViewModel}" IsEnabled="{Binding IsLessonSelected}" Grid.Column="1"/>
+        <local:LessonsCreateView DataContext="{Binding CurrentLessonViewModel}" Grid.Column="1"/>
     </Grid>
 </UserControl>

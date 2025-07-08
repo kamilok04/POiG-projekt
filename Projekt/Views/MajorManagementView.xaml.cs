@@ -18,9 +18,9 @@ namespace Projekt.Views
     /// <summary>
     /// Interaction logic for MajorManagmentView.xaml
     /// </summary>
-    public partial class MajorManagmentView : UserControl
+    public partial class MajorManagementView : UserControl
     {
-        public MajorManagmentView()
+        public MajorManagementView()
         {
             InitializeComponent();
         }
