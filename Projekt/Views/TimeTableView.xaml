@@ -27,7 +27,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border Grid.ColumnSpan="7" Grid.RowSpan="4"  Panel.ZIndex="1" x:Name="Overlay"
-Background="#80000000" d:Visibility="Visible"
+Background="#80000000" d:Visibility="Hidden"
 Visibility="{Binding TimeTable.IsNotCompleted, Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ProgressBar IsIndeterminate="True" 
@@ -49,13 +49,69 @@ Visibility="{Binding TimeTable.IsNotCompleted, Converter={StaticResource Fluent.
             <Label Grid.Row="1" Grid.Column="5">Sobota</Label>
             <Label Grid.Row="1" Grid.Column="6">Niedziela</Label>
 
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding TimeTable.Result[poniedziałek]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TimeTable.Result[wtorek]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TimeTable.Result[środa]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding TimeTable.Result[czwartek]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="4" ItemsSource="{Binding TimeTable.Result[piątek]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="5" ItemsSource="{Binding TimeTable.Result[sobota]}"/>
-            <ListBox MinWidth="200" Grid.Row="2" Grid.Column="6" ItemsSource="{Binding TimeTable.Result[niedziela]}"/>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding TimeTable.Result[poniedziałek]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TimeTable.Result[wtorek]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TimeTable.Result[środa]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="3" ItemsSource="{Binding TimeTable.Result[czwartek]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="4" ItemsSource="{Binding TimeTable.Result[piątek]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="5" ItemsSource="{Binding TimeTable.Result[sobota]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid MinWidth="200" Grid.Row="2" Grid.Column="6" ItemsSource="{Binding TimeTable.Result[niedziela]}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Od" Binding="{Binding TimeStart}" />
+                    <DataGridTextColumn Header="Do" Binding="{Binding TimeEnd}" />
+                    <DataGridTextColumn Header="Przedmiot" Binding="{Binding Subject}" />
+                    <DataGridTextColumn Header="Miejsce" Binding="{Binding Place}" />
+                    <DataGridTextColumn Header="Prowadzący" Binding="{Binding Coordinators}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </ScrollViewer>
 </UserControl>
