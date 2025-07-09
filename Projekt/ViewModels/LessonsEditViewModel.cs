@@ -49,7 +49,9 @@ namespace Projekt.ViewModels
             
             CurrentLessonViewModel.SaveCommand = new RelayCommand(
                 async f => await Update());
+            CurrentLessonViewModel.IsEditMode = true;
             NotifyLessonList = new(LoadDataAsync());
+
             
         }
 

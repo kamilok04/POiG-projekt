@@ -49,9 +49,7 @@
             <DataTemplate DataType="{x:Type viewmodels:LessonsCreateViewModel}">
                 <views:LessonsCreateView/>
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:LessonsDeleteViewModel}">
-                <views:LessonsDeleteView/>
-            </DataTemplate>
+     
             <DataTemplate DataType="{x:Type viewmodels:LessonsEditViewModel}">
                 <views:LessonsEditView/>
             </DataTemplate>

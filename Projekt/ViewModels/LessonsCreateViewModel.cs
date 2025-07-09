@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Printing;
 using System.Reflection.Metadata;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -34,13 +35,30 @@ namespace Projekt.ViewModels
         private PlaceModel? _selectedPlace;
         private List<string> _daysOfWeek = new List<string> { "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" };
         private string? _selectedDayOfWeek;
-  
+
+        private int _selectedId;
+
         private TimeOnly _startTime;
         private TimeOnly _endTime;
         private string? _successString = "";
 
         private string? _errorString= "";
         private string? _infoString = "";
+
+        private bool _isEditMode = false;
+        public bool IsEditMode
+        {
+            get => _isEditMode;
+            set
+            {
+                if (_isEditMode != value)
+                {
+                    _isEditMode = value;
+                    OnPropertyChanged(nameof(IsEditMode));
+                }
+            }
+        }
+
       
 
         private LessonsCreateModel Model { get; init; }
@@ -201,9 +219,20 @@ namespace Projekt.ViewModels
                 param => Cancel());
         }
 
+        private ICommand _deleteCommand;
+
+        public ICommand DeleteCommand
+        {
+            get => _deleteCommand ??= new RelayCommand(
+                async param => await DeleteAsync(),
+                pred => IsEditMode);
+        }
+
+
         public void LoadLesson(LessonModel model)
         {
             Cancel();
+            _selectedId = model.Id;
             SelectedGroup = model.Group != null ? Groups.FirstOrDefault(g => g.GroupId == model.Group.GroupId) : null;
             SelectedPlace = model.Place != null ? Places.FirstOrDefault(p => p.Id == model.Place.Id) : null;
             SelectedSubject = model.Subject != null ? Subjects.FirstOrDefault(s => s.Id == model.Subject.Id) : null;
@@ -218,6 +247,20 @@ namespace Projekt.ViewModels
 
         #region Private Methods  
 
+        private async Task DeleteAsync()
+        {
+            bool success = await Model.DeleteAsync(_selectedId);
+            if (success)
+            {
+                SuccessString = "Usunięto pomyślnie!";
+                
+            }
+            else
+            {
+                ErrorString = "Nie udało się usunąć!\r\n" +
+                    "Pamiętaj, żeby usunąć najpierw wszystkich prowadzących i studentów z zajęć.";
+            }
+        }
 
         private async Task SaveAsync()
         {

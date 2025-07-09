@@ -48,17 +48,19 @@
         <Label Grid.Row="6">Czas zakończenia (hh:mm):</Label>
         <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Grid Grid.Row="8" Grid.Column="2" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="0,10,0,0">
+        <Grid Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" Height="24" HorizontalAlignment="Right"/>
-            <Button Grid.Column="1" Content="Anuluj" Command="{Binding CancelCommand}" Width="100" Height="24" HorizontalAlignment="Right"/>
+            <Button Grid.Column="0" Content="Usuń" Command="{Binding DeleteCommand}" Width="100" Margin="0,0,10,0" Height="24" HorizontalAlignment="Right" Visibility="{Binding IsEditMode, Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" d:Visibility="Visible"/>
+            <Button Grid.Column="1" Content="Zatwierdź" Command="{Binding SaveCommand}" Width="100" Margin="0,0,10,0" Height="24" HorizontalAlignment="Right"/>
+            <Button Grid.Column="2" Content="Anuluj" Command="{Binding CancelCommand}" Width="100" Height="24" HorizontalAlignment="Right"/>
         </Grid>
-        <Label Grid.Row="9" Grid.ColumnSpan="2" Foreground="Green" Content="{Binding SuccessString,Mode=OneWay,FallbackValue='Dodano pomyślnie!'}"  FontSize="24"></Label>
-        <Label Grid.Row="9" Grid.ColumnSpan="2" Foreground="Red" Content="{Binding ErrorString, Mode=OneWay,FallbackValue='Błąd dodawania!'}"  FontSize="24"></Label>
-        <Label Grid.Row="9" Grid.ColumnSpan="2" Foreground="Blue" Content="{Binding InfoString, Mode=OneWay, FallbackValue=''}" FontSize="20" d:Content="Wybierz lekcję, aby móc ją edytować."></Label>
+        <TextBlock Grid.Row="9" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="Green" Text="{Binding SuccessString,Mode=OneWay,FallbackValue='Dodano pomyślnie!'}"  FontSize="24"></TextBlock>
+        <TextBlock Grid.Row="9" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="Red" Text="{Binding ErrorString, Mode=OneWay,FallbackValue='Błąd dodawania!'}"  FontSize="24"></TextBlock>
+        <TextBlock Grid.Row="9" Grid.ColumnSpan="2" TextWrapping="Wrap" Foreground="Blue" Text="{Binding InfoString, Mode=OneWay, FallbackValue=''}" FontSize="20" d:Text="Wybierz lekcję, aby móc ją edytować."></TextBlock>
     </Grid>
 
 </UserControl>

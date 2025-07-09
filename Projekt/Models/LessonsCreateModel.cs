@@ -43,6 +43,12 @@ namespace Projekt.Models
             return rows == 1;
         }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            int result = await LoginWrapper.DBHandler.ExecuteNonQueryAsync(
+                "DELETE FROM zajecie WHERE id = @id", new() { { "@id", id } });
+            return result == 1;
+        }
       
     }
 
