@@ -470,7 +470,7 @@ namespace Projekt.ViewModels
 
             if (!MailAddress.TryCreate(Email, out _)) return false;
 
-            int success = await Model.AddUser();
+            int success = await Model.AddUser(CurrentRole);
 
             switch (success)
             {

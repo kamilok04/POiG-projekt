@@ -24,6 +24,7 @@ namespace Projekt.Models
         public const int LoginError = 3;
         public const int LoginAccountBlocked = 4;
         public const int LoginOffline = 5;
+        public const int LoginNoAccount = 6;
 
         public const int LoginUndefined = -1;
 
@@ -108,7 +109,12 @@ namespace Projekt.Models
                       else
                       {
                           Exception? ex = task.Exception;
-                          if (ex == null) return;
+                          if (ex == null) {
+                              // Błąd bez wyjątku: nie ma takiego konta
+                              _authenticated = LoginNoAccount;
+                              return;
+
+                          };
                           ex = ex.InnerException;
                           if (ex == null) return;
                           var data = ex.Data;

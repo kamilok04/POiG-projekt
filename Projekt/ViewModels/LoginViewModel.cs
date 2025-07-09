@@ -56,7 +56,11 @@ namespace Projekt.ViewModels
                         case LoginModel.LoginOffline:
                             ErrorString = "Łączność z bazą danych wymaga dostępu do internetu.\nPołącz się z internetem i spróbuj ponownie.";
                             break;
+                        case LoginModel.LoginNoAccount:
+                            ErrorString = "Podane konto nie istnieje.\nUpewnij się, że dane logowania są poprawne i spróbuj ponownie.";
+                            break;
                         default:
+
                             ErrorString = "Wystąpił nieznany błąd podczas logowania.";
                             break;
                     }

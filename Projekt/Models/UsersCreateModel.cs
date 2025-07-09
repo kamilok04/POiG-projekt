@@ -121,7 +121,7 @@ namespace Projekt.Models
         /// <returns>
         /// 1 jeśli operacja się powiodła, 0 jeśli nie, -1 jeśli użytkownik o podanym loginie już istnieje.
         /// </returns>
-        public async Task<int> AddUser()
+        public async Task<int> AddUser(string? role)
         {
             if (!await EnsureUserIsUnique()) return -1;
 
@@ -132,7 +132,7 @@ namespace Projekt.Models
             var defaultParameters = ((ITable)this).DefaultParameters ?? throw new InvalidOperationException("DefaultParameters can't be null");
 
             MySqlCommand AddUserCommand = DatabaseHandler.CreateCommand(defaultQuery, defaultParameters);
-            MySqlCommand? AssignRoleCommand = CreateRoleCommand();
+            MySqlCommand? AssignRoleCommand = CreateRoleCommand(role);
             bool transactionResult = false;
 
             if (AssignRoleCommand == null)
@@ -168,13 +168,13 @@ namespace Projekt.Models
         /// <returns>
         /// Obiekt <see cref="MySqlCommand"/> do przypisania roli lub <c>null</c>, jeśli rola nie została wybrana.
         /// </returns>
-        private MySqlCommand? CreateRoleCommand()
+        private MySqlCommand? CreateRoleCommand(string? role)
         {
             string Query = "";
             Dictionary<string, object>? Parameters = null;
             // -- zrobione -- TODO: Przebudować - tu powinno przypisywać się 1 LUB WIĘCEJ ról.
             // Więcej ról można przypisać w edytorze.
-            switch (_currentRole)
+            switch (role)
             {
                 case "Student":
                     Query = "INSERT INTO student (login, indeks) VALUES( @login, @studentID)";
@@ -184,7 +184,7 @@ namespace Projekt.Models
                         };
                     break;
                 case "Pracownik":
-                    Query = "INSERT INTO pracownik (login, tytul) VALUES (@login, @title)";
+                    Query = "INSERT INTO prowadzacy (login, tytul) VALUES (@login, @title)";
                     Parameters = new() {
                             { "@login", _login ?? string.Empty },
                             { "@title", _teacherTitle ?? string.Empty }
