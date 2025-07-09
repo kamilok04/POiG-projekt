@@ -7,31 +7,52 @@ using System.Windows.Input;
 
 namespace Projekt.ViewModels
 {
+    /// <summary>
+    /// ViewModel odpowiedzialny za logikę tworzenia nowego użytkownika w aplikacji.
+    /// Udostępnia właściwości i komendy do powiązania z widokiem oraz obsługuje walidację i zapis danych.
+    /// </summary>
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Backing fields use _ prefix by convention.")]
     public class UsersCreateViewModel : ObservableObject, IPageViewModel
     {
+        /// <inheritdoc/>
         string IPageViewModel.Name => "UsersCreate";
 
         #region Fields
 
+        /// <summary>
+        /// Uprawnienia użytkownika.
+        /// </summary>
         private int Permissions = 0;
+        /// <summary>
+        /// Model logiki tworzenia użytkownika.
+        /// </summary>
         private UsersCreateModel Model;
+        /// <summary>
+        /// Lista dostępnych ról.
+        /// </summary>
         private readonly string[] _roles = ["Nadadministrator", "Administrator", "Pracownik", "Student"];
 
         private string? _errorString;
         private string? _successString;
 
         #endregion
+
         #region Constructors
+        /// <summary>
+        /// Inicjalizuje nową instancję klasy <see cref="UsersCreateViewModel"/>.
+        /// </summary>
+        /// <param name="loginWrapper">Obiekt <see cref="LoginWrapper"/> z informacjami o sesji i połączeniu z bazą.</param>
         public UsersCreateViewModel(LoginWrapper loginWrapper)
         {
             Model = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
-
         #endregion
 
         #region Public Properties/Commands
 
+        /// <summary>
+        /// Imię użytkownika.
+        /// </summary>
         public string? Name
         {
             get => Model?._name;
@@ -44,6 +65,10 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Nazwisko użytkownika.
+        /// </summary>
         public string? Surname
         {
             get => Model?._surname;
@@ -56,6 +81,10 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Login użytkownika.
+        /// </summary>
         public string? Login
         {
             get => Model?._login;
@@ -68,6 +97,10 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Hasło użytkownika.
+        /// </summary>
         public string? Password
         {
             get => Model?._password;
@@ -81,6 +114,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Numer indeksu studenta.
+        /// </summary>
         public int StudentID
         {
             get => Model?._studentID ?? 0;
@@ -94,6 +130,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Adres e-mail użytkownika.
+        /// </summary>
         public string? Email
         {
             get => Model?._email;
@@ -106,6 +145,10 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Data urodzenia użytkownika.
+        /// </summary>
         public DateTime? BirthDate
         {
             get => Model?._birthDate;
@@ -119,6 +162,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Aktualnie wybrana rola użytkownika.
+        /// </summary>
         public string? CurrentRole
         {
             get => Model?._currentRole;
@@ -135,6 +181,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Tytuł nauczyciela (jeśli dotyczy).
+        /// </summary>
         public string? TeacherTitle
         {
             get => Model?._teacherTitle;
@@ -148,6 +197,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Stanowisko pracownika (jeśli dotyczy).
+        /// </summary>
         public string? Position
         {
             get => Model?._position;
@@ -161,14 +213,29 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Model logiki tworzenia użytkownika (do powiązania z widokiem).
+        /// </summary>
         public UsersCreateModel? UsersCreateModel { get => Model; init => Model = value ?? throw new ArgumentNullException(nameof(value)); }
+
+        /// <summary>
+        /// Lista dostępnych ról.
+        /// </summary>
         public string[] Roles => _roles;
 
+        /// <summary>
+        /// Określa, czy widoczne są pola studenta.
+        /// </summary>
         public bool IsStudentVisible => CurrentRole == "Student";
+        /// <summary>
+        /// Określa, czy widoczne są pola nauczyciela.
+        /// </summary>
         public bool IsTeacherVisible => CurrentRole == "Pracownik";
 
         private ICommand? _suggestLoginCommand;
-
+        /// <summary>
+        /// Komenda sugerująca login na podstawie imienia i nazwiska.
+        /// </summary>
         public ICommand SuggestLoginCommand
         {
             get
@@ -181,6 +248,9 @@ namespace Projekt.ViewModels
         }
 
         private ICommand? _suggestStudentIDCommand;
+        /// <summary>
+        /// Komenda sugerująca numer indeksu studenta.
+        /// </summary>
         public ICommand SuggestStudentIDCommand
         {
             get
@@ -192,7 +262,9 @@ namespace Projekt.ViewModels
         }
 
         private ICommand? _randomPasswordCommand;
-
+        /// <summary>
+        /// Komenda generująca losowe hasło.
+        /// </summary>
         public ICommand RandomPasswordCommand
         {
             get
@@ -200,11 +272,13 @@ namespace Projekt.ViewModels
                 return _randomPasswordCommand ??= new RelayCommand(
                     p => Password = GenerateRandomPassword(12),
                     p => true);
-
             }
         }
 
         private ICommand? _saveCommand;
+        /// <summary>
+        /// Komenda zapisująca nowego użytkownika.
+        /// </summary>
         public ICommand SaveCommand
         {
             get
@@ -216,7 +290,9 @@ namespace Projekt.ViewModels
         }
 
         private ICommand? _cancelCommand;
-
+        /// <summary>
+        /// Komenda anulująca wprowadzanie danych.
+        /// </summary>
         public ICommand CancelCommand
         {
             get
@@ -228,6 +304,9 @@ namespace Projekt.ViewModels
             }
         }
 
+        /// <summary>
+        /// Komunikat o błędzie.
+        /// </summary>
         public string? ErrorString
         {
             get => _errorString; set
@@ -239,6 +318,10 @@ namespace Projekt.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Komunikat o sukcesie.
+        /// </summary>
         public string? SuccessString
         {
             get => _successString; set
@@ -255,6 +338,9 @@ namespace Projekt.ViewModels
 
         #region Private Methods
 
+        /// <summary>
+        /// Czyści wszystkie pola formularza.
+        /// </summary>
         private void Cancel()
         {
             Name = Surname = Password = Login = Email = TeacherTitle = string.Empty;
@@ -266,6 +352,11 @@ namespace Projekt.ViewModels
             ErrorString = null;
         }
 
+        /// <summary>
+        /// Sprawdza, czy podany numer indeksu studenta jest poprawny.
+        /// </summary>
+        /// <param name="studentID">Numer indeksu jako string.</param>
+        /// <returns><c>true</c> jeśli numer jest poprawny, w przeciwnym razie <c>false</c>.</returns>
         private bool IsStudentIDAllowed(string? studentID)
         {
             if (string.IsNullOrEmpty(studentID) || !int.TryParse(studentID, out _))
@@ -273,23 +364,40 @@ namespace Projekt.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Asynchronicznie sugeruje nowy numer indeksu studenta.
+        /// </summary>
+        /// <returns>Nowy numer indeksu.</returns>
         private async Task<int> SuggestStudentID()
         {
             return await (UsersCreateModel?.LoginWrapper?.DBHandler?.SuggestStudentID() ?? Task.FromResult(0));
         }
+
+        /// <summary>
+        /// Sugeruje login na podstawie imienia i nazwiska.
+        /// </summary>
+        /// <returns>Sugerowany login.</returns>
         private string SuggestLogin()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname))
                 return "";
-            // Simple algorithm for suggesting login
+            // Prosty algorytm sugerowania loginu
             string suggestedLogin = $"{Name.ToLowerInvariant()}.{Surname.ToLowerInvariant()}".Replace(" ", "");
             return suggestedLogin;
         }
 
-        // Secure password generator
+        /// <summary>
+        /// Generuje losowe hasło o zadanej długości.
+        /// </summary>
+        /// <param name="length">Długość hasła.</param>
+        /// <returns>Wygenerowane hasło.</returns>
         private string GenerateRandomPassword(int length)
             => IHashingHandler.GetRandomString(length);
 
+        /// <summary>
+        /// Sprawdza, czy wszystkie wymagane pola są wypełnione.
+        /// </summary>
+        /// <returns><c>true</c> jeśli wszystkie pola są poprawnie wypełnione, w przeciwnym razie <c>false</c>.</returns>
         private bool AreAllFieldsFilled()
         {
             if (string.IsNullOrEmpty(Email))
@@ -311,6 +419,9 @@ namespace Projekt.ViewModels
             return valid;
         }
 
+        /// <summary>
+        /// Aktualizuje uprawnienia użytkownika na podstawie wybranej roli.
+        /// </summary>
         private void UpdateUserPermissions()
         {
             switch (CurrentRole)
@@ -348,12 +459,16 @@ namespace Projekt.ViewModels
             Model._permissions = Permissions;
         }
 
+        /// <summary>
+        /// Asynchronicznie dodaje nowego użytkownika do bazy danych.
+        /// </summary>
+        /// <returns><c>true</c> jeśli dodanie się powiodło, w przeciwnym razie <c>false</c>.</returns>
         private async Task<bool> AddUser()
         {
             if (!AreAllFieldsFilled() || Model == null)
                 return false;
 
-            if (!MailAddress.TryCreate(Email, out _)) return false; 
+            if (!MailAddress.TryCreate(Email, out _)) return false;
 
             int success = await Model.AddUser();
 

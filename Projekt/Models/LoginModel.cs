@@ -90,7 +90,7 @@ namespace Projekt.Models
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
-                                  int sessionResult = CreateSession().Result;
+                                  int sessionResult = await CreateSession();
 
                                   if (sessionResult == LoginAccountBlocked)
                                   {
