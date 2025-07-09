@@ -70,13 +70,6 @@ namespace Projekt.ViewModels
 
         }
 
-        private ICommand? _tableCancelCommand;
-        public override ICommand TableCancelCommand
-        {
-            get => _tableCancelCommand ??= new RelayCommand(
-                param => GetDataAsync().Wait());
-        }
-
 
         private ICommand _tableCreateCommand;
         public override ICommand TableCreateCommand

@@ -85,11 +85,11 @@ namespace Projekt.ViewModels
 
      
 
-        private ICommand? _tableUndoCommand;
-        public ICommand TableUndoCommand
+        private ICommand? _tableCancelCommand;
+        public ICommand TableCancelCommand
         {
-            get => _tableUndoCommand ??= new RelayCommand(
-                param => GetDataAsync().Wait());
+            get => _tableCancelCommand ??= new RelayCommand(
+                async param => await GetDataAsync());
         }
 
         private ICommand? _clearSelectedCellCommand;
@@ -160,7 +160,7 @@ namespace Projekt.ViewModels
 
         //public abstract ICommand TableDeleteCommand { get; }
         // tymaczasowo: Usuwanie odbędzie się przez usunięcie komórki zawierającej PK
-        public abstract ICommand TableCancelCommand { get; }
+ 
         public abstract ICommand TableCreateCommand { get; }
 
     }
