@@ -90,7 +90,7 @@ namespace Projekt.Models
                               string remoteHash = (string)row["haslo"];
                               if (localHash.Equals(remoteHash))
                               {
-                                  int sessionResult = await CreateSession();
+                                  int sessionResult = CreateSession().Result; // Tu trzeba zablokować wątek!
 
                                   if (sessionResult == LoginAccountBlocked)
                                   {
