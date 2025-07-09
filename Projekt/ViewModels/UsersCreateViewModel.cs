@@ -1,21 +1,13 @@
-﻿using Microsoft.Xaml.Behaviors.Media;
-using MySql.Data.MySqlClient;
-using Projekt.Miscellaneous;
+﻿using Projekt.Miscellaneous;
 using Projekt.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
-using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace Projekt.ViewModels
 {
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Backing fields use _ prefix by convention.")]
     public class UsersCreateViewModel : ObservableObject, IPageViewModel
     {
         string IPageViewModel.Name => "UsersCreate";
@@ -23,23 +15,19 @@ namespace Projekt.ViewModels
         #region Fields
 
         private int Permissions = 0;
-        private UsersCreateModel? Model;
-        private readonly string[] _roles = ["Administrator", "Pracownik", "Student"];
-        //private ObservableCollection<Subject> _allSubjects;
-        //private bool _isStudentVisible = false;
-        //private bool _isTeacherVisible = false;
+        private UsersCreateModel Model;
+        private readonly string[] _roles = ["Nadadministrator", "Administrator", "Pracownik", "Student"];
+
         private string? _errorString;
         private string? _successString;
-
 
         #endregion
         #region Constructors
         public UsersCreateViewModel(LoginWrapper loginWrapper)
         {
-            UsersCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
+            Model = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
-        // for designer only
-        public UsersCreateViewModel() { }
+
         #endregion
 
         #region Public Properties/Commands
@@ -49,7 +37,7 @@ namespace Projekt.ViewModels
             get => Model?._name;
             set
             {
-                if (Model?._name != value && Model != null)
+                if (Model != null && Model._name != value)
                 {
                     Model._name = value;
                     OnPropertyChanged(nameof(Name));
@@ -61,7 +49,7 @@ namespace Projekt.ViewModels
             get => Model?._surname;
             set
             {
-                if (Model?._surname != value && Model != null)
+                if (Model != null && Model._surname != value)
                 {
                     Model._surname = value;
                     OnPropertyChanged(nameof(Surname));
@@ -73,7 +61,7 @@ namespace Projekt.ViewModels
             get => Model?._login;
             set
             {
-                if (Model?._login != value && Model != null)
+                if (Model != null && Model._login != value)
                 {
                     Model._login = value;
                     OnPropertyChanged(nameof(Login));
@@ -85,9 +73,9 @@ namespace Projekt.ViewModels
             get => Model?._password;
             set
             {
-                if (Model?._password != value && Model != null)
+                if (Model != null && Model._password != value)
                 {
-                     Model._password = value;
+                    Model._password = value;
                     OnPropertyChanged(nameof(Password));
                 }
             }
@@ -98,7 +86,7 @@ namespace Projekt.ViewModels
             get => Model?._studentID ?? 0;
             set
             {
-                if (Model?._studentID != value && Model != null)
+                if (Model != null && Model._studentID != value)
                 {
                     Model._studentID = value;
                     OnPropertyChanged(nameof(StudentID));
@@ -106,22 +94,24 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? Email { 
-            get => Model?._email; 
+        public string? Email
+        {
+            get => Model?._email;
             set
             {
-                if (Model?._email != value && Model != null)
+                if (Model != null && Model._email != value)
                 {
                     Model._email = value;
+                    OnPropertyChanged(nameof(Email));
                 }
-            } 
+            }
         }
         public DateTime? BirthDate
         {
             get => Model?._birthDate;
             set
             {
-                if (Model?._birthDate != value && Model != null)
+                if (Model != null && Model._birthDate != value)
                 {
                     Model._birthDate = value;
                     OnPropertyChanged(nameof(BirthDate));
@@ -129,13 +119,12 @@ namespace Projekt.ViewModels
             }
         }
 
-
         public string? CurrentRole
         {
             get => Model?._currentRole;
             set
             {
-                if (Model?._currentRole != value && Model != null)
+                if (Model != null && Model._currentRole != value)
                 {
                     Model._currentRole = value;
                     UpdateUserPermissions();
@@ -146,40 +135,37 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? TeacherTitle { 
+        public string? TeacherTitle
+        {
             get => Model?._teacherTitle;
             set
             {
-                if (Model?._teacherTitle != value && Model != null)
+                if (Model != null && Model._teacherTitle != value)
                 {
                     Model._teacherTitle = value;
+                    OnPropertyChanged(nameof(TeacherTitle));
                 }
             }
         }
 
-        public string? Position {
+        public string? Position
+        {
             get => Model?._position;
             set
             {
-                if (Model?._position != value && Model != null)
+                if (Model != null && Model._position != value)
                 {
                     Model._position = value;
+                    OnPropertyChanged(nameof(Position));
                 }
             }
-        } 
+        }
 
-        public UsersCreateModel? UsersCreateModel { get => Model; init => Model = value; }
-        public string[] Roles { get => _roles; }
-
-
-        //public ObservableCollection<Subject> AllSubjects { get => _allSubjects; set => _allSubjects = value; }
-
-        //public ObservableCollection<Subject> SelectedSubjects => AllSubjects.Where(s => s.IsSelectedSubject);
-
+        public UsersCreateModel? UsersCreateModel { get => Model; init => Model = value ?? throw new ArgumentNullException(nameof(value)); }
+        public string[] Roles => _roles;
 
         public bool IsStudentVisible => CurrentRole == "Student";
         public bool IsTeacherVisible => CurrentRole == "Pracownik";
-  
 
         private ICommand? _suggestLoginCommand;
 
@@ -218,8 +204,6 @@ namespace Projekt.ViewModels
             }
         }
 
-
-
         private ICommand? _saveCommand;
         public ICommand SaveCommand
         {
@@ -244,15 +228,26 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? ErrorString { get => _errorString; set
+        public string? ErrorString
+        {
+            get => _errorString; set
             {
-                _errorString = value;
-                OnPropertyChanged(nameof(ErrorString));
-            } }
-        public string? SuccessString { get => _successString; set
+                if (_errorString != value)
+                {
+                    _errorString = value;
+                    OnPropertyChanged(nameof(ErrorString));
+                }
+            }
+        }
+        public string? SuccessString
+        {
+            get => _successString; set
             {
-                _successString = value;
-                OnPropertyChanged(nameof(SuccessString));
+                if (_successString != value)
+                {
+                    _successString = value;
+                    OnPropertyChanged(nameof(SuccessString));
+                }
             }
         }
 
@@ -262,16 +257,17 @@ namespace Projekt.ViewModels
 
         private void Cancel()
         {
-            Name = Surname = Password = Login = Email = TeacherTitle = String.Empty;
+            Name = Surname = Password = Login = Email = TeacherTitle = string.Empty;
             BirthDate = null;
-            
+            StudentID = 0;
+            Position = string.Empty;
+            CurrentRole = null;
+            SuccessString = null;
+            ErrorString = null;
         }
-
-      
 
         private bool IsStudentIDAllowed(string? studentID)
         {
-
             if (string.IsNullOrEmpty(studentID) || !int.TryParse(studentID, out _))
                 return false;
             return true;
@@ -285,46 +281,38 @@ namespace Projekt.ViewModels
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Surname))
                 return "";
-            // Prosty algorytm do sugerowania loginu
+            // Simple algorithm for suggesting login
             string suggestedLogin = $"{Name.ToLowerInvariant()}.{Surname.ToLowerInvariant()}".Replace(" ", "");
             return suggestedLogin;
         }
 
-        // Bezpieczny generator haseł
+        // Secure password generator
         private string GenerateRandomPassword(int length)
             => IHashingHandler.GetRandomString(length);
 
         private bool AreAllFieldsFilled()
         {
-            // email
-            try {
-                if (string.IsNullOrEmpty(Email))
-                    return false;
-                _ = new MailAddress(Email);
-            }
-            catch { return false; }
+            if (string.IsNullOrEmpty(Email))
+                return false;
 
-            bool valid =  !(
-                String.IsNullOrEmpty(Login) ||
-                String.IsNullOrEmpty(Name) ||
-                String.IsNullOrEmpty(Surname) ||
-                String.IsNullOrEmpty(Password) ||
+            bool valid = !(
+                string.IsNullOrEmpty(Login) ||
+                string.IsNullOrEmpty(Name) ||
+                string.IsNullOrEmpty(Surname) ||
+                string.IsNullOrEmpty(Password) ||
                 BirthDate == null ||
                 BirthDate >= DateTime.Today ||
                 Permissions == 0
                 );
 
-            if(IsStudentVisible)
+            if (IsStudentVisible)
                 valid &= IsStudentIDAllowed(StudentID.ToString());
 
             return valid;
-
-
         }
 
         private void UpdateUserPermissions()
         {
-
             switch (CurrentRole)
             {
                 case "Student":
@@ -350,37 +338,43 @@ namespace Projekt.ViewModels
                         PermissionHelper.CanEditOtherSchedules
                         );
                     break;
+                case "Nadadministrator":
+                    Permissions = PermissionHelper.God;
+                    break;
                 default:
                     Permissions = PermissionHelper.Blocked;
                     break;
             }
+            Model._permissions = Permissions;
         }
 
         private async Task<bool> AddUser()
         {
-            // TODO: jakieś ErrorText ni
-            if (!AreAllFieldsFilled() || Model == null) 
+            if (!AreAllFieldsFilled() || Model == null)
                 return false;
 
-            bool success =  await Model.AddUser();
+            if (!MailAddress.TryCreate(Email, out _)) return false; 
 
-            if (!success)
-            {
-                ErrorString = "Dodawanie nieudane! Sprbuj ponownie";
-                SuccessString = "";
+            int success = await Model.AddUser();
 
-            }
-            else
+            switch (success)
             {
-                ErrorString = "";
-                SuccessString = "Dodano pomyślnie!";
+                case 0:
+                default:
+                    ErrorString = "Dodawanie nieudane :( Spróbuj ponownie";
+                    SuccessString = "";
+                    break;
+                case 1:
+                    ErrorString = "";
+                    SuccessString = "Dodawanie zakończone pomyślnie!";
+                    break;
+                case -1:
+                    ErrorString = "Użytkownik o takiej nazwie już istnieje.\r\nWybierz inną nazwę i spróbuj ponownie.";
+                    SuccessString = "";
+                    break;
             }
-                return success;
+            return success == 1;
         }
         #endregion
-
-      
-
-
     }
 }
