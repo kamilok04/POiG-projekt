@@ -39,8 +39,7 @@
             <Fluent:RibbonTabItem Header="Użytkownicy">
                 <Fluent:RibbonGroupBox Header="Użytkownicy" MinWidth="80">
                     <Fluent:Button Header="Dodaj" Icon="/Resources/plus-256.png" LargeIcon="/Resources/plus-256.png" Height="68" Margin="0,0,0,1" VerticalAlignment="Bottom" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersCreateViewModel" Visibility="{Binding Path='[UsersCreateViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
-                    <Fluent:Button Header="Edytuj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersEditViewModel" Visibility="{Binding Path='[UsersEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
-                    <Fluent:Button Header="Usuń" Icon="/Resources/minus-256.png" LargeIcon="/Resources/minus-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersDeleteViewModel" Visibility="{Binding Path='[UsersDeleteViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
+                    <Fluent:Button Header="Zarządzaj" Icon="/Resources/edit-256.png" LargeIcon="/Resources/edit-256.png" Command="{Binding ChangeCurrentPageViewCommand}" CommandParameter="UsersEditViewModel" Visibility="{Binding Path='[UsersEditViewModel].complete.Result', Converter={StaticResource Fluent.Ribbon.Converters.BoolToVisibilityConverter}}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 

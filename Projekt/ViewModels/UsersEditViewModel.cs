@@ -70,19 +70,26 @@ namespace Projekt.ViewModels
         public override ICommand TableSaveCommand
         {
             get => _tableSaveCommand ??= new RelayCommand(
-                async param => { await Model.CommitTransaction(); await GetDataAsync(); } );
+                async param => await Save());
         
         }
 
-        private ICommand? _tableCancelCommand;
-        public override ICommand TableCancelCommand
-        {
-            get => _tableCancelCommand ??= new RelayCommand(
-                param => GetDataAsync().Wait());
+        private async Task Save()
+        { ChangesPending = false; 
+           bool success = await Model.CommitTransaction();
+            if (success)
+            {
+                MessageBox.Show("Edycja wykonana pomyślnie!", "Modyfikacja użytkowników", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Edycja zawierała błędy i NIE została wykonana.\r\n" +
+                    "Pamiętaj, że przed usunięciem prowadzącego należy najpierw usunąć go ze wszystkich zajęć, które prowadzi.", "Modyfikacja użytkowników", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+  
+
+            await GetDataAsync(); 
         }
-
-
-
         private ICommand _tableCreateCommand;
         public override ICommand TableCreateCommand
         {
@@ -138,10 +145,8 @@ namespace Projekt.ViewModels
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    Model.CommitTransaction().Wait() ;
-                    ChangesPending = false;
+                    Save().Wait();
                     return true;
-
                 case MessageBoxResult.No: 
                     return true;
 

@@ -4,6 +4,7 @@ using Projekt.Miscellaneous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Pkcs;
 using System.Text;
@@ -36,15 +37,18 @@ namespace Projekt.Models
             if (columnName == null || RowKey == null) return;
             MySqlCommand? command;
             string properColumnName = TranslateColumnName(columnName);
-            if (oldValue == null || oldValue == "")
+            if (string.IsNullOrEmpty(oldValue) && string.IsNullOrEmpty(newValue)) return;
+            if (string.IsNullOrEmpty(oldValue))
             {
                 command = CreateInsertCommand(properColumnName, RowKey, newValue);
                 if (command != null) Commands.Add(command);
+                return;
             }
-            if (newValue == null ||  newValue == "")
+            if (string.IsNullOrEmpty(newValue))
             {
-                command = ConsiderDelete(properColumnName, RowKey);
+                command = ConsiderDelete(properColumnName, oldValue);
                 if (command != null) Commands.Add(command);
+                return;
             }
             if(properColumnName == String.Empty) return; // nie ma takiej kolumny, nie robimy nic
             if(properColumnName == "data_urodzenia")
