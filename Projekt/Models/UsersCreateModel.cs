@@ -58,8 +58,9 @@ namespace Projekt.Models
 
         private string? _salt;
 
-        public async Task<bool> AddUser()
+        public async Task<int> AddUser()
         {
+            if (!await EnsureUserIsUnique()) return -1;
 
             _salt = IHashingHandler.GetRandomString(20);
 
@@ -68,10 +69,15 @@ namespace Projekt.Models
             var defaultParameters = ((ITable)this).DefaultParameters ?? throw new InvalidOperationException("DefaultParameters can't be null");
 
             MySqlCommand AddUserCommand = DatabaseHandler.CreateCommand(defaultQuery, defaultParameters);
-            MySqlCommand AssignRoleCommand = CreateRoleCommand();
+            MySqlCommand? AssignRoleCommand = CreateRoleCommand();
+            bool transactionResult = false;
+            
+            if(AssignRoleCommand == null)
+                transactionResult = await DatabaseHandler.ExecuteInTransactionAsync(AddUserCommand);
+            else
+                transactionResult = await DatabaseHandler.ExecuteInTransactionAsync(AddUserCommand, AssignRoleCommand);
 
-            return await DatabaseHandler.ExecuteInTransactionAsync(AddUserCommand, AssignRoleCommand);
-
+            return transactionResult ? 1 : 0;
         }
         private async Task<bool> EnsureUserIsUnique()
         {
@@ -86,12 +92,13 @@ namespace Projekt.Models
             return false; // not unique
         }
 
-        private MySqlCommand CreateRoleCommand()
+        private MySqlCommand? CreateRoleCommand()
         {
 
             string Query = "";
             Dictionary<string, object>? Parameters = null;
-            // TODO: Przebudować - tu powinno przypisywać się 1 LUB WIĘCEJ ról.
+            // -- zrobione -- TODO: Przebudować - tu powinno przypisywać się 1 LUB WIĘCEJ ról.
+            // Więcej ról można przypisać w edytorze.
             switch (_currentRole)
             {
                 case "Student":
@@ -109,16 +116,7 @@ namespace Projekt.Models
                         { "@title", _teacherTitle ?? string.Empty }}
                     ;
                     break;
-
-                    // Nie ma tabeli admin na razie, jest niepotrzebna
-                //case "Administrator":
-                //    Query = "INSERT INTO admin (login) VALUES (@login)";
-                //    Parameters = new() {
-                //        { "@login", _login }
-                //    }
-                //    ;
-                //    break;
-
+                default: return null;
             }
             return DatabaseHandler.CreateCommand(Query, Parameters);
         }

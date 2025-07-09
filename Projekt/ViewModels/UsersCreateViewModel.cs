@@ -24,10 +24,8 @@ namespace Projekt.ViewModels
 
         private int Permissions = 0;
         private UsersCreateModel? Model;
-        private readonly string[] _roles = ["Administrator", "Pracownik", "Student"];
-        //private ObservableCollection<Subject> _allSubjects;
-        //private bool _isStudentVisible = false;
-        //private bool _isTeacherVisible = false;
+        private readonly string[] _roles = ["Nadadministrator", "Administrator", "Pracownik", "Student"];
+  
         private string? _errorString;
         private string? _successString;
 
@@ -38,8 +36,7 @@ namespace Projekt.ViewModels
         {
             UsersCreateModel = new(loginWrapper ?? throw new ArgumentNullException(nameof(loginWrapper)));
         }
-        // for designer only
-        public UsersCreateViewModel() { }
+
         #endregion
 
         #region Public Properties/Commands
@@ -87,7 +84,7 @@ namespace Projekt.ViewModels
             {
                 if (Model?._password != value && Model != null)
                 {
-                     Model._password = value;
+                    Model._password = value;
                     OnPropertyChanged(nameof(Password));
                 }
             }
@@ -106,15 +103,16 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? Email { 
-            get => Model?._email; 
+        public string? Email
+        {
+            get => Model?._email;
             set
             {
                 if (Model?._email != value && Model != null)
                 {
                     Model._email = value;
                 }
-            } 
+            }
         }
         public DateTime? BirthDate
         {
@@ -146,7 +144,8 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? TeacherTitle { 
+        public string? TeacherTitle
+        {
             get => Model?._teacherTitle;
             set
             {
@@ -157,7 +156,8 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? Position {
+        public string? Position
+        {
             get => Model?._position;
             set
             {
@@ -166,20 +166,15 @@ namespace Projekt.ViewModels
                     Model._position = value;
                 }
             }
-        } 
+        }
 
         public UsersCreateModel? UsersCreateModel { get => Model; init => Model = value; }
         public string[] Roles { get => _roles; }
 
 
-        //public ObservableCollection<Subject> AllSubjects { get => _allSubjects; set => _allSubjects = value; }
-
-        //public ObservableCollection<Subject> SelectedSubjects => AllSubjects.Where(s => s.IsSelectedSubject);
-
-
         public bool IsStudentVisible => CurrentRole == "Student";
         public bool IsTeacherVisible => CurrentRole == "Pracownik";
-  
+
 
         private ICommand? _suggestLoginCommand;
 
@@ -244,12 +239,17 @@ namespace Projekt.ViewModels
             }
         }
 
-        public string? ErrorString { get => _errorString; set
+        public string? ErrorString
+        {
+            get => _errorString; set
             {
                 _errorString = value;
                 OnPropertyChanged(nameof(ErrorString));
-            } }
-        public string? SuccessString { get => _successString; set
+            }
+        }
+        public string? SuccessString
+        {
+            get => _successString; set
             {
                 _successString = value;
                 OnPropertyChanged(nameof(SuccessString));
@@ -264,10 +264,10 @@ namespace Projekt.ViewModels
         {
             Name = Surname = Password = Login = Email = TeacherTitle = String.Empty;
             BirthDate = null;
-            
+
         }
 
-      
+
 
         private bool IsStudentIDAllowed(string? studentID)
         {
@@ -296,15 +296,12 @@ namespace Projekt.ViewModels
 
         private bool AreAllFieldsFilled()
         {
-            // email
-            try {
-                if (string.IsNullOrEmpty(Email))
-                    return false;
-                _ = new MailAddress(Email);
-            }
-            catch { return false; }
 
-            bool valid =  !(
+            if (string.IsNullOrEmpty(Email))
+                return false;
+
+
+            bool valid = !(
                 String.IsNullOrEmpty(Login) ||
                 String.IsNullOrEmpty(Name) ||
                 String.IsNullOrEmpty(Surname) ||
@@ -314,10 +311,11 @@ namespace Projekt.ViewModels
                 Permissions == 0
                 );
 
-            if(IsStudentVisible)
+            if (IsStudentVisible)
                 valid &= IsStudentIDAllowed(StudentID.ToString());
 
             return valid;
+
 
 
         }
@@ -350,36 +348,46 @@ namespace Projekt.ViewModels
                         PermissionHelper.CanEditOtherSchedules
                         );
                     break;
+                case "Nadadministrator":
+                    Permissions = PermissionHelper.God;
+                    break;
                 default:
                     Permissions = PermissionHelper.Blocked;
                     break;
             }
+            Model._permissions = Permissions;
         }
 
         private async Task<bool> AddUser()
         {
-            // TODO: jakieś ErrorText ni
-            if (!AreAllFieldsFilled() || Model == null) 
+            if (!AreAllFieldsFilled() || Model == null)
                 return false;
 
-            bool success =  await Model.AddUser();
+            if (!MailAddress.TryCreate(Email, out _)) return false; // Lepiej nie rzucać wyjątkami przy każdym znaku
 
-            if (!success)
+            int success = await Model.AddUser();
+
+            switch (success)
             {
-                ErrorString = "Dodawanie nieudane! Sprbuj ponownie";
-                SuccessString = "";
+                case 0:
+                default:
+                    ErrorString = "Dodawanie nieudane :( Spróbuj ponownie";
+                    SuccessString = "";
+                    break;
+                case 1:
+                    ErrorString = "";
+                    SuccessString = "Dodawanie zakończone pomyślnie!";
+                    break;
+                case -1:
+                    ErrorString = "Użytkownik o takiej nazwie już istnieje.\r\nWybierz inną nazwę i spróbuj ponownie.";
+                    SuccessString = ""; break;
 
             }
-            else
-            {
-                ErrorString = "";
-                SuccessString = "Dodano pomyślnie!";
-            }
-                return success;
+            return success == 0;
         }
         #endregion
 
-      
+
 
 
     }
